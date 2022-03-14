@@ -1,0 +1,15 @@
+syntax = "proto3";
+package galaxy.mint;
+
+import "gogoproto/gogo.proto";
+import "galaxy/mint/params.proto";
+import "galaxy/mint/mint.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/galaxies-labs/galaxy/x/mint/types";
+
+// GenesisState defines the galaxy module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  Minter minter = 2 [(gogoproto.nullable) = false];
+}

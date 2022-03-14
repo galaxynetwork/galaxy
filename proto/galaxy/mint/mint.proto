@@ -1,0 +1,44 @@
+syntax = "proto3";
+package galaxy.mint;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/mint/types";
+
+message Minter {
+    string annual_provisions = 1 [
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable) = false
+    ];
+    string inflation = 2
+    [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+    uint64 phase = 3;
+    uint64 start_phase_block = 4;
+}
+
+message DevloperWeightedAddress {
+    string address = 1 ;
+    string weight = 2 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+      (gogoproto.nullable) = false
+    ];
+  }
+
+  message DistributionProportions {
+    string staking = 1 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+      (gogoproto.nullable) = false
+    ] ;
+    string ecosystem_incentives = 2 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+      (gogoproto.nullable) = false
+    ];
+    string developer_rewards = 3 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+      (gogoproto.nullable) = false
+    ];
+    string community_pool = 4 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+      (gogoproto.nullable) = false
+    ];
+  }

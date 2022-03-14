@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package galaxy.mint;
+
+import "gogoproto/gogo.proto";
+import "galaxy/mint/mint.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/mint/types";
+
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  string mint_denom = 1;
+  //Same with genesis supply
+  uint64 threshold_phase = 2;
+  //inflation stop phase
+  uint64 stop_inflation_phase = 3;
+  DistributionProportions distribution_proportions = 4 [ (gogoproto.nullable) = false ];
+  repeated DevloperWeightedAddress weighted_developer_rewards_receivers = 5 [
+    (gogoproto.nullable) = false
+  ];
+  uint64 blocks_per_year = 6;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package galaxy.clairdrop;
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/clairdrop/types";
+
+
+message Params {
+    google.protobuf.Timestamp clairdrop_start_time = 1 [
+        (gogoproto.stdtime) = true,
+        (gogoproto.nullable) = false,
+        (gogoproto.moretags) = "yaml:\"clairdrop_start_time\""
+    ];
+    google.protobuf.Timestamp clairdrop_end_time = 2 [
+        (gogoproto.stdtime) = true,
+        (gogoproto.nullable) = false,
+        (gogoproto.moretags) = "yaml:\"clairdrop_end_time\""
+    ];
+}

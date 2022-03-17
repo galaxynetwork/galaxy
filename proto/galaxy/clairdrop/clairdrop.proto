@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package galaxy.clairdrop;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/clairdrop/types";
+
+
+enum ClaimAction {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  Delegate = 0;
+  Vote = 1;
+  Nft = 2;
+  Metaverse = 3;
+}
+
+
+message ClaimRecord {
+    // address of claim user
+    string address = 1;
+    // total initial claimable amount for the user
+    repeated cosmos.base.v1beta1.Coin inital_claimable_amount = 2 [
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+        (gogoproto.nullable) = false
+    ];
+    
+    // true if action is completed
+    // index of bool in array refers to claim action eunm
+    repeated bool action_completed = 3 ;
+} 

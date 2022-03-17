@@ -77,7 +77,7 @@ message QueryClaimableForActionResponse {
 
 
 message QueryTotalClaimableRequest {
-  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+  string address = 1 ;
 }
 
 message QueryTotalClaimableResponse {

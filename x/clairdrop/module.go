@@ -80,7 +80,7 @@ func (a AppModuleBasic) GetTxCmd() *cobra.Command {
 
 // GetQueryCmd returns the capability module's root query command.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd(types.StoreKey)
+	return cli.GetQueryCmd()
 }
 
 // ----------------------------------------------------------------------------
@@ -133,10 +133,12 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	// Initialize global index to index in genesis state
+	ctx.Logger().Info("claidrop unmarshal")
 	cdc.MustUnmarshalJSON(gs, &genState)
 
 	InitGenesis(ctx, am.keeper, genState)
 
+	ctx.Logger().Info("claidrop success")
 	return []abci.ValidatorUpdate{}
 }
 

@@ -34,7 +34,7 @@ func NewKeeper(
 ) Keeper {
 
 	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
-		panic("the mint module account has not been set")
+		panic("the claidrop module account has not been set")
 	}
 
 	if !ps.HasKeyTable() {

@@ -159,12 +159,12 @@ var (
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName:     nil,
 		distrtypes.ModuleName:          nil,
-		clairdroptypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		minttypes.ModuleName:           {authtypes.Minter},
 		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		clairdroptypes.ModuleName:      {authtypes.Minter},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -316,8 +316,8 @@ func New(
 
 	app.ClairdropKeeper = clairdropkeeper.NewKeeper(
 		appCodec,
-		keys[minttypes.StoreKey],
-		app.GetSubspace(minttypes.ModuleName),
+		keys[clairdroptypes.StoreKey],
+		app.GetSubspace(clairdroptypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.DistrKeeper,
@@ -326,7 +326,9 @@ func New(
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper = *stakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks(), app.ClairdropKeeper.Hooks()),
+		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks(),
+			app.ClairdropKeeper.Hooks(),
+		),
 	)
 
 	// ... other modules keepers
@@ -433,6 +435,7 @@ func New(
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
+		clairdroptypes.ModuleName,
 		stakingtypes.ModuleName,
 		ibchost.ModuleName,
 		feegrant.ModuleName,
@@ -444,18 +447,18 @@ func New(
 		genutiltypes.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
-		clairdroptypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
-		crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName,
+		crisistypes.ModuleName, govtypes.ModuleName,
+		clairdroptypes.ModuleName,
+		stakingtypes.ModuleName,
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
 		genutiltypes.ModuleName, evidencetypes.ModuleName,
 		paramstypes.ModuleName, upgradetypes.ModuleName, vestingtypes.ModuleName,
 		feegrant.ModuleName,
 		ibchost.ModuleName, ibctransfertypes.ModuleName,
-		clairdroptypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -468,6 +471,7 @@ func New(
 		authtypes.ModuleName,
 		banktypes.ModuleName,
 		distrtypes.ModuleName,
+		clairdroptypes.ModuleName,
 		stakingtypes.ModuleName,
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
@@ -481,7 +485,6 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		ibctransfertypes.ModuleName,
-		clairdroptypes.ModuleName,
 
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
@@ -506,7 +509,6 @@ func New(
 		transferModule,
 	)
 	app.sm.RegisterStoreDecoders()
-
 	// initialize stores
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
@@ -568,7 +570,8 @@ func (app *App) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.Res
 		panic(err)
 	}
 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.mm.GetVersionMap())
-	return app.mm.InitGenesis(ctx, app.appCodec, genesisState)
+	responseInitChain := app.mm.InitGenesis(ctx, app.appCodec, genesisState)
+	return responseInitChain
 }
 
 // LoadHeight loads a particular height
@@ -691,6 +694,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(clairdroptypes.ModuleName)
+
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

@@ -19,9 +19,7 @@ type KeeperTestSuite struct {
 
 func (suite *KeeperTestSuite) SetupTest() {
 	suite.app = app.Setup(false)
-	suite.app.Logger().Info("set up test ready")
 	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{Time: time.Now().UTC(), Height: 1})
-	suite.app.Logger().Info("set up test finish")
 }
 
 func TestKeeperTestSuite(t *testing.T) {

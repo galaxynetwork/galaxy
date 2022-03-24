@@ -11,14 +11,11 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	if genState.Params.ClairdropStartTime.Equal(time.Time{}) {
 		genState.Params.ClairdropStartTime = ctx.BlockTime()
-		genState.Params.ClairdropEndTime = ctx.BlockTime().Add(time.Hour * 24 * 30 * 4)
+		genState.Params.ClairdropEndTime = ctx.BlockTime().Add(time.Hour * 24 * 30 * 12) // 1 year
 	}
 	k.SetParams(ctx, genState.Params)
-
 	k.CreateModuleAccount(ctx, genState.ModuleAccountBalance)
-
 	err := k.SetClaimRecords(ctx, genState.ClaimRecords)
-
 	if err != nil {
 		panic(
 			err,

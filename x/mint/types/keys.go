@@ -7,7 +7,8 @@ const (
 	ModuleName = "mint"
 
 	// StoreKey defines the primary module store key
-	StoreKey = ModuleName
+	StoreKey    = ModuleName
+	MemStoreKey = "mem" + ModuleName
 
 	// RouterKey is the message route for slashing
 	RouterKey = ModuleName

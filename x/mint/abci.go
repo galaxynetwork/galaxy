@@ -16,6 +16,7 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
 
 	// inflation end
 	if minter.Inflation.Equal(sdk.ZeroDec()) {
+
 		return
 	}
 
@@ -33,6 +34,11 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
 		k.SetMinter(ctx, minter)
 		// inflation end
 		if minter.Inflation.Equal(sdk.ZeroDec()) {
+			//if still has ramaning amount  it will be fund to community pool
+			coin := k.ModuleBalance(ctx)
+			if coin.IsPositive() {
+				k.FundToCommuinityPool(ctx, sdk.NewCoins(coin))
+			}
 			return
 		}
 	}

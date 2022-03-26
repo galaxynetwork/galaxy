@@ -64,12 +64,33 @@ func (k Keeper) MintCoins(ctx sdk.Context, newCoins sdk.Coins) error {
 	return k.bk.MintCoins(ctx, types.ModuleName, newCoins)
 }
 
+func (k Keeper) ModuleBalance(ctx sdk.Context) sdk.Coin {
+	params := k.GetParams(ctx)
+	return k.bk.GetBalance(
+		ctx,
+		k.ak.GetModuleAddress(types.ModuleName),
+		params.MintDenom,
+	)
+}
+
 func (k Keeper) TokenSupply(ctx sdk.Context, denom string) sdk.Int {
 	return k.bk.GetSupply(ctx, denom).Amount
 }
 
 func (k Keeper) AddCollectedFees(ctx sdk.Context, fees sdk.Coins) error {
 	return k.bk.SendCoinsFromModuleToModule(ctx, types.ModuleName, k.feeCollectorName, fees)
+}
+
+func (k Keeper) FundToCommuinityPool(ctx sdk.Context, coins sdk.Coins) error {
+	err := k.dk.FundCommunityPool(
+		ctx,
+		coins,
+		k.ak.GetModuleAddress(types.ModuleName),
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (k Keeper) GetProportions(ctx sdk.Context, mintedCoin sdk.Coin, ratio sdk.Dec) sdk.Coin {
@@ -97,7 +118,6 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 	developerRewards := k.GetProportions(ctx, mintedCoin, proportions.DeveloperRewards)
 	developerRewardsCoins := sdk.NewCoins(developerRewards)
 	developerReceivers := params.WeightedDeveloperRewardsReceivers
-
 	//if dev is none fund to communiy
 	if len(developerReceivers) == 0 {
 		developerRewardsCoins := sdk.NewCoins(developerRewards)
@@ -107,7 +127,8 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 		}
 	} else {
 		for _, weightedReceiver := range developerReceivers {
-			developerRewardProPortion := sdk.NewCoins(k.GetProportions(ctx, developerRewards, weightedReceiver.Weight))
+			devProportions := k.GetProportions(ctx, developerRewards, weightedReceiver.Weight)
+			developerRewardProPortion := sdk.NewCoins(devProportions)
 			if weightedReceiver.Address == "" {
 				err = k.dk.FundCommunityPool(ctx, developerRewardProPortion,
 					k.ak.GetModuleAddress(types.ModuleName))

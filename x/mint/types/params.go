@@ -178,6 +178,9 @@ func validateWeightedDeveloperRewardsReceivers(i interface{}) error {
 
 	weightSum := sdk.NewDec(0)
 	for i, w := range v {
+		if w.Address == "" {
+			return fmt.Errorf("invalid address at %dth", i)
+		}
 		if w.Address != "" {
 			_, err := sdk.AccAddressFromBech32(w.Address)
 			if err != nil {

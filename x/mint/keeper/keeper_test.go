@@ -309,5 +309,4 @@ func (suite *KeeperTestSuite) TestMintInflationThenDistr() {
 			devRemaningCoin,
 		).Amount.ToDec(),
 	)
-
 }

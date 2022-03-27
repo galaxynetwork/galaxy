@@ -104,10 +104,53 @@ func TestAnnualProvisions(t *testing.T) {
 	for _, test := range tests {
 		minter.Inflation = test.Inflation
 		currentSupply := minter.NextAnnualProvisions(params, supply)
+		t.Log(currentSupply)
 		require.True(
 			t,
 			currentSupply.Equal(test.Supply.ToDec()),
 		)
+	}
+}
+
+func TestAnnualProvisionsEachBlock(t *testing.T) {
+	minter := DefaultInitialMinter()
+	params := DefaultParams()
+	genesisSupply := sdk.NewInt(1_000_000_000_000_000)
+	supply := genesisSupply
+
+	prev := sdk.NewDec(0)
+	for i := 1; i <= int(params.BlocksPerYear)*int(params.StopInflationPhase); i = i + 100 {
+		if minter.Inflation.Equal(sdk.ZeroDec()) {
+			continue
+		}
+		currentBlock := uint64(i)
+
+		currentPhase := minter.CurrentPhase(params, int64(currentBlock))
+		if minter.Phase != uint64(currentPhase) {
+			minter.Phase = uint64(minter.CurrentPhase(params, int64(currentBlock)))
+			minter.Inflation = minter.PhaseInflationRate(uint64(minter.Phase), params)
+			minter.AnnualProvisions = minter.NextAnnualProvisions(params, supply)
+			require.NotEqual(
+				t,
+				minter.AnnualProvisions,
+				prev,
+			)
+			t.Logf("changed : %s, current : %s", minter.AnnualProvisions.String(), prev.String())
+		} else {
+			require.Equal(
+				t,
+				minter.AnnualProvisions,
+				prev,
+			)
+		}
+		prev = minter.AnnualProvisions
+
+		if minter.Inflation.Equal(sdk.ZeroDec()) {
+			continue
+		}
+
+		mintedCoin := minter.BlockProvision(params)
+		supply = supply.Add(sdk.NewInt(mintedCoin.Amount.Int64() * 100))
 	}
 }
 
@@ -149,6 +192,7 @@ func TestCurrentPhase(t *testing.T) {
 	for _, test := range tests {
 		currentPhase := minter.CurrentPhase(params, (test.CurrentBlock))
 
+		t.Logf("current block : %d", test.CurrentBlock)
 		require.True(
 			t,
 			currentPhase == (test.Phase),

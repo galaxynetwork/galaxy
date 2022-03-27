@@ -16,31 +16,27 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
 
 	// inflation end
 	if minter.Inflation.Equal(sdk.ZeroDec()) {
-
 		return
 	}
 
 	params := k.GetParams(ctx)
+	totalSupply := k.TokenSupply(ctx, params.MintDenom)
 	currentBlock := uint64(ctx.BlockHeight())
-	nextPhase := minter.NextPhase(params, currentBlock)
 
-	if nextPhase != minter.Phase {
-		newInflation := minter.PhaseInflationRate(nextPhase, params)
-		totalSupply := k.TokenSupply(ctx, params.MintDenom)
-		minter.Inflation = newInflation
-		minter.Phase = nextPhase
-		minter.StartPhaseBlock = currentBlock
-		minter.AnnualProvisions = minter.NextAnnualProvisions(params, totalSupply)
-		k.SetMinter(ctx, minter)
-		// inflation end
-		if minter.Inflation.Equal(sdk.ZeroDec()) {
-			//if still has ramaning amount  it will be fund to community pool
-			coin := k.ModuleBalance(ctx)
-			if coin.IsPositive() {
-				k.FundToCommuinityPool(ctx, sdk.NewCoins(coin))
-			}
-			return
+	minter.Phase = uint64(minter.CurrentPhase(params, int64(currentBlock)))
+	minter.Inflation = minter.PhaseInflationRate(uint64(minter.Phase), params)
+	minter.AnnualProvisions = minter.NextAnnualProvisions(params, totalSupply)
+
+	k.SetMinter(ctx, minter)
+
+	// inflation end
+	if minter.Inflation.Equal(sdk.ZeroDec()) {
+		//if still has ramaning amount  it will be fund to community pool
+		coin := k.ModuleBalance(ctx)
+		if coin.IsPositive() {
+			k.FundToCommuinityPool(ctx, sdk.NewCoins(coin))
 		}
+		return
 	}
 
 	mintedCoin := minter.BlockProvision(params)

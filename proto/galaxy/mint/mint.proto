@@ -13,7 +13,6 @@ message Minter {
     string inflation = 2
     [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
     uint64 phase = 3;
-    uint64 start_phase_block = 4;
 }
 
 message DevloperWeightedAddress {

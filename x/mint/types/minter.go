@@ -2,16 +2,16 @@ package types
 
 import (
 	"fmt"
+	"math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func NewMinter(inflation, annualProvisions sdk.Dec, phase uint64, startPhaseBlock uint64) Minter {
+func NewMinter(inflation, annualProvisions sdk.Dec, phase uint64) Minter {
 	return Minter{
 		AnnualProvisions: annualProvisions,
 		Phase:            phase,
 		Inflation:        inflation,
-		StartPhaseBlock:  startPhaseBlock,
 	}
 }
 
@@ -19,7 +19,6 @@ func InitialMinter(inflation sdk.Dec) Minter {
 	return NewMinter(
 		inflation,
 		sdk.NewDec(0),
-		uint64(0),
 		uint64(0),
 	)
 }
@@ -46,16 +45,12 @@ func (m Minter) PhaseInflationRate(phase uint64, param Params) sdk.Dec {
 	}
 }
 
-func (m Minter) NextPhase(params Params, currentBlock uint64) uint64 {
-	nonePhase := m.Phase == 0
-	if nonePhase {
+func (m Minter) CurrentPhase(params Params, currentBlock int64) int64 {
+	v := int64(math.Ceil(float64(currentBlock) / float64(params.BlocksPerYear)))
+	if v == 0 {
 		return 1
 	}
-	blockNewPhase := m.StartPhaseBlock + params.BlocksPerYear
-	if blockNewPhase > currentBlock {
-		return m.Phase
-	}
-	return m.Phase + 1
+	return v
 }
 
 func (m Minter) NextAnnualProvisions(_ Params, totalSupply sdk.Int) sdk.Dec {

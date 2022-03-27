@@ -23,9 +23,12 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {
 	totalSupply := k.TokenSupply(ctx, params.MintDenom)
 	currentBlock := uint64(ctx.BlockHeight())
 
-	minter.Phase = uint64(minter.CurrentPhase(params, int64(currentBlock)))
-	minter.Inflation = minter.PhaseInflationRate(uint64(minter.Phase), params)
-	minter.AnnualProvisions = minter.NextAnnualProvisions(params, totalSupply)
+	currentPhase := minter.CurrentPhase(params, int64(currentBlock))
+	if minter.Phase != uint64(currentPhase) {
+		minter.Phase = uint64(minter.CurrentPhase(params, int64(currentBlock)))
+		minter.Inflation = minter.PhaseInflationRate(uint64(minter.Phase), params)
+		minter.AnnualProvisions = minter.NextAnnualProvisions(params, totalSupply)
+	}
 
 	k.SetMinter(ctx, minter)
 

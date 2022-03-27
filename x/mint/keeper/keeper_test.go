@@ -239,17 +239,14 @@ func (suite *KeeperTestSuite) TestMintInflationThenDistr() {
 			)
 		}
 
-		suite.T().Log("minter inflation ", minter.Inflation)
-		suite.T().Log("minter annual provisions ", minter.AnnualProvisions)
+		suite.T().Log("minter inflation : ", minter.Inflation, " current phase : ", phase, ", annual provisions : ", minter.AnnualProvisions)
 		mintKeeper.SetMinter(suite.ctx, minter)
 
 		if minter.Inflation.Equal(sdk.ZeroDec()) {
-			suite.T().Log("return because inflation zero")
 			if minter.Inflation.Equal(sdk.ZeroDec()) {
 				//if still has ramaning amount  it will be fund to community pool
 				devRemaningCoin = mintKeeper.ModuleBalance(suite.ctx)
 				if devRemaningCoin.IsPositive() {
-					suite.T().Log("remaning fund to community pool")
 					err := mintKeeper.FundToCommuinityPool(suite.ctx, sdk.NewCoins(devRemaningCoin))
 					require.NoError(err)
 				}
@@ -296,6 +293,7 @@ func (suite *KeeperTestSuite) TestMintInflationThenDistr() {
 	totalSupply := mintKeeper.TokenSupply(suite.ctx, params.MintDenom)
 	feeCollectorAmount := bankKeeper.GetBalance(suite.ctx, authKeeper.GetModuleAddress(authtypes.FeeCollectorName), params.MintDenom)
 	distributionAmount := bankKeeper.GetBalance(suite.ctx, authKeeper.GetModuleAddress(distrtypes.ModuleName), params.MintDenom)
+	suite.T().Log("total supply", totalSupply.String())
 
 	require.Equal(
 		totalSupply.ToDec(),

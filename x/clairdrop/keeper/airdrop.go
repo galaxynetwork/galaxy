@@ -25,6 +25,7 @@ func (k Keeper) EndAirdrop(ctx sdk.Context) error {
 
 func (k Keeper) ClawbackAirdrop(ctx sdk.Context) error {
 	claimRecords := k.GetClaimRecords(ctx)
+	developerAddress := k.mk.GetDeveloperAddress(ctx)
 	for _, claimRecord := range claimRecords {
 		addr, err := sdk.AccAddressFromBech32(claimRecord.Address)
 		if err != nil {
@@ -40,7 +41,19 @@ func (k Keeper) ClawbackAirdrop(ctx sdk.Context) error {
 		if err != nil {
 			return err
 		}
+		//if never make transaction
 		if seq == 0 {
+			//skip developer
+			var skip bool
+			for _, addr := range developerAddress {
+				if addr == claimRecord.Address {
+					skip = true
+					continue
+				}
+			}
+			if skip {
+				continue
+			}
 			balance := k.bk.GetBalance(ctx, addr, types.DefaultClaimDenom)
 			clawbackCoins := sdk.NewCoins(balance)
 			err = k.dk.FundCommunityPool(ctx, clawbackCoins, addr)

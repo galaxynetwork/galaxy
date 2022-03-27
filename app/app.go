@@ -309,6 +309,16 @@ func New(
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
 
+	app.MintKeeper = mintkeeper.NewKeeper(
+		appCodec,
+		keys[minttypes.StoreKey],
+		app.GetSubspace(minttypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.DistrKeeper,
+		authtypes.FeeCollectorName,
+	)
+
 	app.ClairdropKeeper = clairdropkeeper.NewKeeper(
 		appCodec,
 		keys[clairdroptypes.StoreKey],
@@ -316,6 +326,7 @@ func New(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.DistrKeeper,
+		app.MintKeeper,
 	)
 
 	// register the staking hooks
@@ -327,16 +338,6 @@ func New(
 	)
 
 	// ... other modules keepers
-
-	app.MintKeeper = mintkeeper.NewKeeper(
-		appCodec,
-		keys[minttypes.StoreKey],
-		app.GetSubspace(minttypes.ModuleName),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.DistrKeeper,
-		authtypes.FeeCollectorName,
-	)
 
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(

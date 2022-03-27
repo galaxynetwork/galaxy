@@ -21,6 +21,7 @@ type Keeper struct {
 	ak types.AccountKeeper
 	bk types.BankKeeper
 	dk types.DistributionKeeper
+	mk types.MintKeeper
 }
 
 func NewKeeper(
@@ -30,7 +31,7 @@ func NewKeeper(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	dk types.DistributionKeeper,
-
+	mk types.MintKeeper,
 ) Keeper {
 
 	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
@@ -48,6 +49,7 @@ func NewKeeper(
 		ak:         ak,
 		bk:         bk,
 		dk:         dk,
+		mk:         mk,
 	}
 }
 

@@ -23,3 +23,7 @@ type BankKeeper interface {
 type DistributionKeeper interface {
 	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error
 }
+
+type MintKeeper interface {
+	GetDeveloperAddress(ctx sdk.Context) []string
+}

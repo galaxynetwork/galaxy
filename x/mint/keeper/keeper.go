@@ -57,6 +57,17 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
+func (k Keeper) GetDeveloperAddress(ctx sdk.Context) []string {
+	params := k.GetParams(ctx)
+
+	address := []string{}
+
+	for _, d := range params.WeightedDeveloperRewardsReceivers {
+		address = append(address, d.Address)
+	}
+	return address
+}
+
 func (k Keeper) MintCoins(ctx sdk.Context, newCoins sdk.Coins) error {
 	if newCoins.Empty() {
 		return nil

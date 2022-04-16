@@ -1,15 +1,268 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  title: HTTP API Console
-  name: ''
-  description: ''
+  title: Galaxy - gRPC Gateway docs
+  name: "Galaxy"
+  description: A REST interface for state queries, legacy transactions
+  version: 1.0.0
 paths:
+  /galaxy/clairdrop/module_account_balance:
+    get:
+      summary: Module account balance queries the module account balance of clairdorp module
+      operationId: GalaxyClairdropModuleAccountBalance
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              moduleAccountBalance:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
+                title: moduleAccountBalance is the module account balance of the coins
+      tags:
+        - Query
+  "/galaxy/clairdrop/claim_record/{address}":
+    get:
+      summary: Claim record queries the total claim record of address
+      operationId: GalaxyClairdropClaimRecord
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              claim_record:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    description: claimable address
+                  action_completed:
+                    type: array
+                    items:
+                      type: boolean
+                    title: action_completed is a list of whether the mission has been completed by claim record
+                  inital_claimable_amount:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the custom
+                        method
+
+                        signatures required by gogoproto.
+                    title: inital_claimable_amount is a list of inital claimable amount by claim record
+      parameters:
+        - name: address
+          description: address is the address to query claim record for.
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  "/galaxy/clairdrop/claimable_for_action/{address}/{action}":
+    get:
+      summary: Claimable for action queries the claimable for action of address
+      operationId: GalaxyClairdropClaimableForAction
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              coins:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
+                title: coins is a list of claimable by claim action
+      parameters:
+        - name: address
+          description: address is the address to query claimable for action for.
+          in: path
+          required: true
+          type: string
+        - name: action
+          description: action is the action to query claimable for.
+          in: path
+          required: true
+          type: string
+          enum:
+            - Delegate
+            - Vote
+            - Story
+            - Nft
+      tags:
+        - Query
+  "/galaxy/clairdrop/total_claimable/{address}":
+    get:
+      summary: Total claimable queries the total claimable of address
+      operationId: GalaxyClairdropTotalClaimable
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              coins:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
+                title: coins is a list of total claimable by claim record
+      parameters:
+        - name: address
+          description: address is the address to query total claimable for.
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /galaxy/mint/params:
+    get:
+      summary: Params queries the params of mint module
+      operationId: GalaxyMintParams
+      responses:
+        200:
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              minter:
+                type: object
+                properties:
+                  mint_denom:
+                    type: string
+                    description: >-
+                      Coin defines a token with a denomination
+                  threshold_phase:
+                    type: number
+                    description: >-
+                      Phase of Inflation Decrease
+                  stop_inflation_phase:
+                    type: number
+                    description: >-
+                      Phase of which inflation stops
+                  distribution_proportions:
+                    type: object
+                    properties:
+                      staking:
+                        type: string
+                        description: >-
+                          Staking Distribution Ratio
+                      ecosystem_incentives:
+                        type: string
+                        description: >-
+                          Ecosystem incentives Distribution Ratio
+                      developer_rewards:
+                        type: string
+                        description: >-
+                          Developer rewards Distribution Ratio
+                      community_pool:
+                        type: string
+                        description: >-
+                          Community pool Distribution Ratio
+                    title: >-
+                      Defining Inflation Distribution Ratio
+                  weighted_developer_rewards_receivers:
+                    type: object
+                    properties:
+                      weight:
+                        type: string
+                        description: >-
+                          Weight of developer receiver
+                          github.com/cosmos/cosmos-sdk/types.Dec
+                      address:
+                        type: string
+                        description: >-
+                          Address of developer receiver
+                    title: >-
+                      List of Rewarded Developers
+                  blocks_per_year:
+                    type: number
+                    description: >-
+                      Blocks per year
+      tags:
+        - Query
+  /galaxy/mint/minter:
+    get:
+      summary: Minter queries the minter of mint module
+      operationId: GalaxyMintMinter
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              minter:
+                type: object
+                properties:
+                  annual_provisions:
+                    type: string
+                    description: >-
+                      Current annual provisions
+                  inflation:
+                    type: string
+                    description: >-
+                      Current Inflation
+                  phase:
+                    type: number
+                    description: >-
+                      Current year
+      tags:
+        - Query
   /cosmos/authz/v1beta1/grants:
     get:
-      summary: 'Returns list of `Authorization`, granted to the grantee by the granter.'
+      summary: "Returns list of `Authorization`, granted to the grantee by the granter."
       operationId: CosmosAuthzV1Beta1Grants
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -22,7 +275,7 @@ paths:
                     authorization:
                       type: object
                       properties:
-                        '@type':
+                        "@type":
                           type: string
                           description: >-
                             A URL/resource name that uniquely identifies the
@@ -239,7 +492,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -483,12 +736,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/bank/v1beta1/balances/{address}':
+  "/cosmos/bank/v1beta1/balances/{address}":
     get:
       summary: AllBalances queries the balance of all coins for a single account.
       operationId: CosmosBankV1Beta1AllBalances
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -549,7 +802,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -616,12 +869,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/bank/v1beta1/balances/{address}/by_denom':
+  "/cosmos/bank/v1beta1/balances/{address}/by_denom":
     get:
       summary: Balance queries the balance of a single coin for a single account.
       operationId: CosmosBankV1Beta1Balance
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -659,7 +912,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -682,7 +935,7 @@ paths:
         denominations.
       operationId: CosmosBankV1Beta1DenomsMetadata
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -745,8 +998,8 @@ paths:
                         displayed in clients.
                     name:
                       type: string
-                      description: 'Since: cosmos-sdk 0.43'
-                      title: 'name defines the name of the token (eg: Cosmos Atom)'
+                      description: "Since: cosmos-sdk 0.43"
+                      title: "name defines the name of the token (eg: Cosmos Atom)"
                     symbol:
                       type: string
                       description: >-
@@ -801,7 +1054,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -863,12 +1116,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/bank/v1beta1/denoms_metadata/{denom}':
+  "/cosmos/bank/v1beta1/denoms_metadata/{denom}":
     get:
       summary: DenomsMetadata queries the client metadata of a given coin denomination.
       operationId: CosmosBankV1Beta1DenomMetadata
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -929,8 +1182,8 @@ paths:
                       displayed in clients.
                   name:
                     type: string
-                    description: 'Since: cosmos-sdk 0.43'
-                    title: 'name defines the name of the token (eg: Cosmos Atom)'
+                    description: "Since: cosmos-sdk 0.43"
+                    title: "name defines the name of the token (eg: Cosmos Atom)"
                   symbol:
                     type: string
                     description: >-
@@ -964,7 +1217,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -980,7 +1233,7 @@ paths:
       summary: Params queries the parameters of x/bank module.
       operationId: CosmosBankV1Beta1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1023,7 +1276,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       tags:
@@ -1033,7 +1286,7 @@ paths:
       summary: TotalSupply queries the total supply of all coins.
       operationId: CosmosBankV1Beta1TotalSupply
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1097,7 +1350,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1159,12 +1412,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/bank/v1beta1/supply/{denom}':
+  "/cosmos/bank/v1beta1/supply/{denom}":
     get:
       summary: SupplyOf queries the supply of a single coin.
       operationId: CosmosBankV1Beta1SupplyOf
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1202,7 +1455,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1218,7 +1471,7 @@ paths:
       summary: CommunityPool queries the community pool coins.
       operationId: CosmosDistributionV1Beta1CommunityPool
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1262,19 +1515,19 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/rewards':
+  "/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/rewards":
     get:
       summary: |-
         DelegationTotalRewards queries the total rewards accrued by a each
         validator.
       operationId: CosmosDistributionV1Beta1DelegationTotalRewards
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1345,7 +1598,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1356,12 +1609,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/rewards/{validatorAddress}':
+  "/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/rewards/{validatorAddress}":
     get:
       summary: DelegationRewards queries the total rewards accrued by a delegation.
       operationId: CosmosDistributionV1Beta1DelegationRewards
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1403,7 +1656,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1419,12 +1672,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/validators':
+  "/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/validators":
     get:
       summary: DelegatorValidators queries the validators of a delegator.
       operationId: CosmosDistributionV1Beta1DelegatorValidators
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1454,7 +1707,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1465,12 +1718,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/withdraw_address':
+  "/cosmos/distribution/v1beta1/delegators/{delegatorAddress}/withdraw_address":
     get:
       summary: DelegatorWithdrawAddress queries withdraw address of a delegator.
       operationId: CosmosDistributionV1Beta1DelegatorWithdrawAddress
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1496,7 +1749,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1512,7 +1765,7 @@ paths:
       summary: Params queries params of the distribution module.
       operationId: CosmosDistributionV1Beta1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1547,17 +1800,17 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/validators/{validatorAddress}/commission':
+  "/cosmos/distribution/v1beta1/validators/{validatorAddress}/commission":
     get:
       summary: ValidatorCommission queries accumulated commission for a validator.
       operationId: CosmosDistributionV1Beta1ValidatorCommission
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1602,7 +1855,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1613,12 +1866,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/validators/{validatorAddress}/outstanding_rewards':
+  "/cosmos/distribution/v1beta1/validators/{validatorAddress}/outstanding_rewards":
     get:
       summary: ValidatorOutstandingRewards queries rewards of a validator address.
       operationId: CosmosDistributionV1Beta1ValidatorOutstandingRewards
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1670,7 +1923,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1681,12 +1934,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/distribution/v1beta1/validators/{validatorAddress}/slashes':
+  "/cosmos/distribution/v1beta1/validators/{validatorAddress}/slashes":
     get:
       summary: ValidatorSlashes queries slash events of a validator.
       operationId: CosmosDistributionV1Beta1ValidatorSlashes
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1748,7 +2001,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -1836,7 +2089,7 @@ paths:
       summary: AllEvidence queries all evidence.
       operationId: CosmosEvidenceV1Beta1AllEvidence
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -1846,7 +2099,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -2055,7 +2308,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -2284,12 +2537,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/evidence/v1beta1/evidence/{evidenceHash}':
+  "/cosmos/evidence/v1beta1/evidence/{evidenceHash}":
     get:
       summary: Evidence queries evidence based on evidence hash.
       operationId: CosmosEvidenceV1Beta1Evidence
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -2297,7 +2550,7 @@ paths:
               evidence:
                 type: object
                 properties:
-                  '@type':
+                  "@type":
                     type: string
                     description: >-
                       A URL/resource name that uniquely identifies the type of
@@ -2481,7 +2734,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -2660,12 +2913,12 @@ paths:
           format: byte
       tags:
         - Query
-  '/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}':
+  "/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}":
     get:
       summary: Allowance returns fee granted to the grantee by the granter.
       operationId: CosmosFeegrantV1Beta1Allowance
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -2688,7 +2941,7 @@ paths:
                     description: allowance can be any of basic and filtered fee allowance.
                     type: object
                     properties:
-                      '@type':
+                      "@type":
                         type: string
                         description: >-
                           A URL/resource name that uniquely identifies the type
@@ -2768,7 +3021,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -2955,12 +3208,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/feegrant/v1beta1/allowances/{grantee}':
+  "/cosmos/feegrant/v1beta1/allowances/{grantee}":
     get:
       summary: Allowances returns all the grants for address.
       operationId: CosmosFeegrantV1Beta1Allowances
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -2986,7 +3239,7 @@ paths:
                         allowance.
                       type: object
                       properties:
-                        '@type':
+                        "@type":
                           type: string
                           description: >-
                             A URL/resource name that uniquely identifies the
@@ -3085,7 +3338,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -3318,12 +3571,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/gov/v1beta1/params/{paramsType}':
+  "/cosmos/gov/v1beta1/params/{paramsType}":
     get:
       summary: Params queries all parameters of the gov module.
       operationId: CosmosGovV1Beta1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -3405,7 +3658,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -3592,7 +3845,7 @@ paths:
       summary: Proposals queries all proposals based on given status.
       operationId: CosmosGovV1Beta1Proposals
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -3608,7 +3861,7 @@ paths:
                     content:
                       type: object
                       properties:
-                        '@type':
+                        "@type":
                           type: string
                           description: >-
                             A URL/resource name that uniquely identifies the
@@ -3808,11 +4061,11 @@ paths:
                     finalTallyResult:
                       type: object
                       properties:
-                        'yes':
+                        "yes":
                           type: string
                         abstain:
                           type: string
-                        'no':
+                        "no":
                           type: string
                         noWithVeto:
                           type: string
@@ -3890,7 +4143,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -4155,12 +4408,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}":
     get:
       summary: Proposal queries proposal details based on ProposalID.
       operationId: CosmosGovV1Beta1Proposal
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -4174,7 +4427,7 @@ paths:
                   content:
                     type: object
                     properties:
-                      '@type':
+                      "@type":
                         type: string
                         description: >-
                           A URL/resource name that uniquely identifies the type
@@ -4372,11 +4625,11 @@ paths:
                   finalTallyResult:
                     type: object
                     properties:
-                      'yes':
+                      "yes":
                         type: string
                       abstain:
                         type: string
-                      'no':
+                      "no":
                         type: string
                       noWithVeto:
                         type: string
@@ -4433,7 +4686,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -4612,12 +4865,12 @@ paths:
           format: uint64
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}/deposits':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}/deposits":
     get:
       summary: Deposits queries all deposits of a single proposal.
       operationId: CosmosGovV1Beta1Deposits
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -4691,7 +4944,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -4926,14 +5179,14 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}/deposits/{depositor}':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}/deposits/{depositor}":
     get:
       summary: >-
         Deposit queries single deposit information based proposalID,
         depositAddr.
       operationId: CosmosGovV1Beta1Deposit
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -4986,7 +5239,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -5170,12 +5423,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}/tally':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}/tally":
     get:
       summary: TallyResult queries the tally of a proposal vote.
       operationId: CosmosGovV1Beta1TallyResult
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -5183,11 +5436,11 @@ paths:
               tally:
                 type: object
                 properties:
-                  'yes':
+                  "yes":
                     type: string
                   abstain:
                     type: string
-                  'no':
+                  "no":
                     type: string
                   noWithVeto:
                     type: string
@@ -5212,7 +5465,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -5391,12 +5644,12 @@ paths:
           format: uint64
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}/votes':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}/votes":
     get:
       summary: Votes queries votes of a given proposal.
       operationId: CosmosGovV1Beta1Votes
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -5460,7 +5713,7 @@ paths:
 
 
                           Since: cosmos-sdk 0.43
-                      title: 'Since: cosmos-sdk 0.43'
+                      title: "Since: cosmos-sdk 0.43"
                   description: >-
                     Vote defines a vote on a governance proposal.
 
@@ -5503,7 +5756,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -5738,12 +5991,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/gov/v1beta1/proposals/{proposalId}/votes/{voter}':
+  "/cosmos/gov/v1beta1/proposals/{proposalId}/votes/{voter}":
     get:
-      summary: 'Vote queries voted information based on proposalID, voterAddr.'
+      summary: "Vote queries voted information based on proposalID, voterAddr."
       operationId: CosmosGovV1Beta1Vote
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -5805,7 +6058,7 @@ paths:
 
 
                         Since: cosmos-sdk 0.43
-                    title: 'Since: cosmos-sdk 0.43'
+                    title: "Since: cosmos-sdk 0.43"
                 description: >-
                   Vote defines a vote on a governance proposal.
 
@@ -5829,7 +6082,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -6018,7 +6271,7 @@ paths:
       summary: Params queries the parameters of slashing module
       operationId: CosmosSlashingV1Beta1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -6061,7 +6314,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       tags:
@@ -6071,7 +6324,7 @@ paths:
       summary: SigningInfos queries signing info of all validators
       operationId: CosmosSlashingV1Beta1SigningInfos
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -6176,7 +6429,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -6238,12 +6491,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/slashing/v1beta1/signing_infos/{consAddress}':
+  "/cosmos/slashing/v1beta1/signing_infos/{consAddress}":
     get:
       summary: SigningInfo queries the signing info of given cons address
       operationId: CosmosSlashingV1Beta1SigningInfo
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -6321,7 +6574,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                   additionalProperties: {}
       parameters:
@@ -6332,14 +6585,14 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/staking/v1beta1/delegations/{delegatorAddr}':
+  "/cosmos/staking/v1beta1/delegations/{delegatorAddr}":
     get:
       summary: >-
         DelegatorDelegations queries all delegations of a given delegator
         address.
       operationId: CosmosStakingV1Beta1DelegatorDelegations
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -6433,7 +6686,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -6667,12 +6920,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/delegators/{delegatorAddr}/redelegations':
+  "/cosmos/staking/v1beta1/delegators/{delegatorAddr}/redelegations":
     get:
       summary: Redelegations queries redelegations of given address.
       operationId: CosmosStakingV1Beta1Redelegations
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -6828,7 +7081,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -7072,7 +7325,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/delegators/{delegatorAddr}/unbonding_delegations':
+  "/cosmos/staking/v1beta1/delegators/{delegatorAddr}/unbonding_delegations":
     get:
       summary: >-
         DelegatorUnbondingDelegations queries all unbonding delegations of a
@@ -7081,7 +7334,7 @@ paths:
         delegator address.
       operationId: CosmosStakingV1Beta1DelegatorUnbondingDelegations
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -7175,7 +7428,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -7409,14 +7662,14 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/delegators/{delegatorAddr}/validators':
+  "/cosmos/staking/v1beta1/delegators/{delegatorAddr}/validators":
     get:
       summary: |-
         DelegatorValidators queries all validators info for given delegator
         address.
       operationId: CosmosStakingV1Beta1DelegatorValidators
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -7434,7 +7687,7 @@ paths:
                     consensusPubkey:
                       type: object
                       properties:
-                        '@type':
+                        "@type":
                           type: string
                           description: >-
                             A URL/resource name that uniquely identifies the
@@ -7768,7 +8021,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -8002,14 +8255,14 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/delegators/{delegatorAddr}/validators/{validatorAddr}':
+  "/cosmos/staking/v1beta1/delegators/{delegatorAddr}/validators/{validatorAddr}":
     get:
       summary: |-
         DelegatorValidator queries validator info for given delegator validator
         pair.
       operationId: CosmosStakingV1Beta1DelegatorValidator
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -8025,7 +8278,7 @@ paths:
                   consensusPubkey:
                     type: object
                     properties:
-                      '@type':
+                      "@type":
                         type: string
                         description: >-
                           A URL/resource name that uniquely identifies the type
@@ -8337,7 +8590,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -8520,12 +8773,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/staking/v1beta1/historical_info/{height}':
+  "/cosmos/staking/v1beta1/historical_info/{height}":
     get:
       summary: HistoricalInfo queries the historical info for given height.
       operationId: CosmosStakingV1Beta1HistoricalInfo
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -8624,7 +8877,7 @@ paths:
                         consensusPubkey:
                           type: object
                           properties:
-                            '@type':
+                            "@type":
                               type: string
                               description: >-
                                 A URL/resource name that uniquely identifies the
@@ -8943,7 +9196,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -9127,7 +9380,7 @@ paths:
       summary: Parameters queries the staking parameters.
       operationId: CosmosStakingV1Beta1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -9176,7 +9429,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -9353,7 +9606,7 @@ paths:
       summary: Pool queries the pool info.
       operationId: CosmosStakingV1Beta1Pool
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -9382,7 +9635,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -9559,7 +9812,7 @@ paths:
       summary: Validators queries all validators that match the given status.
       operationId: CosmosStakingV1Beta1Validators
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -9577,7 +9830,7 @@ paths:
                     consensusPubkey:
                       type: object
                       properties:
-                        '@type':
+                        "@type":
                           type: string
                           description: >-
                             A URL/resource name that uniquely identifies the
@@ -9911,7 +10164,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -10145,12 +10398,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/validators/{validatorAddr}':
+  "/cosmos/staking/v1beta1/validators/{validatorAddr}":
     get:
       summary: Validator queries validator info for given validator address.
       operationId: CosmosStakingV1Beta1Validator
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -10166,7 +10419,7 @@ paths:
                   consensusPubkey:
                     type: object
                     properties:
-                      '@type':
+                      "@type":
                         type: string
                         description: >-
                           A URL/resource name that uniquely identifies the type
@@ -10478,7 +10731,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -10656,12 +10909,12 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations':
+  "/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations":
     get:
       summary: ValidatorDelegations queries delegate info for given validator.
       operationId: CosmosStakingV1Beta1ValidatorDelegations
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -10752,7 +11005,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -10986,12 +11239,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations/{delegatorAddr}':
+  "/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations/{delegatorAddr}":
     get:
       summary: Delegation queries delegate info for given validator delegator pair.
       operationId: CosmosStakingV1Beta1Delegation
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -11062,7 +11315,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -11245,14 +11498,14 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations/{delegatorAddr}/unbonding_delegation':
+  "/cosmos/staking/v1beta1/validators/{validatorAddr}/delegations/{delegatorAddr}/unbonding_delegation":
     get:
       summary: |-
         UnbondingDelegation queries unbonding info for given validator delegator
         pair.
       operationId: CosmosStakingV1Beta1UnbondingDelegation
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -11324,7 +11577,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -11507,14 +11760,14 @@ paths:
           type: string
       tags:
         - Query
-  '/cosmos/staking/v1beta1/validators/{validatorAddr}/unbonding_delegations':
+  "/cosmos/staking/v1beta1/validators/{validatorAddr}/unbonding_delegations":
     get:
       summary: >-
         ValidatorUnbondingDelegations queries unbonding delegations of a
         validator.
       operationId: CosmosStakingV1Beta1ValidatorUnbondingDelegations
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -11608,7 +11861,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -11847,7 +12100,7 @@ paths:
       summary: DenomTraces queries all denomination traces.
       operationId: IbcApplicationsTransferV1DenomTraces
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -11911,7 +12164,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -12130,12 +12383,12 @@ paths:
           type: boolean
       tags:
         - Query
-  '/ibc/apps/transfer/v1/denom_traces/{hash}':
+  "/ibc/apps/transfer/v1/denom_traces/{hash}":
     get:
       summary: DenomTrace queries a denomination trace information.
       operationId: IbcApplicationsTransferV1DenomTrace
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -12178,7 +12431,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -12361,7 +12614,7 @@ paths:
       summary: Params queries all parameters of the ibc-transfer module.
       operationId: IbcApplicationsTransferV1Params
       responses:
-        '200':
+        "200":
           description: A successful response.
           schema:
             type: object
@@ -12402,7 +12655,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -12581,7 +12834,7 @@ definitions:
       authorization:
         type: object
         properties:
-          '@type':
+          "@type":
             type: string
             description: >-
               A URL/resource name that uniquely identifies the type of the
@@ -12767,7 +13020,7 @@ definitions:
             authorization:
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -13038,7 +13291,7 @@ definitions:
   google.protobuf.Any:
     type: object
     properties:
-      '@type':
+      "@type":
         type: string
         description: >-
           A URL/resource name that uniquely identifies the type of the
@@ -13201,7 +13454,7 @@ definitions:
         items:
           type: object
           properties:
-            '@type':
+            "@type":
               type: string
               description: >-
                 A URL/resource name that uniquely identifies the type of the
@@ -13457,8 +13710,8 @@ definitions:
           displayed in clients.
       name:
         type: string
-        description: 'Since: cosmos-sdk 0.43'
-        title: 'name defines the name of the token (eg: Cosmos Atom)'
+        description: "Since: cosmos-sdk 0.43"
+        title: "name defines the name of the token (eg: Cosmos Atom)"
       symbol:
         type: string
         description: >-
@@ -13631,8 +13884,8 @@ definitions:
               displayed in clients.
           name:
             type: string
-            description: 'Since: cosmos-sdk 0.43'
-            title: 'name defines the name of the token (eg: Cosmos Atom)'
+            description: "Since: cosmos-sdk 0.43"
+            title: "name defines the name of the token (eg: Cosmos Atom)"
           symbol:
             type: string
             description: >-
@@ -13707,8 +13960,8 @@ definitions:
                 displayed in clients.
             name:
               type: string
-              description: 'Since: cosmos-sdk 0.43'
-              title: 'name defines the name of the token (eg: Cosmos Atom)'
+              description: "Since: cosmos-sdk 0.43"
+              title: "name defines the name of the token (eg: Cosmos Atom)"
             symbol:
               type: string
               description: >-
@@ -14226,7 +14479,7 @@ definitions:
         items:
           type: object
           properties:
-            '@type':
+            "@type":
               type: string
               description: >-
                 A URL/resource name that uniquely identifies the type of the
@@ -14413,7 +14666,7 @@ definitions:
       evidence:
         type: object
         properties:
-          '@type':
+          "@type":
             type: string
             description: >-
               A URL/resource name that uniquely identifies the type of the
@@ -14587,7 +14840,7 @@ definitions:
         description: allowance can be any of basic and filtered fee allowance.
         type: object
         properties:
-          '@type':
+          "@type":
             type: string
             description: >-
               A URL/resource name that uniquely identifies the type of the
@@ -14672,7 +14925,7 @@ definitions:
             description: allowance can be any of basic and filtered fee allowance.
             type: object
             properties:
-              '@type':
+              "@type":
                 type: string
                 description: >-
                   A URL/resource name that uniquely identifies the type of the
@@ -14754,7 +15007,7 @@ definitions:
               description: allowance can be any of basic and filtered fee allowance.
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -14913,7 +15166,7 @@ definitions:
       content:
         type: object
         properties:
-          '@type':
+          "@type":
             type: string
             description: >-
               A URL/resource name that uniquely identifies the type of the
@@ -15094,11 +15347,11 @@ definitions:
       finalTallyResult:
         type: object
         properties:
-          'yes':
+          "yes":
             type: string
           abstain:
             type: string
-          'no':
+          "no":
             type: string
           noWithVeto:
             type: string
@@ -15319,7 +15572,7 @@ definitions:
           content:
             type: object
             properties:
-              '@type':
+              "@type":
                 type: string
                 description: >-
                   A URL/resource name that uniquely identifies the type of the
@@ -15506,11 +15759,11 @@ definitions:
           finalTallyResult:
             type: object
             properties:
-              'yes':
+              "yes":
                 type: string
               abstain:
                 type: string
-              'no':
+              "no":
                 type: string
               noWithVeto:
                 type: string
@@ -15562,7 +15815,7 @@ definitions:
             content:
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -15753,11 +16006,11 @@ definitions:
             finalTallyResult:
               type: object
               properties:
-                'yes':
+                "yes":
                   type: string
                 abstain:
                   type: string
-                'no':
+                "no":
                   type: string
                 noWithVeto:
                   type: string
@@ -15819,11 +16072,11 @@ definitions:
       tally:
         type: object
         properties:
-          'yes':
+          "yes":
             type: string
           abstain:
             type: string
-          'no':
+          "no":
             type: string
           noWithVeto:
             type: string
@@ -15888,7 +16141,7 @@ definitions:
                 WeightedVoteOption defines a unit of vote for vote split.
 
                 Since: cosmos-sdk 0.43
-            title: 'Since: cosmos-sdk 0.43'
+            title: "Since: cosmos-sdk 0.43"
         description: |-
           Vote defines a vote on a governance proposal.
           A Vote consists of a proposal ID, the voter, and the vote option.
@@ -15952,7 +16205,7 @@ definitions:
                   WeightedVoteOption defines a unit of vote for vote split.
 
                   Since: cosmos-sdk 0.43
-              title: 'Since: cosmos-sdk 0.43'
+              title: "Since: cosmos-sdk 0.43"
           description: |-
             Vote defines a vote on a governance proposal.
             A Vote consists of a proposal ID, the voter, and the vote option.
@@ -16001,11 +16254,11 @@ definitions:
   cosmos.gov.v1beta1.TallyResult:
     type: object
     properties:
-      'yes':
+      "yes":
         type: string
       abstain:
         type: string
-      'no':
+      "no":
         type: string
       noWithVeto:
         type: string
@@ -16064,7 +16317,7 @@ definitions:
             WeightedVoteOption defines a unit of vote for vote split.
 
             Since: cosmos-sdk 0.43
-        title: 'Since: cosmos-sdk 0.43'
+        title: "Since: cosmos-sdk 0.43"
     description: |-
       Vote defines a vote on a governance proposal.
       A Vote consists of a proposal ID, the voter, and the vote option.
@@ -16375,7 +16628,7 @@ definitions:
         properties:
           rate:
             type: string
-            description: 'rate is the commission rate charged to delegators, as a fraction.'
+            description: "rate is the commission rate charged to delegators, as a fraction."
           maxRate:
             type: string
             description: >-
@@ -16396,7 +16649,7 @@ definitions:
     properties:
       rate:
         type: string
-        description: 'rate is the commission rate charged to delegators, as a fraction.'
+        description: "rate is the commission rate charged to delegators, as a fraction."
       maxRate:
         type: string
         description: >-
@@ -16576,7 +16829,7 @@ definitions:
             consensusPubkey:
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -17135,7 +17388,7 @@ definitions:
           consensusPubkey:
             type: object
             properties:
-              '@type':
+              "@type":
                 type: string
                 description: >-
                   A URL/resource name that uniquely identifies the type of the
@@ -17426,7 +17679,7 @@ definitions:
             consensusPubkey:
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -17823,7 +18076,7 @@ definitions:
                 consensusPubkey:
                   type: object
                   properties:
-                    '@type':
+                    "@type":
                       type: string
                       description: >-
                         A URL/resource name that uniquely identifies the type of
@@ -18424,7 +18677,7 @@ definitions:
           consensusPubkey:
             type: object
             properties:
-              '@type':
+              "@type":
                 type: string
                 description: >-
                   A URL/resource name that uniquely identifies the type of the
@@ -18784,7 +19037,7 @@ definitions:
             consensusPubkey:
               type: object
               properties:
-                '@type':
+                "@type":
                   type: string
                   description: >-
                     A URL/resource name that uniquely identifies the type of the
@@ -19370,7 +19623,7 @@ definitions:
       consensusPubkey:
         type: object
         properties:
-          '@type':
+          "@type":
             type: string
             description: >-
               A URL/resource name that uniquely identifies the type of the

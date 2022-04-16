@@ -13,8 +13,8 @@ enum ClaimAction {
 
   Delegate = 0;
   Vote = 1;
-  Nft = 2;
-  Metaverse = 3;
+  Story = 2;
+  Nft = 3;
 }
 
 

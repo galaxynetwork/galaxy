@@ -152,7 +152,7 @@ $ %s query claim claimable-for-action osmo1ey69r37gfxvxg62sh4r0ktpuc46pzjrm23kcr
 			action, ok := types.ClaimAction_value[args[1]]
 			if !ok {
 				return fmt.Errorf("invalid Action type: %s.  Valid actions are %s, %s, %s, %s", args[1],
-					types.Delegate, types.Vote, types.Nft, types.Metaverse)
+					types.Delegate, types.Vote, types.Story, types.Nft)
 			}
 
 			// Query store

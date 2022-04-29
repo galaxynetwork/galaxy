@@ -229,6 +229,8 @@ type App struct {
 
 	// sm is the simulation manager
 	sm *module.SimulationManager
+
+	configurator module.Configurator
 }
 
 // New returns a reference to an initialized blockchain app
@@ -491,7 +493,9 @@ func New(
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
+
+	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	app.mm.RegisterServices(app.configurator)
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	app.sm = module.NewSimulationManager(
@@ -519,24 +523,49 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 
 	anteHandler, err := NewAnteHandler(
-		HandlerOptions {
-			HandlerOptions:  ante.HandlerOptions{
-			AccountKeeper:   app.AccountKeeper,
-			BankKeeper:      app.BankKeeper,
-			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
-			FeegrantKeeper:  app.FeeGrantKeeper,
-			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
-		},
-		IBCChannelkeeper:  app.IBCKeeper.ChannelKeeper,
-		Codec:             app.appCodec,
-	})
+		HandlerOptions{
+			HandlerOptions: ante.HandlerOptions{
+				AccountKeeper:   app.AccountKeeper,
+				BankKeeper:      app.BankKeeper,
+				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
+				FeegrantKeeper:  app.FeeGrantKeeper,
+				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+			},
+			IBCChannelkeeper: app.IBCKeeper.ChannelKeeper,
+			Codec:            app.appCodec,
+		})
 
 	if err != nil {
 		panic(err)
 	}
-	
+
 	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
+
+	//forced update min commision
+	app.UpgradeKeeper.SetUpgradeHandler(upgradeName,
+		func(ctx sdk.Context, _ upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+			minCommissionRate := sdk.NewDecWithPrec(5, 2)
+
+			validators := app.StakingKeeper.GetAllValidators(ctx)
+
+			for _, v := range validators {
+				if v.Commission.Rate.LT(minCommissionRate) {
+					if v.Commission.MaxRate.LT(minCommissionRate) {
+						v.Commission.MaxRate = minCommissionRate
+					}
+
+					v.Commission.Rate = minCommissionRate
+					v.Commission.UpdateTime = ctx.BlockHeader().Time
+
+					app.StakingKeeper.BeforeValidatorModified(ctx, v.GetOperator())
+
+					app.StakingKeeper.SetValidator(ctx, v)
+				}
+			}
+			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
+		},
+	)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {

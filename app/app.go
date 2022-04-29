@@ -518,19 +518,23 @@ func New(
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 
-	anteHandler, err := ante.NewAnteHandler(
-		ante.HandlerOptions{
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions {
+			HandlerOptions:  ante.HandlerOptions{
 			AccountKeeper:   app.AccountKeeper,
 			BankKeeper:      app.BankKeeper,
 			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
-	)
+		IBCChannelkeeper:  app.IBCKeeper.ChannelKeeper,
+		Codec:             app.appCodec,
+	})
+
 	if err != nil {
 		panic(err)
 	}
-
+	
 	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 

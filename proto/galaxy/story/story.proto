@@ -1,0 +1,88 @@
+syntax = "proto3";
+package galaxy.story;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/story/types";
+
+
+message Story {
+
+    // id defines the unique identifier of the story
+    string id = 1 [(gogoproto.nullable) = false];
+
+    // name defines the human-readable name of the story
+    string name = 2 [(gogoproto.nullable) = false];
+    
+    // description is a brief description of story
+    string description = 3;
+
+    // type defines what type of story
+    // name of category
+    string category = 4 [(gogoproto.nullable) = false];
+
+    // preview url of page
+    string preview_url = 5;
+}
+
+
+message Category {
+
+    // name defines what category is.
+    // ex-noun) blog, vlog, announcement, book, worldview
+    string name = 1 [(gogoproto.nullable) = false];
+    
+    // description is a brief description of category
+    string description = 2 [(gogoproto.nullable) = false];
+
+    // list of data formats that can be support on associated pages
+    // name of format
+    repeated string support_formats = 3 [(gogoproto.nullable) = false];
+}
+
+
+message Format {
+
+    // name defines format of data
+    // ex) text, markdown, html, svg etc 
+    string name = 1 [(gogoproto.nullable) = false];
+
+    // description is a brief description of format
+    string description = 2 [(gogoproto.nullable) = false];
+}
+
+
+message Page {
+    // story_id associated with the page,
+    string story_id = 1 [(gogoproto.nullable) = false];
+
+    // id is an alphanumeric identifier of the Page, unique within the scope of its story.
+    string id = 2 [(gogoproto.nullable) = false];
+
+    // name defines the human-readable name of the page
+    string name = 3 [(gogoproto.nullable) = false];
+
+    // data of page
+    Data data = 4 [(gogoproto.nullable) = false];
+
+    // author wallet address for the actual creator of the content
+    string creator = 5 [
+        (gogoproto.nullable) = false,
+        (gogoproto.moretags) = "yaml:\"address\""
+    ];
+
+    // preview url of page
+    string preview_url = 6;
+}
+
+
+message Data {
+
+    // format defines what the data format is
+    // name of format
+    string format = 1 [(gogoproto.nullable) = false];
+    
+    // data belonging to format
+    google.protobuf.Any data = 2 [(gogoproto.nullable) = false];
+}

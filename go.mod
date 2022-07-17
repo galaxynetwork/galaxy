@@ -3,6 +3,7 @@ module github.com/galaxies-labs/galaxy
 go 1.18
 
 require (
+	github.com/cosmos/cosmos-proto v1.0.0-alpha7
 	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/cosmos/ibc-go/v2 v2.0.2
 	github.com/gogo/protobuf v1.3.3

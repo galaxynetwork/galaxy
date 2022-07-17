@@ -1,27 +1,23 @@
-package keeper
+package keeper_test
 
-import (
-	"testing"
-)
-
-func TestHasBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestHasBrand() {
 }
 
-func TestSetBrand(t *testing.T) {}
+func (suite *KeeperTestSuite) TestSetBrand() {}
 
-func TestGetBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestGetBrand() {
 }
 
-func TestIterateBrands(t *testing.T) {
+func (suite *KeeperTestSuite) TestIterateBrands() {
 }
 
-func TestGetBrands(t *testing.T) {
+func (suite *KeeperTestSuite) TestGetBrands() {
 }
 
-func TestGetBrandsByOwner(t *testing.T) {
+func (suite *KeeperTestSuite) TestGetBrandsByOwner() {
 }
 
-func TestMarshalBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestMarshalBrand() {
 }
 
-func TestUnmarshalBrand(t *testing.T) {}
+func (suite *KeeperTestSuite) TestUnmarshalBrand() {}

@@ -1,15 +1,11 @@
-package keeper
+package keeper_test
 
-import (
-	"testing"
-)
-
-func TestBrands(t *testing.T) {
+func (suite *KeeperTestSuite) TestBrands() {
 }
 
-func TestBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestBrand() {
 
 }
 
-func TestBrandsByOwner(t *testing.T) {
+func (suite *KeeperTestSuite) TestBrandsByOwner() {
 }

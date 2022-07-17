@@ -8,6 +8,8 @@ import (
 const (
 	ModuleName = "brand"
 
+	StoreKey = ModuleName
+
 	DefaultBrandCreationFeeDenom = "uglx"
 )
 

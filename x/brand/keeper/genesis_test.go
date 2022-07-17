@@ -1,7 +1,5 @@
-package keeper
+package keeper_test
 
-import "testing"
+func (suite *KeeperTestSuite) TestInitGenesis() {}
 
-func TestInitGenesis(t *testing.T) {}
-
-func TestExportGenesis(t *testing.T) {}
+func (suite *KeeperTestSuite) TestExportGenesis() {}

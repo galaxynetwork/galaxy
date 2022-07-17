@@ -1,14 +1,25 @@
-package keeper
+package keeper_test
 
 import (
-	"testing"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/galaxies-labs/galaxy/app"
+	"github.com/galaxies-labs/galaxy/x/brand/types"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestCreateBrand(t *testing.T) {
+type IntegrationTestSuite struct {
+	suite.Suite
+
+	app         *app.App
+	ctx         sdk.Context
+	queryClient types.QueryClient
 }
 
-func TestEditBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestCreateBrand() {
 }
 
-func TestTransferOwnershipBrand(t *testing.T) {
+func (suite *KeeperTestSuite) TestEditBrand() {
+}
+
+func (suite *KeeperTestSuite) TestTransferOwnershipBrand() {
 }

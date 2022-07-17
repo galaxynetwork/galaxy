@@ -80,6 +80,7 @@ import (
 	ibchost "github.com/cosmos/ibc-go/v2/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v2/modules/core/keeper"
 
+	"github.com/galaxies-labs/galaxy/x/brand"
 	"github.com/galaxies-labs/galaxy/x/mint"
 	mintkeeper "github.com/galaxies-labs/galaxy/x/mint/keeper"
 	minttypes "github.com/galaxies-labs/galaxy/x/mint/types"
@@ -255,10 +256,19 @@ func New(
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
-		distrtypes.StoreKey, slashingtypes.StoreKey,
-		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
-		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
+		authtypes.StoreKey,
+		banktypes.StoreKey,
+		stakingtypes.StoreKey,
+		distrtypes.StoreKey,
+		slashingtypes.StoreKey,
+		govtypes.StoreKey,
+		paramstypes.StoreKey,
+		ibchost.StoreKey,
+		upgradetypes.StoreKey,
+		feegrant.StoreKey,
+		evidencetypes.StoreKey,
+		ibctransfertypes.StoreKey,
+		capabilitytypes.StoreKey,
 		minttypes.StoreKey,
 		clairdroptypes.StoreKey,
 		brandtypes.StoreKey,
@@ -429,6 +439,7 @@ func New(
 		transferModule,
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		clairdrop.NewAppModule(appCodec, app.ClairdropKeeper),
+		brand.NewAppModule(appCodec, app.BrandKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -444,6 +455,7 @@ func New(
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
 		clairdroptypes.ModuleName,
+		brandtypes.ModuleName,
 		stakingtypes.ModuleName,
 		ibchost.ModuleName,
 		feegrant.ModuleName,
@@ -458,15 +470,25 @@ func New(
 	)
 
 	app.mm.SetOrderEndBlockers(
-		crisistypes.ModuleName, govtypes.ModuleName,
+		crisistypes.ModuleName,
+		govtypes.ModuleName,
 		clairdroptypes.ModuleName,
 		stakingtypes.ModuleName,
-		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
-		slashingtypes.ModuleName, minttypes.ModuleName,
-		genutiltypes.ModuleName, evidencetypes.ModuleName,
-		paramstypes.ModuleName, upgradetypes.ModuleName, vestingtypes.ModuleName,
+		capabilitytypes.ModuleName,
+		authtypes.ModuleName,
+		banktypes.ModuleName,
+		distrtypes.ModuleName,
+		slashingtypes.ModuleName,
+		minttypes.ModuleName,
+		brandtypes.ModuleName,
+		genutiltypes.ModuleName,
+		evidencetypes.ModuleName,
+		paramstypes.ModuleName,
+		upgradetypes.ModuleName,
+		vestingtypes.ModuleName,
 		feegrant.ModuleName,
-		ibchost.ModuleName, ibctransfertypes.ModuleName,
+		ibchost.ModuleName,
+		ibctransfertypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -484,6 +506,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
+		brandtypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		genutiltypes.ModuleName,
@@ -667,9 +690,7 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 	if apiConfig.Swagger {
 		apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
 		apiSvr.Router.HandleFunc("/", openapiconsole.Handler(Name, "/static/openapi.yml"))
-
 	}
-
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
@@ -706,6 +727,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(clairdroptypes.ModuleName)
+	paramsKeeper.Subspace(brandtypes.ModuleName)
 
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 

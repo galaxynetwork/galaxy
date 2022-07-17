@@ -10,6 +10,8 @@ const (
 
 	StoreKey = ModuleName
 
+	QuerierRoute = ModuleName
+
 	DefaultBrandCreationFeeDenom = "uglx"
 )
 

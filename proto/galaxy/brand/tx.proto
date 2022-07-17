@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package galaxy.brand;
+
+import "gogoproto/gogo.proto";
+import "galaxy/brand/brand.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/msg/v1/msg.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/brand/types";
+
+// Msg defines the brand Msg service.
+service Msg {
+    // CreateBrand defines a method for creating a new Brand.
+    rpc CreateBrand(MsgCreateBrand) returns (MsgCreateBrandResponse);
+
+    // EditBrand defines a method for editing an existing brand.
+    rpc EditBrand(MsgEditBrand) returns (MsgEditBrandResponse);
+
+    // TransferOwnershipBrand defines a method for transfer ownership of existing brand
+    rpc TransferOwnershipBrand(MsgTransferOwnershipBrand) returns (MsgTransferOwnershipBrandResponse);
+  }
+
+
+  message MsgCreateBrand {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    string id = 1;
+
+    string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+    
+    BrandDescription description = 3 [(gogoproto.nullable) = false];;
+  }
+
+  message MsgCreateBrandResponse {
+    string brand_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  }
+
+  message MsgEditBrand {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    string id = 1;
+
+    string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+    BrandDescription description = 3 [(gogoproto.nullable) = false];;
+  }
+
+  message MsgEditBrandResponse {}
+
+
+  message MsgTransferOwnershipBrand {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    string id = 1;
+    string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+    string dest_owner = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  }
+  
+  message MsgTransferOwnershipBrandResponse {}

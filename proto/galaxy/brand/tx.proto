@@ -19,10 +19,9 @@ service Msg {
 
     // TransferOwnershipBrand defines a method for transfer ownership of existing brand
     rpc TransferOwnershipBrand(MsgTransferOwnershipBrand) returns (MsgTransferOwnershipBrandResponse);
-  }
+}
 
-
-  message MsgCreateBrand {
+message MsgCreateBrand {
     option (cosmos.msg.v1.signer) = "owner";
 
     string id = 1;
@@ -30,13 +29,13 @@ service Msg {
     string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
     
     BrandDescription description = 3 [(gogoproto.nullable) = false];;
-  }
+}
 
-  message MsgCreateBrandResponse {
+message MsgCreateBrandResponse {
     string brand_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  }
+}
 
-  message MsgEditBrand {
+message MsgEditBrand {
     option (cosmos.msg.v1.signer) = "owner";
 
     string id = 1;
@@ -44,17 +43,16 @@ service Msg {
     string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
     BrandDescription description = 3 [(gogoproto.nullable) = false];;
-  }
+}
 
-  message MsgEditBrandResponse {}
+message MsgEditBrandResponse {}
 
-
-  message MsgTransferOwnershipBrand {
+message MsgTransferOwnershipBrand {
     option (cosmos.msg.v1.signer) = "owner";
 
     string id = 1;
     string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
     string dest_owner = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  }
-  
-  message MsgTransferOwnershipBrandResponse {}
+}
+
+message MsgTransferOwnershipBrandResponse {}

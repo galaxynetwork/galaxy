@@ -10,6 +10,7 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/galaxies-labs/galaxy/x/brand/types";
 
+
 service Query {
     // ListBrand queries all Brands
     rpc ListBrand(QueryListBrandRequest) returns (QueryListBrandResponse) {
@@ -26,7 +27,6 @@ service Query {
         option (google.api.http).get = "/galaxy/brand/brands/by_owner";
     }
 }
-
 
 message QueryListBrandRequest {
     cosmos.base.query.v1beta1.PageRequest pagination = 1;

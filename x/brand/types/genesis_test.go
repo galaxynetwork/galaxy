@@ -8,7 +8,7 @@ import (
 
 func TestGenesisState(t *testing.T) {
 	tests := []struct {
-		genState   GenesisState
+		genState   *GenesisState
 		expectPass bool
 	}{
 		{
@@ -43,9 +43,9 @@ func TestGenesisState(t *testing.T) {
 
 	for i, test := range tests {
 		if test.expectPass {
-			require.NoError(t, ValidateGenesis(test.genState), "test genState index: %d, genState: %s", i, test.genState.String())
+			require.NoError(t, ValidateGenesis(*test.genState), "test genState index: %d, genState: %s", i, test.genState.String())
 		} else {
-			require.Error(t, ValidateGenesis(test.genState), "test genState index: %d, genState: %s", i, test.genState.String())
+			require.Error(t, ValidateGenesis(*test.genState), "test genState index: %d, genState: %s", i, test.genState.String())
 		}
 	}
 }

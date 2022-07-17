@@ -3,16 +3,16 @@ package types
 import "fmt"
 
 // NewGenesisState returns a brand genesis state.
-func NewGenesisState(brands Brands, params Params) GenesisState {
-	return GenesisState{
+func NewGenesisState(brands Brands, params Params) *GenesisState {
+	return &GenesisState{
 		Brands: brands,
 		Params: params,
 	}
 }
 
 // DefaultGenesisState returns a brand default genesis state.
-func DefaultGenesisState() GenesisState {
-	return GenesisState{
+func DefaultGenesisState() *GenesisState {
+	return &GenesisState{
 		Brands: Brands{},
 		Params: DefaultParams(),
 	}

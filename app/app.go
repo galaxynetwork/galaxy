@@ -80,17 +80,17 @@ import (
 	ibchost "github.com/cosmos/ibc-go/v2/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v2/modules/core/keeper"
 
-	//
 	"github.com/galaxies-labs/galaxy/x/mint"
 	mintkeeper "github.com/galaxies-labs/galaxy/x/mint/keeper"
 	minttypes "github.com/galaxies-labs/galaxy/x/mint/types"
 
-	//
 	"github.com/galaxies-labs/galaxy/x/clairdrop"
 	clairdropkeeper "github.com/galaxies-labs/galaxy/x/clairdrop/keeper"
 	clairdroptypes "github.com/galaxies-labs/galaxy/x/clairdrop/types"
 
-	//
+	brandkeeper "github.com/galaxies-labs/galaxy/x/brand/keeper"
+	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
+
 	"github.com/spf13/cast"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
@@ -218,6 +218,7 @@ type App struct {
 
 	MintKeeper      mintkeeper.Keeper
 	ClairdropKeeper clairdropkeeper.Keeper
+	BrandKeeper     brandkeeper.Keeper
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
@@ -260,7 +261,7 @@ func New(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		minttypes.StoreKey,
 		clairdroptypes.StoreKey,
-		// this line is used by starport scaffolding # stargate/app/storeKey
+		brandtypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -331,6 +332,13 @@ func New(
 		app.BankKeeper,
 		app.DistrKeeper,
 		app.MintKeeper,
+	)
+
+	app.BrandKeeper = brandkeeper.NewKeeper(
+		keys[brandtypes.StoreKey],
+		appCodec,
+		app.AccountKeeper,
+		app.GetSubspace(brandtypes.ModuleName),
 	)
 
 	// register the staking hooks

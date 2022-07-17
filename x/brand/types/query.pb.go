@@ -31,22 +31,22 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type QueryListBrandRequest struct {
+type QueryBrandsRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryListBrandRequest) Reset()         { *m = QueryListBrandRequest{} }
-func (m *QueryListBrandRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryListBrandRequest) ProtoMessage()    {}
-func (*QueryListBrandRequest) Descriptor() ([]byte, []int) {
+func (m *QueryBrandsRequest) Reset()         { *m = QueryBrandsRequest{} }
+func (m *QueryBrandsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandsRequest) ProtoMessage()    {}
+func (*QueryBrandsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{0}
 }
-func (m *QueryListBrandRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListBrandRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListBrandRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandsRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -56,42 +56,42 @@ func (m *QueryListBrandRequest) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryListBrandRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListBrandRequest.Merge(m, src)
+func (m *QueryBrandsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandsRequest.Merge(m, src)
 }
-func (m *QueryListBrandRequest) XXX_Size() int {
+func (m *QueryBrandsRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListBrandRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListBrandRequest.DiscardUnknown(m)
+func (m *QueryBrandsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandsRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListBrandRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandsRequest proto.InternalMessageInfo
 
-func (m *QueryListBrandRequest) GetPagination() *query.PageRequest {
+func (m *QueryBrandsRequest) GetPagination() *query.PageRequest {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-type QueryListBrandResponse struct {
+type QueryBrandsResponse struct {
 	Brands     []Brand             `protobuf:"bytes,1,rep,name=brands,proto3" json:"brands"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryListBrandResponse) Reset()         { *m = QueryListBrandResponse{} }
-func (m *QueryListBrandResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryListBrandResponse) ProtoMessage()    {}
-func (*QueryListBrandResponse) Descriptor() ([]byte, []int) {
+func (m *QueryBrandsResponse) Reset()         { *m = QueryBrandsResponse{} }
+func (m *QueryBrandsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandsResponse) ProtoMessage()    {}
+func (*QueryBrandsResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{1}
 }
-func (m *QueryListBrandResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListBrandResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListBrandResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandsResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -101,48 +101,48 @@ func (m *QueryListBrandResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *QueryListBrandResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListBrandResponse.Merge(m, src)
+func (m *QueryBrandsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandsResponse.Merge(m, src)
 }
-func (m *QueryListBrandResponse) XXX_Size() int {
+func (m *QueryBrandsResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListBrandResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListBrandResponse.DiscardUnknown(m)
+func (m *QueryBrandsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandsResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListBrandResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandsResponse proto.InternalMessageInfo
 
-func (m *QueryListBrandResponse) GetBrands() []Brand {
+func (m *QueryBrandsResponse) GetBrands() []Brand {
 	if m != nil {
 		return m.Brands
 	}
 	return nil
 }
 
-func (m *QueryListBrandResponse) GetPagination() *query.PageResponse {
+func (m *QueryBrandsResponse) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-type QueryGetBrandRequest struct {
+type QueryBrandRequest struct {
 	BrandId string `protobuf:"bytes,1,opt,name=brand_id,json=brandId,proto3" json:"brand_id,omitempty"`
 }
 
-func (m *QueryGetBrandRequest) Reset()         { *m = QueryGetBrandRequest{} }
-func (m *QueryGetBrandRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetBrandRequest) ProtoMessage()    {}
-func (*QueryGetBrandRequest) Descriptor() ([]byte, []int) {
+func (m *QueryBrandRequest) Reset()         { *m = QueryBrandRequest{} }
+func (m *QueryBrandRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandRequest) ProtoMessage()    {}
+func (*QueryBrandRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{2}
 }
-func (m *QueryGetBrandRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetBrandRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetBrandRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -152,41 +152,41 @@ func (m *QueryGetBrandRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *QueryGetBrandRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetBrandRequest.Merge(m, src)
+func (m *QueryBrandRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandRequest.Merge(m, src)
 }
-func (m *QueryGetBrandRequest) XXX_Size() int {
+func (m *QueryBrandRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetBrandRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetBrandRequest.DiscardUnknown(m)
+func (m *QueryBrandRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetBrandRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandRequest proto.InternalMessageInfo
 
-func (m *QueryGetBrandRequest) GetBrandId() string {
+func (m *QueryBrandRequest) GetBrandId() string {
 	if m != nil {
 		return m.BrandId
 	}
 	return ""
 }
 
-type QueryGetBrandResponse struct {
+type QueryBrandResponse struct {
 	Brand Brand `protobuf:"bytes,1,opt,name=brand,proto3" json:"brand"`
 }
 
-func (m *QueryGetBrandResponse) Reset()         { *m = QueryGetBrandResponse{} }
-func (m *QueryGetBrandResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetBrandResponse) ProtoMessage()    {}
-func (*QueryGetBrandResponse) Descriptor() ([]byte, []int) {
+func (m *QueryBrandResponse) Reset()         { *m = QueryBrandResponse{} }
+func (m *QueryBrandResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandResponse) ProtoMessage()    {}
+func (*QueryBrandResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{3}
 }
-func (m *QueryGetBrandResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetBrandResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetBrandResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -196,42 +196,42 @@ func (m *QueryGetBrandResponse) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryGetBrandResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetBrandResponse.Merge(m, src)
+func (m *QueryBrandResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandResponse.Merge(m, src)
 }
-func (m *QueryGetBrandResponse) XXX_Size() int {
+func (m *QueryBrandResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetBrandResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetBrandResponse.DiscardUnknown(m)
+func (m *QueryBrandResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetBrandResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandResponse proto.InternalMessageInfo
 
-func (m *QueryGetBrandResponse) GetBrand() Brand {
+func (m *QueryBrandResponse) GetBrand() Brand {
 	if m != nil {
 		return m.Brand
 	}
 	return Brand{}
 }
 
-type QueryListBrandByOwnerRequest struct {
+type QueryBrandsByOwnerRequest struct {
 	Owner      string             `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryListBrandByOwnerRequest) Reset()         { *m = QueryListBrandByOwnerRequest{} }
-func (m *QueryListBrandByOwnerRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryListBrandByOwnerRequest) ProtoMessage()    {}
-func (*QueryListBrandByOwnerRequest) Descriptor() ([]byte, []int) {
+func (m *QueryBrandsByOwnerRequest) Reset()         { *m = QueryBrandsByOwnerRequest{} }
+func (m *QueryBrandsByOwnerRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandsByOwnerRequest) ProtoMessage()    {}
+func (*QueryBrandsByOwnerRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{4}
 }
-func (m *QueryListBrandByOwnerRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandsByOwnerRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListBrandByOwnerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandsByOwnerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListBrandByOwnerRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandsByOwnerRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -241,49 +241,49 @@ func (m *QueryListBrandByOwnerRequest) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *QueryListBrandByOwnerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListBrandByOwnerRequest.Merge(m, src)
+func (m *QueryBrandsByOwnerRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandsByOwnerRequest.Merge(m, src)
 }
-func (m *QueryListBrandByOwnerRequest) XXX_Size() int {
+func (m *QueryBrandsByOwnerRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListBrandByOwnerRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListBrandByOwnerRequest.DiscardUnknown(m)
+func (m *QueryBrandsByOwnerRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandsByOwnerRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListBrandByOwnerRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandsByOwnerRequest proto.InternalMessageInfo
 
-func (m *QueryListBrandByOwnerRequest) GetOwner() string {
+func (m *QueryBrandsByOwnerRequest) GetOwner() string {
 	if m != nil {
 		return m.Owner
 	}
 	return ""
 }
 
-func (m *QueryListBrandByOwnerRequest) GetPagination() *query.PageRequest {
+func (m *QueryBrandsByOwnerRequest) GetPagination() *query.PageRequest {
 	if m != nil {
 		return m.Pagination
 	}
 	return nil
 }
 
-type QueryListBrandByOwnerResponse struct {
+type QueryBrandsByOwnerResponse struct {
 	Brands     []Brand             `protobuf:"bytes,1,rep,name=brands,proto3" json:"brands"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryListBrandByOwnerResponse) Reset()         { *m = QueryListBrandByOwnerResponse{} }
-func (m *QueryListBrandByOwnerResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryListBrandByOwnerResponse) ProtoMessage()    {}
-func (*QueryListBrandByOwnerResponse) Descriptor() ([]byte, []int) {
+func (m *QueryBrandsByOwnerResponse) Reset()         { *m = QueryBrandsByOwnerResponse{} }
+func (m *QueryBrandsByOwnerResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBrandsByOwnerResponse) ProtoMessage()    {}
+func (*QueryBrandsByOwnerResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6efb8fb3a35e25f0, []int{5}
 }
-func (m *QueryListBrandByOwnerResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryBrandsByOwnerResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListBrandByOwnerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBrandsByOwnerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListBrandByOwnerResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBrandsByOwnerResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -293,26 +293,26 @@ func (m *QueryListBrandByOwnerResponse) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *QueryListBrandByOwnerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListBrandByOwnerResponse.Merge(m, src)
+func (m *QueryBrandsByOwnerResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBrandsByOwnerResponse.Merge(m, src)
 }
-func (m *QueryListBrandByOwnerResponse) XXX_Size() int {
+func (m *QueryBrandsByOwnerResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListBrandByOwnerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListBrandByOwnerResponse.DiscardUnknown(m)
+func (m *QueryBrandsByOwnerResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBrandsByOwnerResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListBrandByOwnerResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryBrandsByOwnerResponse proto.InternalMessageInfo
 
-func (m *QueryListBrandByOwnerResponse) GetBrands() []Brand {
+func (m *QueryBrandsByOwnerResponse) GetBrands() []Brand {
 	if m != nil {
 		return m.Brands
 	}
 	return nil
 }
 
-func (m *QueryListBrandByOwnerResponse) GetPagination() *query.PageResponse {
+func (m *QueryBrandsByOwnerResponse) GetPagination() *query.PageResponse {
 	if m != nil {
 		return m.Pagination
 	}
@@ -320,52 +320,51 @@ func (m *QueryListBrandByOwnerResponse) GetPagination() *query.PageResponse {
 }
 
 func init() {
-	proto.RegisterType((*QueryListBrandRequest)(nil), "galaxy.brand.QueryListBrandRequest")
-	proto.RegisterType((*QueryListBrandResponse)(nil), "galaxy.brand.QueryListBrandResponse")
-	proto.RegisterType((*QueryGetBrandRequest)(nil), "galaxy.brand.QueryGetBrandRequest")
-	proto.RegisterType((*QueryGetBrandResponse)(nil), "galaxy.brand.QueryGetBrandResponse")
-	proto.RegisterType((*QueryListBrandByOwnerRequest)(nil), "galaxy.brand.QueryListBrandByOwnerRequest")
-	proto.RegisterType((*QueryListBrandByOwnerResponse)(nil), "galaxy.brand.QueryListBrandByOwnerResponse")
+	proto.RegisterType((*QueryBrandsRequest)(nil), "galaxy.brand.QueryBrandsRequest")
+	proto.RegisterType((*QueryBrandsResponse)(nil), "galaxy.brand.QueryBrandsResponse")
+	proto.RegisterType((*QueryBrandRequest)(nil), "galaxy.brand.QueryBrandRequest")
+	proto.RegisterType((*QueryBrandResponse)(nil), "galaxy.brand.QueryBrandResponse")
+	proto.RegisterType((*QueryBrandsByOwnerRequest)(nil), "galaxy.brand.QueryBrandsByOwnerRequest")
+	proto.RegisterType((*QueryBrandsByOwnerResponse)(nil), "galaxy.brand.QueryBrandsByOwnerResponse")
 }
 
 func init() { proto.RegisterFile("galaxy/brand/query.proto", fileDescriptor_6efb8fb3a35e25f0) }
 
 var fileDescriptor_6efb8fb3a35e25f0 = []byte{
-	// 533 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x94, 0x4f, 0x6f, 0xd3, 0x30,
-	0x18, 0xc6, 0xeb, 0x8e, 0x8e, 0xcd, 0xe3, 0x80, 0x4c, 0x99, 0xba, 0xa8, 0x4b, 0x47, 0x06, 0x6c,
-	0x1a, 0xaa, 0xad, 0x96, 0x4f, 0x40, 0x0e, 0x14, 0x24, 0x24, 0x20, 0xdc, 0xb8, 0x54, 0xce, 0x62,
-	0x99, 0x48, 0x5d, 0x9c, 0xc5, 0x2e, 0x2c, 0x02, 0x2e, 0x7c, 0x82, 0x09, 0x10, 0x17, 0xbe, 0x06,
-	0x1f, 0x62, 0xc7, 0x09, 0x2e, 0x9c, 0x10, 0x6a, 0xf9, 0x20, 0x28, 0xb6, 0xcb, 0x9a, 0x52, 0x0a,
-	0xe2, 0xb2, 0x4b, 0x55, 0xeb, 0x7d, 0xde, 0xf7, 0xf9, 0xbd, 0x7f, 0x5a, 0xd8, 0xe0, 0x74, 0x40,
-	0x8f, 0x72, 0x12, 0x66, 0x34, 0x89, 0xc8, 0xe1, 0x90, 0x65, 0x39, 0x4e, 0x33, 0xa1, 0x04, 0xba,
-	0x64, 0x22, 0x58, 0x47, 0x9c, 0x3a, 0x17, 0x5c, 0xe8, 0x00, 0x29, 0xbe, 0x19, 0x8d, 0x53, 0xce,
-	0xd6, 0x9f, 0x36, 0xb2, 0xb7, 0x2f, 0xe4, 0x81, 0x90, 0x24, 0xa4, 0x92, 0x99, 0xb2, 0xe4, 0x79,
-	0x27, 0x64, 0x8a, 0x76, 0x48, 0x4a, 0x79, 0x9c, 0x50, 0x15, 0x8b, 0xc4, 0x6a, 0x37, 0x8c, 0xb6,
-	0x6f, 0xca, 0x9b, 0x87, 0x0d, 0x35, 0xb9, 0x10, 0x7c, 0xc0, 0x08, 0x4d, 0x63, 0x42, 0x93, 0x44,
-	0x28, 0x9d, 0x67, 0xa3, 0x5e, 0x1f, 0x5e, 0x7d, 0x5c, 0x94, 0x7e, 0x10, 0x4b, 0xe5, 0x17, 0xe6,
-	0x01, 0x3b, 0x1c, 0x32, 0xa9, 0xd0, 0x5d, 0x08, 0xcf, 0x5c, 0x1a, 0x60, 0x0b, 0xec, 0xae, 0x75,
-	0x6f, 0x62, 0x5b, 0xb9, 0x40, 0xc2, 0xa6, 0x53, 0x8b, 0x84, 0x1f, 0x51, 0xce, 0x6c, 0x6e, 0x30,
-	0x95, 0xe9, 0xbd, 0x07, 0x70, 0x7d, 0xd6, 0x41, 0xa6, 0x22, 0x91, 0x0c, 0x75, 0xe0, 0xb2, 0xee,
-	0x57, 0x36, 0xc0, 0xd6, 0xd2, 0xee, 0x5a, 0xf7, 0x0a, 0x9e, 0x9e, 0x17, 0xd6, 0x62, 0xff, 0xc2,
-	0xc9, 0xb7, 0x56, 0x25, 0xb0, 0x42, 0xd4, 0x2b, 0x51, 0x55, 0x35, 0xd5, 0xce, 0x5f, 0xa9, 0x8c,
-	0x5f, 0x09, 0xab, 0x03, 0xeb, 0x9a, 0xaa, 0xc7, 0xca, 0x6d, 0x6f, 0xc0, 0x15, 0x6d, 0xd5, 0x8f,
-	0x23, 0xdd, 0xf4, 0x6a, 0x70, 0x51, 0xbf, 0xef, 0x47, 0xde, 0x3d, 0x3b, 0xaa, 0xb3, 0x14, 0xdb,
-	0x07, 0x81, 0x35, 0xad, 0xb1, 0x53, 0x5a, 0xd0, 0x86, 0xd1, 0x79, 0x1f, 0x00, 0x6c, 0x96, 0x67,
-	0xe2, 0xe7, 0x0f, 0x5f, 0x24, 0x2c, 0x9b, 0x50, 0x60, 0x58, 0x13, 0xc5, 0xdb, 0x20, 0xf8, 0x8d,
-	0xcf, 0x9f, 0xda, 0x75, 0xdb, 0xe4, 0x9d, 0x28, 0xca, 0x98, 0x94, 0x4f, 0x54, 0x16, 0x27, 0x3c,
-	0x30, 0xb2, 0x99, 0x65, 0x55, 0xff, 0x7b, 0x59, 0x1f, 0x01, 0xdc, 0xfc, 0x03, 0xd8, 0xf9, 0xef,
-	0xac, 0x7b, 0xbc, 0x04, 0x6b, 0x9a, 0x0e, 0x29, 0xb8, 0xfa, 0x8b, 0x10, 0x6d, 0x97, 0x11, 0xe6,
-	0x9e, 0xb3, 0x73, 0x7d, 0xb1, 0xc8, 0xb8, 0x79, 0xcd, 0x37, 0x5f, 0x7e, 0xbc, 0xab, 0xae, 0xa3,
-	0x3a, 0xf9, 0xfd, 0x57, 0x29, 0xd1, 0x2b, 0xb8, 0x32, 0xd9, 0x3d, 0xf2, 0xe6, 0xd4, 0x9b, 0xb9,
-	0x25, 0x67, 0x7b, 0xa1, 0xc6, 0x5a, 0xee, 0x68, 0xcb, 0x6b, 0xa8, 0x35, 0xcf, 0x92, 0xbc, 0x9c,
-	0x1c, 0xe3, 0x6b, 0xf4, 0x16, 0xc0, 0xcb, 0xb3, 0x6b, 0x41, 0x7b, 0x8b, 0xda, 0x2a, 0x1f, 0x95,
-	0x73, 0xeb, 0x9f, 0xb4, 0x16, 0xeb, 0x86, 0xc6, 0x6a, 0xa1, 0xcd, 0xb9, 0x58, 0x61, 0xde, 0xd7,
-	0x87, 0xe7, 0xf7, 0x4e, 0x46, 0x2e, 0x38, 0x1d, 0xb9, 0xe0, 0xfb, 0xc8, 0x05, 0xc7, 0x63, 0xb7,
-	0x72, 0x3a, 0x76, 0x2b, 0x5f, 0xc7, 0x6e, 0xe5, 0x69, 0x9b, 0xc7, 0xea, 0xd9, 0x30, 0xc4, 0xfb,
-	0xe2, 0xc0, 0x94, 0x88, 0x99, 0x6c, 0x0f, 0x68, 0x28, 0x27, 0x05, 0x8f, 0x6c, 0x49, 0x95, 0xa7,
-	0x4c, 0x86, 0xcb, 0xfa, 0xef, 0xe8, 0xf6, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x05, 0xe9, 0x51,
-	0x11, 0x4d, 0x05, 0x00, 0x00,
+	// 522 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x54, 0x4f, 0x8b, 0xd3, 0x40,
+	0x14, 0xef, 0x54, 0x5b, 0x75, 0x56, 0x0f, 0xce, 0x16, 0x69, 0xc3, 0x9a, 0x76, 0x03, 0xda, 0x22,
+	0x74, 0x86, 0xd6, 0x4f, 0x60, 0x40, 0x17, 0x4f, 0x6a, 0xbc, 0x89, 0x50, 0x26, 0x9b, 0x21, 0x06,
+	0xbb, 0x99, 0x6c, 0x26, 0xd5, 0x0d, 0xe2, 0xc5, 0x9b, 0x37, 0x65, 0x2f, 0x7e, 0x10, 0x3f, 0xc4,
+	0x1e, 0x17, 0xbd, 0x78, 0x12, 0x69, 0xfd, 0x0a, 0xde, 0x25, 0x6f, 0x26, 0x6e, 0xe3, 0xb6, 0xbb,
+	0xe0, 0xc5, 0x4b, 0xe9, 0xf0, 0x7e, 0xef, 0xf7, 0xe7, 0xbd, 0xd7, 0xe2, 0x76, 0xc8, 0xa7, 0xfc,
+	0x20, 0x67, 0x7e, 0xca, 0xe3, 0x80, 0xed, 0xcf, 0x44, 0x9a, 0xd3, 0x24, 0x95, 0x99, 0x24, 0x57,
+	0x75, 0x85, 0x42, 0xc5, 0x6a, 0x85, 0x32, 0x94, 0x50, 0x60, 0xc5, 0x37, 0x8d, 0xb1, 0xaa, 0xdd,
+	0xf0, 0x69, 0x2a, 0x77, 0x76, 0xa5, 0xda, 0x93, 0x8a, 0xf9, 0x5c, 0x09, 0x4d, 0xcb, 0x5e, 0x8d,
+	0x7c, 0x91, 0xf1, 0x11, 0x4b, 0x78, 0x18, 0xc5, 0x3c, 0x8b, 0x64, 0x6c, 0xb0, 0x1d, 0x8d, 0x9d,
+	0x68, 0x7a, 0xfd, 0x30, 0xa5, 0xad, 0x50, 0xca, 0x70, 0x2a, 0x18, 0x4f, 0x22, 0xc6, 0xe3, 0x58,
+	0x66, 0xd0, 0x67, 0xaa, 0xce, 0x73, 0x4c, 0x9e, 0x14, 0xd4, 0x6e, 0x21, 0xac, 0x3c, 0xb1, 0x3f,
+	0x13, 0x2a, 0x23, 0x0f, 0x30, 0x3e, 0x91, 0x68, 0xa3, 0x1e, 0x1a, 0x6c, 0x8c, 0x6f, 0x53, 0x43,
+	0x5b, 0xf8, 0xa1, 0x3a, 0xa6, 0xf1, 0x43, 0x1f, 0xf3, 0x50, 0x98, 0x5e, 0x6f, 0xa9, 0xd3, 0xf9,
+	0x88, 0xf0, 0x66, 0x85, 0x5e, 0x25, 0x32, 0x56, 0x82, 0x8c, 0x70, 0x13, 0x92, 0xaa, 0x36, 0xea,
+	0x5d, 0x18, 0x6c, 0x8c, 0x37, 0xe9, 0xf2, 0xa4, 0x28, 0xa0, 0xdd, 0x8b, 0x47, 0xdf, 0xbb, 0x35,
+	0xcf, 0x00, 0xc9, 0x4e, 0xc5, 0x52, 0x1d, 0x2c, 0xf5, 0xcf, 0xb5, 0xa4, 0xf5, 0x2a, 0x9e, 0x28,
+	0xbe, 0x7e, 0x62, 0xa9, 0x0c, 0xdc, 0xc1, 0x97, 0x41, 0x67, 0x12, 0x05, 0x10, 0xf7, 0x8a, 0x77,
+	0x09, 0xde, 0x0f, 0x03, 0xe7, 0xfe, 0xf2, 0x84, 0xfe, 0x24, 0x60, 0xb8, 0x01, 0x00, 0x33, 0x9c,
+	0x33, 0x02, 0x68, 0x9c, 0x73, 0x88, 0x70, 0x67, 0x69, 0x14, 0x6e, 0xfe, 0xe8, 0x75, 0x2c, 0xd2,
+	0x52, 0x9f, 0xe2, 0x86, 0x2c, 0xde, 0x5a, 0xdc, 0x6d, 0x7f, 0xf9, 0x3c, 0x6c, 0x99, 0x6c, 0xf7,
+	0x82, 0x20, 0x15, 0x4a, 0x3d, 0xcd, 0xd2, 0x28, 0x0e, 0x3d, 0x0d, 0xfb, 0x6b, 0x41, 0xf5, 0x7f,
+	0x5e, 0xd0, 0x27, 0x84, 0xad, 0x55, 0xae, 0xfe, 0xff, 0x9e, 0xc6, 0xbf, 0xea, 0xb8, 0x01, 0xd6,
+	0xc8, 0x4b, 0xdc, 0xd4, 0xf6, 0x48, 0xaf, 0xaa, 0x7f, 0xfa, 0x72, 0xad, 0xed, 0x33, 0x10, 0x5a,
+	0xc4, 0xd9, 0x7a, 0xf7, 0xf5, 0xe7, 0x61, 0xfd, 0x06, 0x69, 0xb1, 0xd3, 0x3f, 0x3d, 0x45, 0x14,
+	0x6e, 0x00, 0x9e, 0x74, 0xd7, 0x31, 0x95, 0x52, 0xbd, 0xf5, 0x00, 0xa3, 0xd4, 0x07, 0xa5, 0x6d,
+	0xd2, 0x5d, 0xa5, 0xc4, 0xde, 0x94, 0x17, 0xf7, 0x96, 0xbc, 0x47, 0xf8, 0x5a, 0x65, 0x03, 0xa4,
+	0xbf, 0x36, 0x47, 0xf5, 0x72, 0xac, 0xc1, 0xf9, 0x40, 0xe3, 0xe6, 0x16, 0xb8, 0xe9, 0x92, 0x9b,
+	0x2b, 0xdd, 0xf8, 0xf9, 0x04, 0x4e, 0xcb, 0xdd, 0x39, 0x9a, 0xdb, 0xe8, 0x78, 0x6e, 0xa3, 0x1f,
+	0x73, 0x1b, 0x7d, 0x58, 0xd8, 0xb5, 0xe3, 0x85, 0x5d, 0xfb, 0xb6, 0xb0, 0x6b, 0xcf, 0x86, 0x61,
+	0x94, 0xbd, 0x98, 0xf9, 0x74, 0x57, 0xee, 0x69, 0x8a, 0x48, 0xa8, 0xe1, 0x94, 0xfb, 0xaa, 0x24,
+	0x3c, 0x30, 0x94, 0x59, 0x9e, 0x08, 0xe5, 0x37, 0xe1, 0x1f, 0xe6, 0xee, 0xef, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xb0, 0x6f, 0x6d, 0x01, 0x20, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -380,12 +379,12 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
-	// ListBrand queries all Brands
-	ListBrand(ctx context.Context, in *QueryListBrandRequest, opts ...grpc.CallOption) (*QueryListBrandResponse, error)
-	// GetBrand queries and Brand based on it's id
-	GetBrand(ctx context.Context, in *QueryGetBrandRequest, opts ...grpc.CallOption) (*QueryGetBrandResponse, error)
-	// ListBrandByOwner queries all Brands by owner address
-	ListBrandByOwner(ctx context.Context, in *QueryListBrandByOwnerRequest, opts ...grpc.CallOption) (*QueryListBrandByOwnerResponse, error)
+	// Brands queries all Brands
+	Brands(ctx context.Context, in *QueryBrandsRequest, opts ...grpc.CallOption) (*QueryBrandsResponse, error)
+	// Brand queries and Brand based on it's id
+	Brand(ctx context.Context, in *QueryBrandRequest, opts ...grpc.CallOption) (*QueryBrandResponse, error)
+	// BrandsByOwner queries all Brands by owner address
+	BrandsByOwner(ctx context.Context, in *QueryBrandsByOwnerRequest, opts ...grpc.CallOption) (*QueryBrandsByOwnerResponse, error)
 }
 
 type queryClient struct {
@@ -396,27 +395,27 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) ListBrand(ctx context.Context, in *QueryListBrandRequest, opts ...grpc.CallOption) (*QueryListBrandResponse, error) {
-	out := new(QueryListBrandResponse)
-	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/ListBrand", in, out, opts...)
+func (c *queryClient) Brands(ctx context.Context, in *QueryBrandsRequest, opts ...grpc.CallOption) (*QueryBrandsResponse, error) {
+	out := new(QueryBrandsResponse)
+	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/Brands", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) GetBrand(ctx context.Context, in *QueryGetBrandRequest, opts ...grpc.CallOption) (*QueryGetBrandResponse, error) {
-	out := new(QueryGetBrandResponse)
-	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/GetBrand", in, out, opts...)
+func (c *queryClient) Brand(ctx context.Context, in *QueryBrandRequest, opts ...grpc.CallOption) (*QueryBrandResponse, error) {
+	out := new(QueryBrandResponse)
+	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/Brand", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) ListBrandByOwner(ctx context.Context, in *QueryListBrandByOwnerRequest, opts ...grpc.CallOption) (*QueryListBrandByOwnerResponse, error) {
-	out := new(QueryListBrandByOwnerResponse)
-	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/ListBrandByOwner", in, out, opts...)
+func (c *queryClient) BrandsByOwner(ctx context.Context, in *QueryBrandsByOwnerRequest, opts ...grpc.CallOption) (*QueryBrandsByOwnerResponse, error) {
+	out := new(QueryBrandsByOwnerResponse)
+	err := c.cc.Invoke(ctx, "/galaxy.brand.Query/BrandsByOwner", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -425,82 +424,82 @@ func (c *queryClient) ListBrandByOwner(ctx context.Context, in *QueryListBrandBy
 
 // QueryServer is the server API for Query service.
 type QueryServer interface {
-	// ListBrand queries all Brands
-	ListBrand(context.Context, *QueryListBrandRequest) (*QueryListBrandResponse, error)
-	// GetBrand queries and Brand based on it's id
-	GetBrand(context.Context, *QueryGetBrandRequest) (*QueryGetBrandResponse, error)
-	// ListBrandByOwner queries all Brands by owner address
-	ListBrandByOwner(context.Context, *QueryListBrandByOwnerRequest) (*QueryListBrandByOwnerResponse, error)
+	// Brands queries all Brands
+	Brands(context.Context, *QueryBrandsRequest) (*QueryBrandsResponse, error)
+	// Brand queries and Brand based on it's id
+	Brand(context.Context, *QueryBrandRequest) (*QueryBrandResponse, error)
+	// BrandsByOwner queries all Brands by owner address
+	BrandsByOwner(context.Context, *QueryBrandsByOwnerRequest) (*QueryBrandsByOwnerResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
 type UnimplementedQueryServer struct {
 }
 
-func (*UnimplementedQueryServer) ListBrand(ctx context.Context, req *QueryListBrandRequest) (*QueryListBrandResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListBrand not implemented")
+func (*UnimplementedQueryServer) Brands(ctx context.Context, req *QueryBrandsRequest) (*QueryBrandsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Brands not implemented")
 }
-func (*UnimplementedQueryServer) GetBrand(ctx context.Context, req *QueryGetBrandRequest) (*QueryGetBrandResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBrand not implemented")
+func (*UnimplementedQueryServer) Brand(ctx context.Context, req *QueryBrandRequest) (*QueryBrandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Brand not implemented")
 }
-func (*UnimplementedQueryServer) ListBrandByOwner(ctx context.Context, req *QueryListBrandByOwnerRequest) (*QueryListBrandByOwnerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListBrandByOwner not implemented")
+func (*UnimplementedQueryServer) BrandsByOwner(ctx context.Context, req *QueryBrandsByOwnerRequest) (*QueryBrandsByOwnerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BrandsByOwner not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
 	s.RegisterService(&_Query_serviceDesc, srv)
 }
 
-func _Query_ListBrand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryListBrandRequest)
+func _Query_Brands_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBrandsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ListBrand(ctx, in)
+		return srv.(QueryServer).Brands(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/galaxy.brand.Query/ListBrand",
+		FullMethod: "/galaxy.brand.Query/Brands",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ListBrand(ctx, req.(*QueryListBrandRequest))
+		return srv.(QueryServer).Brands(ctx, req.(*QueryBrandsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_GetBrand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetBrandRequest)
+func _Query_Brand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBrandRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).GetBrand(ctx, in)
+		return srv.(QueryServer).Brand(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/galaxy.brand.Query/GetBrand",
+		FullMethod: "/galaxy.brand.Query/Brand",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).GetBrand(ctx, req.(*QueryGetBrandRequest))
+		return srv.(QueryServer).Brand(ctx, req.(*QueryBrandRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ListBrandByOwner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryListBrandByOwnerRequest)
+func _Query_BrandsByOwner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBrandsByOwnerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ListBrandByOwner(ctx, in)
+		return srv.(QueryServer).BrandsByOwner(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/galaxy.brand.Query/ListBrandByOwner",
+		FullMethod: "/galaxy.brand.Query/BrandsByOwner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ListBrandByOwner(ctx, req.(*QueryListBrandByOwnerRequest))
+		return srv.(QueryServer).BrandsByOwner(ctx, req.(*QueryBrandsByOwnerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -510,23 +509,23 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListBrand",
-			Handler:    _Query_ListBrand_Handler,
+			MethodName: "Brands",
+			Handler:    _Query_Brands_Handler,
 		},
 		{
-			MethodName: "GetBrand",
-			Handler:    _Query_GetBrand_Handler,
+			MethodName: "Brand",
+			Handler:    _Query_Brand_Handler,
 		},
 		{
-			MethodName: "ListBrandByOwner",
-			Handler:    _Query_ListBrandByOwner_Handler,
+			MethodName: "BrandsByOwner",
+			Handler:    _Query_BrandsByOwner_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "galaxy/brand/query.proto",
 }
 
-func (m *QueryListBrandRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -536,12 +535,12 @@ func (m *QueryListBrandRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryListBrandRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandsRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListBrandRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -561,7 +560,7 @@ func (m *QueryListBrandRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryListBrandResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandsResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -571,12 +570,12 @@ func (m *QueryListBrandResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryListBrandResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandsResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListBrandResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -610,7 +609,7 @@ func (m *QueryListBrandResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetBrandRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -620,12 +619,12 @@ func (m *QueryGetBrandRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetBrandRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetBrandRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -640,7 +639,7 @@ func (m *QueryGetBrandRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetBrandResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -650,12 +649,12 @@ func (m *QueryGetBrandResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetBrandResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetBrandResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -673,7 +672,7 @@ func (m *QueryGetBrandResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryListBrandByOwnerRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandsByOwnerRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -683,12 +682,12 @@ func (m *QueryListBrandByOwnerRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryListBrandByOwnerRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandsByOwnerRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListBrandByOwnerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandsByOwnerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -715,7 +714,7 @@ func (m *QueryListBrandByOwnerRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryListBrandByOwnerResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryBrandsByOwnerResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -725,12 +724,12 @@ func (m *QueryListBrandByOwnerResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryListBrandByOwnerResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBrandsByOwnerResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListBrandByOwnerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBrandsByOwnerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -775,7 +774,7 @@ func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *QueryListBrandRequest) Size() (n int) {
+func (m *QueryBrandsRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -788,7 +787,7 @@ func (m *QueryListBrandRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryListBrandResponse) Size() (n int) {
+func (m *QueryBrandsResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -807,7 +806,7 @@ func (m *QueryListBrandResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetBrandRequest) Size() (n int) {
+func (m *QueryBrandRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -820,7 +819,7 @@ func (m *QueryGetBrandRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetBrandResponse) Size() (n int) {
+func (m *QueryBrandResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -831,7 +830,7 @@ func (m *QueryGetBrandResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryListBrandByOwnerRequest) Size() (n int) {
+func (m *QueryBrandsByOwnerRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -848,7 +847,7 @@ func (m *QueryListBrandByOwnerRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryListBrandByOwnerResponse) Size() (n int) {
+func (m *QueryBrandsByOwnerResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -873,7 +872,7 @@ func sovQuery(x uint64) (n int) {
 func sozQuery(x uint64) (n int) {
 	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *QueryListBrandRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -896,10 +895,10 @@ func (m *QueryListBrandRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListBrandRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandsRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListBrandRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -959,7 +958,7 @@ func (m *QueryListBrandRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryListBrandResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -982,10 +981,10 @@ func (m *QueryListBrandResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListBrandResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandsResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListBrandResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1079,7 +1078,7 @@ func (m *QueryListBrandResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetBrandRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1102,10 +1101,10 @@ func (m *QueryGetBrandRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetBrandRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetBrandRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1161,7 +1160,7 @@ func (m *QueryGetBrandRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetBrandResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1184,10 +1183,10 @@ func (m *QueryGetBrandResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetBrandResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetBrandResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1244,7 +1243,7 @@ func (m *QueryGetBrandResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryListBrandByOwnerRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandsByOwnerRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1267,10 +1266,10 @@ func (m *QueryListBrandByOwnerRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListBrandByOwnerRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandsByOwnerRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListBrandByOwnerRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandsByOwnerRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1362,7 +1361,7 @@ func (m *QueryListBrandByOwnerRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryListBrandByOwnerResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryBrandsByOwnerResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1385,10 +1384,10 @@ func (m *QueryListBrandByOwnerResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListBrandByOwnerResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBrandsByOwnerResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListBrandByOwnerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBrandsByOwnerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

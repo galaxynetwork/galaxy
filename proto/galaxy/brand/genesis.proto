@@ -1,0 +1,12 @@
+syntax="proto3";
+
+package galaxy.brand;
+import "gogoproto/gogo.proto";
+import "galaxy/brand/brand.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/brand/types";
+
+
+message GenesisState {
+    repeated Brand brands = 1 [(gogoproto.nullable) = false];
+}

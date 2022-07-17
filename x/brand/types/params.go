@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -45,13 +46,17 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // validateBrandCreationFee defines a method validating sdk coin type
 func validateBrandCreationFee(i interface{}) error {
-	v, ok := i.(sdk.Coins)
+	v, ok := i.(sdk.Coin)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
 	if v.Validate() != nil {
 		return fmt.Errorf("invalid brand creation fee: %+v", i)
+	}
+
+	if !strings.EqualFold(v.Denom, DefaultBrandCreationFeeDenom) {
+		return fmt.Errorf("invalid brand creation fee denom: %s, it must be: %s", v.Denom, DefaultBrandCreationFeeDenom)
 	}
 
 	return nil

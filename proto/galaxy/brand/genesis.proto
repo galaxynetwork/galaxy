@@ -3,10 +3,20 @@ syntax="proto3";
 package galaxy.brand;
 import "gogoproto/gogo.proto";
 import "galaxy/brand/brand.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/galaxies-labs/galaxy/x/brand/types";
 
 
 message GenesisState {
     repeated Brand brands = 1 [(gogoproto.nullable) = false];
+
+    Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+message Params {
+    cosmos.base.v1beta1.Coin brand_creation_fee = 1 [
+        (gogoproto.nullable) = false
+  ];
 }

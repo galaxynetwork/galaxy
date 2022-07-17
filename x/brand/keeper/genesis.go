@@ -19,7 +19,9 @@ func (keeper Keeper) InitGenesis(ctx sdk.Context, genState types.GenesisState) e
 		}
 
 		keeper.SetBrand(ctx, brand)
-		keeper.SetBrandByOwner(ctx, brand.Id, sdk.AccAddress(brand.Owner))
+
+		acc, _ := sdk.AccAddressFromBech32(brand.Owner)
+		keeper.SetBrandByOwner(ctx, brand.Id, acc)
 	}
 	return nil
 }

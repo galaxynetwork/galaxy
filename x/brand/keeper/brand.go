@@ -49,6 +49,7 @@ func (keeper Keeper) GetBrand(ctx sdk.Context, brandID string) (types.Brand, boo
 }
 
 func (keeper Keeper) IterateBrands(ctx sdk.Context, cb func(brand types.Brand) (stop bool)) {
+
 	prefix := prefix.NewStore(ctx.KVStore(keeper.storeKey), types.KeyPrefixBrand)
 
 	iterator := prefix.Iterator(nil, nil)
@@ -66,9 +67,9 @@ func (keeper Keeper) IterateBrands(ctx sdk.Context, cb func(brand types.Brand) (
 	}
 }
 func (keeper Keeper) IterateBrandsByOwner(ctx sdk.Context, owner string, cb func(brand types.Brand) (stop bool)) {
-	prefix := prefix.NewStore(ctx.KVStore(keeper.storeKey), types.GetPrefixBrandByOwnerKey(sdk.AccAddress(owner)))
-
-	iterator := prefix.Iterator(nil, nil)
+	acc, _ := sdk.AccAddressFromBech32(owner)
+	ownerStore := keeper.getBrandByOwnerStore(ctx, acc)
+	iterator := ownerStore.Iterator(nil, nil)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -117,16 +118,14 @@ func (keeper Keeper) UnmarshalBrand(bz []byte, brand *types.Brand) error {
 
 // SetBrandByOwner defines a method for indexing brand ids by owner
 func (k Keeper) SetBrandByOwner(ctx sdk.Context, brandID string, owner sdk.AccAddress) {
-	store := ctx.KVStore(k.storeKey)
-	ownerStore := prefix.NewStore(store, types.GetPrefixBrandByOwnerKey(owner))
+	ownerStore := k.getBrandByOwnerStore(ctx, owner)
 
 	ownerStore.Set([]byte(brandID), []byte(brandID))
 }
 
 // DeleteBrandByOwner defines a method for removed indexed brand by owner
 func (k Keeper) DeleteBrandByOwner(ctx sdk.Context, brandID string, owner sdk.AccAddress) {
-	store := ctx.KVStore(k.storeKey)
-	ownerStore := prefix.NewStore(store, types.GetPrefixBrandByOwnerKey(owner))
+	ownerStore := k.getBrandByOwnerStore(ctx, owner)
 
 	ownerStore.Delete([]byte(brandID))
 }

@@ -32,9 +32,9 @@ func (suite *KeeperTestSuite) TestStoreBrand() {
 	require.NoError(brandKeeper.SetBrand(ctx, brandC))
 
 	//set brand ids index by onwer
-	brandKeeper.SetBrandByOwner(ctx, brandA.Id, sdk.AccAddress(brandA.Owner))
-	brandKeeper.SetBrandByOwner(ctx, brandB.Id, sdk.AccAddress(brandB.Owner))
-	brandKeeper.SetBrandByOwner(ctx, brandC.Id, sdk.AccAddress(brandC.Owner))
+	brandKeeper.SetBrandByOwner(ctx, brandA.Id, ownerA)
+	brandKeeper.SetBrandByOwner(ctx, brandB.Id, ownerA)
+	brandKeeper.SetBrandByOwner(ctx, brandC.Id, ownerB)
 
 	///has brands
 	require.True(brandKeeper.HasBrand(ctx, brandA.Id))
@@ -66,10 +66,10 @@ func (suite *KeeperTestSuite) TestStoreBrand() {
 	brand, exist = brandKeeper.GetBrand(ctx, brandA.Id)
 	require.Equal(brand.Owner, ownerA.String())
 
-	brandKeeper.DeleteBrandByOwner(ctx, brandA.Id, sdk.AccAddress(brandA.Owner))
+	brandKeeper.DeleteBrandByOwner(ctx, brandA.Id, ownerA)
 	brandA.Owner = ownerC.String()
 	require.NoError(brandKeeper.SetBrand(ctx, brandA))
-	brandKeeper.SetBrandByOwner(ctx, brandA.Id, sdk.AccAddress(brandA.Owner))
+	brandKeeper.SetBrandByOwner(ctx, brandA.Id, ownerC)
 
 	brand, exist = brandKeeper.GetBrand(ctx, brandA.Id)
 	require.Equal(brand.Owner, ownerC.String())

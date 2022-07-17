@@ -4,9 +4,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/galaxies-labs/galaxy/app"
+	"github.com/galaxies-labs/galaxy/x/brand/keeper"
+	"github.com/galaxies-labs/galaxy/x/brand/types"
 	"github.com/stretchr/testify/suite"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
@@ -14,18 +16,27 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	ctx sdk.Context
-	app *app.App
+	ctx         sdk.Context
+	app         *app.App
+	queryClient types.QueryClient
+	msgServer   types.MsgServer
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
 	suite.app = app.Setup(false)
 	suite.ctx = suite.app.GetBaseApp().NewContext(false, tmproto.Header{Height: 1, ChainID: "galaxy-1", Time: time.Now().UTC()})
 
-	suite.app.BankKeeper.SetParams(
+	suite.app.BrandKeeper.SetParams(
 		suite.ctx,
 		types.DefaultParams(),
 	)
+
+	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
+	types.RegisterQueryServer(queryHelper, keeper.NewQuerier(suite.app.BrandKeeper))
+	suite.queryClient = types.NewQueryClient(queryHelper)
+
+	suite.msgServer = keeper.NewMsgServerImpl(suite.app.BrandKeeper)
+
 }
 
 func TestKeeperTestSuite(t *testing.T) {

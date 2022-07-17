@@ -38,8 +38,8 @@ func NewBrand(id string, owner sdk.AccAddress, description BrandDescription) Bra
 func (brand *Brand) Validate() error {
 	brand.Id = strings.TrimSpace(brand.Id)
 
-	if !reBrandID.MatchString(brand.Id) {
-		return sdkerrors.Wrapf(ErrInvalidBrandID, "invalid brand id: %s", brand.Id)
+	if err := ValidateBrandID(brand.Id); err != nil {
+		return err
 	}
 
 	brandAcc, err := sdk.AccAddressFromBech32(brand.BrandAddress)
@@ -90,6 +90,14 @@ func (bd *BrandDescription) Validate() error {
 
 	if len(bd.Details) > MaxDetailsLength {
 		return sdkerrors.Wrapf(ErrInvalidBrandDetails, "brand details is longer than max length of %d", MaxDetailsLength)
+	}
+
+	return nil
+}
+
+func ValidateBrandID(id string) error {
+	if !reBrandID.MatchString(strings.TrimSpace(id)) {
+		return sdkerrors.Wrapf(ErrInvalidBrandID, "invalid brand id: %s", id)
 	}
 
 	return nil

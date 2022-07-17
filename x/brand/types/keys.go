@@ -7,6 +7,8 @@ import (
 
 const (
 	ModuleName = "brand"
+
+	DefaultBrandCreationFeeDenom = "uglx"
 )
 
 func NewBrandAddress(brandID string) sdk.AccAddress {

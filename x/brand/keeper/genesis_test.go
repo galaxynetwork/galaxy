@@ -30,11 +30,14 @@ func (suite *KeeperTestSuite) TestGenesis() {
 
 	require.NoError(brandKeeper.InitGenesis(ctx, *genStateA))
 	require.Error(brandKeeper.InitGenesis(ctx, *invalidGenStateA))
-	require.Error(brandKeeper.InitGenesis(ctx, *invalidGenStateB))
+	//panic when initial invalid parameter space set
+	require.Panics(func() {
+		brandKeeper.InitGenesis(ctx, *invalidGenStateB)
+	})
 
 	exportedGenStateA := brandKeeper.ExportGenesis(ctx)
-	require.Equal(genStateA, exportedGenStateA)
-	require.NotEqual(invalidGenStateA, exportedGenStateA)
+	require.Equal(genStateA, &exportedGenStateA)
+	require.NotEqual(invalidGenStateA, &exportedGenStateA)
 
 	require.NoError(brandKeeper.InitGenesis(ctx, exportedGenStateA))
 }

@@ -1,0 +1,33 @@
+syntax="proto3";
+
+package galaxy.brand;
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/brand/types";
+
+
+message Brand {
+    // id defines unique identifier of brand
+    // [a-zA-Z0-9]{1,30}
+    string id = 1;
+
+    // brand_address defines bech32 address of brand
+    string brand_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+    // owner defines owner address of brand
+    string owner = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+    BrandDescription description = 4 [(gogoproto.nullable) = false];
+}
+
+message BrandDescription {
+    // name defines name of brand
+    string name = 1;
+
+    // details defines detail of brand
+    string details = 2;
+    
+    // brand_image_uri defines a url that points to brand image
+    string brand_image_uri = 3;
+}

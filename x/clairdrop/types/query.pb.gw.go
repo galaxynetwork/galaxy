@@ -525,15 +525,15 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"galaxy", "clairdrop", "params"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"galaxy", "clairdrop", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ModuleAccountBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"galaxy", "clairdrop", "module_account_balance"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ModuleAccountBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"galaxy", "clairdrop", "module_account_balance"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ClaimRecord_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"galaxy", "clairdrop", "claim_record", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClaimRecord_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"galaxy", "clairdrop", "claim_record", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ClaimableForAction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"galaxy", "clairdrop", "claimable_for_action", "address", "action"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClaimableForAction_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"galaxy", "clairdrop", "claimable_for_action", "address", "action"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_TotalClaimable_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"galaxy", "clairdrop", "total_claimable", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TotalClaimable_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"galaxy", "clairdrop", "total_claimable", "address"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

@@ -22,6 +22,11 @@ type Keeper struct {
 // NewKeeper returns a brand keeper. It handles:
 // - creating/editing brands
 func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec, authKeeper types.AccountKeeper, paramstore paramtypes.Subspace) Keeper {
+
+	if !paramstore.HasKeyTable() {
+		paramstore = paramstore.WithKeyTable(types.ParamKeyTable())
+	}
+
 	return Keeper{
 		storeKey:   storeKey,
 		cdc:        cdc,

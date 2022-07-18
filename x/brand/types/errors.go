@@ -10,4 +10,8 @@ var (
 	ErrInvalidBrandOwnerAddress = sdkerrors.Register(ModuleName, 4, "invalid brand owner address")
 	ErrInvalidBrandName         = sdkerrors.Register(ModuleName, 5, "invalid brand name")
 	ErrInvalidBrandDetails      = sdkerrors.Register(ModuleName, 6, "invalid brand details")
+	ErrExistBrandID             = sdkerrors.Register(ModuleName, 7, "exist brand id")
+	ErrExistBrandAddress        = sdkerrors.Register(ModuleName, 8, "exist brand address")
+	ErrNotFoundBrand            = sdkerrors.Register(ModuleName, 9, "not found brand")
+	ErrUnauthorized             = sdkerrors.Register(ModuleName, 10, "unauthorized")
 )

@@ -348,6 +348,7 @@ func New(
 		keys[brandtypes.StoreKey],
 		appCodec,
 		app.AccountKeeper,
+		app.DistrKeeper,
 		app.GetSubspace(brandtypes.ModuleName),
 	)
 

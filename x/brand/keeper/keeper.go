@@ -13,26 +13,27 @@ import (
 )
 
 type Keeper struct {
-	storeKey   storetypes.StoreKey
-	cdc        codec.BinaryCodec
-	authKeeper types.AccountKeeper
-
-	paramstore paramtypes.Subspace
+	storeKey    storetypes.StoreKey
+	cdc         codec.BinaryCodec
+	authKeeper  types.AccountKeeper
+	distrKeeper types.DistrKeeper
+	paramstore  paramtypes.Subspace
 }
 
 // NewKeeper returns a brand keeper. It handles:
 // - creating/editing brands
-func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec, authKeeper types.AccountKeeper, paramstore paramtypes.Subspace) Keeper {
+func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec, authKeeper types.AccountKeeper, distrKeeper types.DistrKeeper, paramstore paramtypes.Subspace) Keeper {
 
 	if !paramstore.HasKeyTable() {
 		paramstore = paramstore.WithKeyTable(types.ParamKeyTable())
 	}
 
 	return Keeper{
-		storeKey:   storeKey,
-		cdc:        cdc,
-		authKeeper: authKeeper,
-		paramstore: paramstore,
+		storeKey:    storeKey,
+		cdc:         cdc,
+		authKeeper:  authKeeper,
+		distrKeeper: distrKeeper,
+		paramstore:  paramstore,
 	}
 }
 

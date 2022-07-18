@@ -11,6 +11,12 @@ var (
 	_ sdk.Msg = &MsgTransferOwnershipBrand{}
 )
 
+const (
+	TypeMsgCreateBrand            = "create_brand"
+	TypeMsgEditBrand              = "edit_brand"
+	TypeMsgTransferOwnershipBrand = "transfer_ownership_brand"
+)
+
 func NewMsgCreateBrand(id, owner string, description BrandDescription) *MsgCreateBrand {
 	return &MsgCreateBrand{
 		Id:          id,
@@ -21,7 +27,7 @@ func NewMsgCreateBrand(id, owner string, description BrandDescription) *MsgCreat
 
 func (msg MsgCreateBrand) Route() string { return RouterKey }
 
-func (msg MsgCreateBrand) Type() string { return sdk.MsgTypeURL(&msg) }
+func (msg MsgCreateBrand) Type() string { return TypeMsgCreateBrand }
 
 func (msg MsgCreateBrand) GetSignBytes() []byte {
 	return ModuleCdc.MustMarshalJSON(&msg)
@@ -58,7 +64,7 @@ func NewMsgEditBrand(id, owner string, description BrandDescription) *MsgEditBra
 
 func (msg MsgEditBrand) Route() string { return RouterKey }
 
-func (msg MsgEditBrand) Type() string { return sdk.MsgTypeURL(&msg) }
+func (msg MsgEditBrand) Type() string { return TypeMsgEditBrand }
 
 func (msg MsgEditBrand) GetSignBytes() []byte {
 	return ModuleCdc.MustMarshalJSON(&msg)
@@ -95,7 +101,7 @@ func NewMsgTransferOwnershipBrand(id, owner, destOwner string) *MsgTransferOwner
 
 func (msg MsgTransferOwnershipBrand) Route() string { return RouterKey }
 
-func (msg MsgTransferOwnershipBrand) Type() string { return sdk.MsgTypeURL(&msg) }
+func (msg MsgTransferOwnershipBrand) Type() string { return TypeMsgTransferOwnershipBrand }
 
 func (msg MsgTransferOwnershipBrand) GetSignBytes() []byte {
 	return ModuleCdc.MustMarshalJSON(&msg)

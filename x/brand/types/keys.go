@@ -10,6 +10,8 @@ const (
 
 	StoreKey = ModuleName
 
+	RouterKey = ModuleName
+
 	QuerierRoute = ModuleName
 
 	DefaultBrandCreationFeeDenom = "uglx"

@@ -15,7 +15,8 @@ func (suite *KeeperTestSuite) TestCreateBrand() {
 	bak2 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().String())
 
 	app.AccountKeeper.SetAccount(ctx, app.AccountKeeper.NewAccountWithAddress(ctx, bak1))
-	initialMintedCoins := sdk.NewCoins(sdk.NewCoin(types.DefaultBrandCreationFeeDenom, sdk.NewInt(1_000_000_000_000)))
+	amount := sdk.NewInt(1_000_000_000_000)
+	initialMintedCoins := sdk.NewCoins(sdk.NewCoin(types.DefaultBrandCreationFeeDenom, amount))
 	suite.Require().NoError(
 		app.MintKeeper.MintCoins(ctx, initialMintedCoins),
 	)
@@ -40,6 +41,9 @@ func (suite *KeeperTestSuite) TestCreateBrand() {
 		{types.NewMsgCreateBrand("brandIdbc", "bech32", types.NewBrandDescription("name", "", "")), false},
 	}
 
+	balance := app.BankKeeper.GetBalance(ctx, bak1, initialMintedCoins.GetDenomByIndex(0))
+	suite.Require().Equal(balance, initialMintedCoins[0])
+
 	for _, test := range tests {
 		res, err := msgServer.CreateBrand(wrapCtx, test.msg)
 		if !test.expectPass {
@@ -57,6 +61,14 @@ func (suite *KeeperTestSuite) TestCreateBrand() {
 			suite.Require().NoError(err)
 			suite.Require().Len(res.Brands, 1)
 			suite.Require().Equal(res.Brands[0].Id, test.msg.Id)
+
+			newBalance := app.BankKeeper.GetBalance(ctx, bak1, initialMintedCoins.GetDenomByIndex(0))
+			suite.Require().Equal(
+				balance.Sub(app.BrandKeeper.GetParams(ctx).BrandCreationFee),
+				newBalance,
+			)
+
+			balance = newBalance
 		}
 	}
 }

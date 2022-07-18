@@ -17,12 +17,16 @@ type Keeper struct {
 	cdc         codec.BinaryCodec
 	authKeeper  types.AccountKeeper
 	distrKeeper types.DistrKeeper
+	bankKeeper  types.BankKeeper
 	paramstore  paramtypes.Subspace
+	hooks       types.BrandHooks
 }
 
 // NewKeeper returns a brand keeper. It handles:
 // - creating/editing brands
-func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec, authKeeper types.AccountKeeper, distrKeeper types.DistrKeeper, paramstore paramtypes.Subspace) Keeper {
+func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec,
+	authKeeper types.AccountKeeper, distrKeeper types.DistrKeeper, bankKeeper types.BankKeeper,
+	paramstore paramtypes.Subspace) Keeper {
 
 	if !paramstore.HasKeyTable() {
 		paramstore = paramstore.WithKeyTable(types.ParamKeyTable())
@@ -33,13 +37,24 @@ func NewKeeper(storeKey storetypes.StoreKey, cdc codec.BinaryCodec, authKeeper t
 		cdc:         cdc,
 		authKeeper:  authKeeper,
 		distrKeeper: distrKeeper,
+		bankKeeper:  bankKeeper,
 		paramstore:  paramstore,
+		hooks:       nil,
 	}
 }
 
 // Logger returns a module-specific logger.
 func (keeper Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+// Set the brand hooks
+func (k *Keeper) SetHooks(sh types.BrandHooks) {
+	if k.hooks != nil {
+		panic("cannot set brand hooks twice")
+	}
+
+	k.hooks = sh
 }
 
 // GetParams get all parameters as types.Params

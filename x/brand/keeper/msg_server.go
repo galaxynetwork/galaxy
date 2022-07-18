@@ -55,6 +55,11 @@ func (ms msgServer) CreateBrand(goCtx context.Context, msg *types.MsgCreateBrand
 	ms.SetBrand(ctx, brand)
 	ms.SetBrandByOwner(ctx, brand.Id, owner)
 
+	// call the after-creation hook
+	if err := ms.AfterBrandCreated(ctx, brand.Id); err != nil {
+		return nil, err
+	}
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.TypeMsgCreateBrand,
@@ -140,6 +145,11 @@ func (ms msgServer) TransferOwnershipBrand(goCtx context.Context, msg *types.Msg
 	ms.SetBrand(ctx, brand)
 	ms.DeleteBrandByOwner(ctx, brand.Id, owner)
 	ms.SetBrandByOwner(ctx, brand.Id, destOwner)
+
+	// call the after-creation hook
+	if err := ms.AfterBrandOwnerChanged(ctx, brand.Id, destOwner, owner); err != nil {
+		return nil, err
+	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(

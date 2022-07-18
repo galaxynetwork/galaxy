@@ -349,6 +349,7 @@ func New(
 		appCodec,
 		app.AccountKeeper,
 		app.DistrKeeper,
+		app.BankKeeper,
 		app.GetSubspace(brandtypes.ModuleName),
 	)
 
@@ -401,6 +402,9 @@ func New(
 		),
 	)
 
+	app.BrandKeeper.SetHooks(
+		brandtypes.NewMultiBrandHooks(),
+	)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it

@@ -136,3 +136,19 @@ clean:
 
 distclean: clean
 	rm -rf vendor/
+
+
+##############################################################################
+###                                Localnet                                 ###
+###############################################################################
+
+start-localnet-ci:
+	galaxyd init liveness --chain-id liveness --home ~/.galaxyd-liveness
+	galaxyd config chain-id liveness --home ~/.galaxyd-liveness
+	galaxyd config keyring-backend test --home ~/.galaxyd-liveness
+	galaxyd keys add val --home ~/.galaxyd-liveness
+	galaxyd add-genesis-account val 10000000000000000000000000uglx --home ~/.galaxyd-liveness --keyring-backend test
+	galaxyd gentx val 1000000000uglx --home ~/.galaxyd-liveness --chain-id liveness
+	galaxyd collect-gentxs --home ~/.galaxyd-liveness
+	sed -i -e "s/stake/uglx/g" ~/.galaxyd-liveness/config/genesis.json
+	galaxyd start --home ~/.galaxyd-liveness --x-crisis-skip-assert-invariants

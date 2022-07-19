@@ -1,0 +1,23 @@
+syntax="proto3";
+
+package galaxy.nft;
+
+import "galaxy/nft/nft.proto";
+option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
+
+
+message GenesisState {
+    // classes defines the list class of the nft type.
+    repeated Class classes = 1;
+    repeated NFTEntry entries = 2;
+}
+
+
+message NFTEntry {
+    // owner is the owner address of the following nft
+    string owner = 1;
+
+    // nfts is a group of nfts of the same owner
+    repeated NFT nfts = 2;
+}
+

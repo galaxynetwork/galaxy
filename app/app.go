@@ -153,6 +153,7 @@ var (
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 		mint.AppModuleBasic{},
 		clairdrop.AppModuleBasic{},
+		brand.AppModuleBasic{},
 	)
 
 	// module account permissions

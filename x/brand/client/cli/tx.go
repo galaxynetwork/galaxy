@@ -39,7 +39,7 @@ func NewTxCmd() *cobra.Command {
 func NewCreateBrandTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-brand [brand_id] --name [text] --details [text,optional] --brand-image-uri [text,optional]",
-		Short: "Create brand with brandID which is a trademark",
+		Short: "create a new brand",
 		Long: `"Create brand with brandID which is a trademark
 Note, the '--from' flag is owner of brand.
 `,

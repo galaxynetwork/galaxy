@@ -11,7 +11,7 @@ import (
 func (keeper Keeper) InitGenesis(ctx sdk.Context, genState types.GenesisState) error {
 	keeper.SetParams(ctx, genState.Params)
 	for _, brand := range genState.Brands {
-		if len(strings.TrimSpace(brand.Id)) == 0 {
+		if len(strings.TrimSpace(brand.BrandAddress)) == 0 {
 			brand.BrandAddress = types.NewBrandAddress(brand.Id).String()
 		}
 		if err := brand.Validate(); err != nil {

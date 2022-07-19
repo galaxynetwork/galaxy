@@ -17,6 +17,8 @@ const (
 	// Constants pertaining to a Description object
 	MaxNameLength    int = 100
 	MaxDetailsLength int = 10000
+
+	DoNotModify = "[do-not-modify]"
 )
 
 var (
@@ -93,6 +95,20 @@ func (bd *BrandDescription) Validate() error {
 	}
 
 	return nil
+}
+
+func (bd BrandDescription) UpdateDescription(desc BrandDescription) BrandDescription {
+	if desc.Name == DoNotModify {
+		desc.Name = bd.Name
+	}
+	if desc.Details == DoNotModify {
+		desc.Details = bd.Details
+	}
+	if desc.BrandImageUri == DoNotModify {
+		desc.BrandImageUri = bd.BrandImageUri
+	}
+
+	return NewBrandDescription(desc.Name, desc.Details, desc.BrandImageUri)
 }
 
 func ValidateBrandID(id string) error {

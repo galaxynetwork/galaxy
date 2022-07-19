@@ -80,10 +80,6 @@ func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*
 		return nil, types.ErrExistBrandID
 	}
 
-	if err := msg.Description.Validate(); err != nil {
-		return nil, types.ErrExistBrandID
-	}
-
 	_, err := sdk.AccAddressFromBech32(msg.Owner)
 	if err != nil {
 		return nil, err
@@ -98,7 +94,12 @@ func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*
 		return nil, types.ErrUnauthorized
 	}
 
-	brand.Description = msg.Description
+	description := brand.Description.UpdateDescription(msg.Description)
+	brand.Description = description
+
+	if err := brand.Description.Validate(); err != nil {
+		return nil, types.ErrExistBrandID
+	}
 
 	ms.SetBrand(ctx, brand)
 

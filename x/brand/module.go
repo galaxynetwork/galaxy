@@ -1,6 +1,7 @@
 package brand
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -13,6 +14,7 @@ import (
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/galaxies-labs/galaxy/x/brand/client/cli"
 	"github.com/galaxies-labs/galaxy/x/brand/keeper"
 	"github.com/galaxies-labs/galaxy/x/brand/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -34,8 +36,13 @@ func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 func (AppModuleBasic) Name() string {
 	return types.ModuleName
 }
-func (AppModuleBasic) RegisterLegacyAminoCodec(*codec.LegacyAmino)         {}
-func (AppModuleBasic) RegisterInterfaces(cdc codectypes.InterfaceRegistry) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	types.RegisterCodec(cdc)
+}
+
+func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	types.RegisterInterfaces(registry)
+}
 
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.DefaultGenesisState())
@@ -50,13 +57,17 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 	return types.ValidateGenesis(genState)
 }
 
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(client.Context, *runtime.ServeMux) {}
-
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	if err := types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx)); err != nil {
+		panic(err)
+	}
 }
-func (AppModuleBasic) GetTxCmd() *cobra.Command { return &cobra.Command{} }
 
-func (AppModuleBasic) GetQueryCmd() *cobra.Command { return &cobra.Command{} }
+func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {}
+
+func (AppModuleBasic) GetTxCmd() *cobra.Command { return cli.NewTxCmd() }
+
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { return cli.GetQueryCmd() }
 
 type AppModule struct {
 	AppModuleBasic
@@ -87,7 +98,11 @@ func (am AppModule) QuerierRoute() string { return types.QuerierRoute }
 
 func (am AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier { return nil }
 
-func (am AppModule) RegisterServices(cfg module.Configurator) {}
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	querier := keeper.Querier{Keeper: am.keeper}
+	types.RegisterQueryServer(cfg.QueryServer(), querier)
+}
 
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 

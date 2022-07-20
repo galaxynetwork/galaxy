@@ -14,8 +14,8 @@ message Class {
     ClassDescription description = 3;
 
     // fee_basis_points defines fee basis point received an nft is traded.
-    // value specified at creation time is immutable.
-    // (it may be possible to update it proposal is accepted)
+    // ! value specified at creation time is immutable.
+    // ! (it may be possible to update it proposal is accepted)
     // 1~10,000: 100 = 1%, 1 = 0.01%
     uint32 fee_basis_points = 4;
 

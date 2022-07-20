@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package galaxy.nft;
+
+import "gogoproto/gogo.proto";
+import "galaxy/nft/nft.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
+
+
+service Query {
+    // Classes queries all Classes
+    rpc Classes(QueryClassesRequest) returns (QueryClassesResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes";
+    }
+
+    // Class queries based on it's id
+    rpc Class(QueryClassRequest) returns (QueryClassResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes/{class_id}";
+    }
+}
+
+message QueryClassesRequest {
+    string brand_id = 1;
+
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryClassesResponse {
+    repeated Class classes = 1 [(gogoproto.nullable) = false];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryClassRequest {
+    string class_id = 1;
+}
+
+message QueryClassResponse {
+    Class classes = 1 [(gogoproto.nullable) = false];
+}

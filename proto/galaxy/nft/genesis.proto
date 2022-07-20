@@ -3,6 +3,7 @@ syntax="proto3";
 package galaxy.nft;
 
 import "galaxy/nft/nft.proto";
+
 option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
 

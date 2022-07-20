@@ -17,7 +17,7 @@ service Query {
         option (google.api.http).get = "/galaxy/brand/brands";
     }
 
-     // Brand queries and Brand based on it's id
+     // Brand queries based on it's id
     rpc Brand(QueryBrandRequest) returns (QueryBrandResponse) {
         option (google.api.http).get = "/galaxy/brand/brands/{brand_id}";
     }

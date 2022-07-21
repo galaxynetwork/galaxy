@@ -25,12 +25,11 @@ var (
 	reClassID = regexp.MustCompile(fmt.Sprintf(`^%s$`, reClassIDString))
 )
 
-func NewClass(brandID, id string, feeBasisPoints uint32, maxSupply uint64, description ClassDescription) Class {
+func NewClass(brandID, id string, feeBasisPoints uint32, description ClassDescription) Class {
 	return Class{
 		BrandId:        brandID,
 		Id:             id,
 		FeeBasisPoints: feeBasisPoints,
-		MaxSupply:      maxSupply,
 		Description:    description,
 	}
 }

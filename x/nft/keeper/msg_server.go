@@ -33,7 +33,7 @@ func (k msgServer) CreateClass(goCtx context.Context, msg *types.MsgCreateClass)
 		return nil, brandtypes.ErrUnauthorized
 	}
 
-	class := types.NewClass(msg.BrandId, msg.Id, msg.FeeBasisPoints, msg.MaxSupply, msg.Description)
+	class := types.NewClass(msg.BrandId, msg.Id, msg.FeeBasisPoints, msg.Description)
 	if err := class.Validate(); err != nil {
 		return nil, err
 	}

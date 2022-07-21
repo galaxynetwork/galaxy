@@ -12,7 +12,7 @@ option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
 
 service Query {
-    // Classes queries all Classes
+    // Classes queries all Classes or only classes belonging to a given brandID
     rpc Classes(QueryClassesRequest) returns (QueryClassesResponse) {
         option (google.api.http).get = "/galaxy/nft/classes";
     }

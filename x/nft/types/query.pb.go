@@ -285,7 +285,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
-	// Classes queries all Classes
+	// Classes queries all Classes or only classes belonging to a given brandID
 	Classes(ctx context.Context, in *QueryClassesRequest, opts ...grpc.CallOption) (*QueryClassesResponse, error)
 	// Class queries based on it's id
 	Class(ctx context.Context, in *QueryClassRequest, opts ...grpc.CallOption) (*QueryClassResponse, error)
@@ -319,7 +319,7 @@ func (c *queryClient) Class(ctx context.Context, in *QueryClassRequest, opts ...
 
 // QueryServer is the server API for Query service.
 type QueryServer interface {
-	// Classes queries all Classes
+	// Classes queries all Classes or only classes belonging to a given brandID
 	Classes(context.Context, *QueryClassesRequest) (*QueryClassesResponse, error)
 	// Class queries based on it's id
 	Class(context.Context, *QueryClassRequest) (*QueryClassResponse, error)

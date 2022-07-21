@@ -3,9 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"strings"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/galaxies-labs/galaxy/x/brand/types"
@@ -24,28 +22,54 @@ func NewQuerier(k Keeper) Querier {
 }
 
 // Brands queries all Brands
-func (keeper Querier) Brands(ctx context.Context, req *types.QueryBrandsRequest) (*types.QueryBrandsResponse, error) {
+func (k Querier) Brands(ctx context.Context, req *types.QueryBrandsRequest) (*types.QueryBrandsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
+	var err error
+	var addr sdk.AccAddress
+
+	if len(req.Owner) > 0 {
+		addr, err = sdk.AccAddressFromBech32(req.Owner)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid owner address: %s", err)
+		}
+	}
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	brandStore := prefix.NewStore(sdkCtx.KVStore(keeper.storeKey), types.KeyPrefixBrand)
-
 	var brands types.Brands
+	var pageRes *query.PageResponse
 
-	pageRes, err := query.Paginate(brandStore, req.Pagination, func(key, value []byte) error {
-		var brand types.Brand
-		if err := keeper.UnmarshalBrand(value, &brand); err != nil {
-			return err
+	switch {
+	case len(addr) > 0:
+		if pageRes, err = query.Paginate(k.getBrandByOwnerStore(sdkCtx, addr), req.Pagination, func(key, _ []byte) error {
+			brand, exist := k.GetBrand(sdkCtx, string(key[:]))
+			if !exist {
+				return fmt.Errorf("unexpected brand is stored in brand_by_owner store")
+			}
+
+			brands = append(brands, brand)
+
+			return nil
+		}); err != nil {
+			return nil, status.Errorf(codes.Internal, err.Error())
 		}
+	default:
+		if pageRes, err = query.Paginate(k.getBrandStore(sdkCtx), req.Pagination, func(_, bz []byte) error {
+			var brand types.Brand
 
-		brands = append(brands, brand)
-		return nil
-	})
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
+			if err := k.UnmarshalBrand(bz, &brand); err != nil {
+				return err
+			}
+
+			brands = append(brands, brand)
+
+			return nil
+		}); err != nil {
+			return nil, status.Errorf(codes.Internal, err.Error())
+		}
 	}
 
 	return &types.QueryBrandsResponse{Brands: brands, Pagination: pageRes}, nil
@@ -57,12 +81,8 @@ func (keeper Querier) Brand(ctx context.Context, req *types.QueryBrandRequest) (
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	if len(strings.TrimSpace(req.BrandId)) == 0 {
-		return nil, status.Error(codes.InvalidArgument, "brand id cannot be empty")
-	}
-
 	if err := types.ValidateBrandID(req.BrandId); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid brand id: %s", err.Error())
+		return nil, status.Error(codes.InvalidArgument, types.ErrInvalidBrandID.Error())
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -71,40 +91,4 @@ func (keeper Querier) Brand(ctx context.Context, req *types.QueryBrandRequest) (
 
 	return &types.QueryBrandResponse{Brand: brand}, nil
 
-}
-
-// BrandsByOwner queries all Brands by owner address
-func (keeper Querier) BrandsByOwner(ctx context.Context, req *types.QueryBrandsByOwnerRequest) (*types.QueryBrandsByOwnerResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	if len(strings.TrimSpace(req.Owner)) == 0 {
-		return nil, status.Error(codes.InvalidArgument, "owner address cannot be empty")
-	}
-
-	addr, err := sdk.AccAddressFromBech32(req.Owner)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid owner address: %s", err.Error())
-	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	ownerStore := keeper.getBrandByOwnerStore(sdkCtx, addr)
-
-	var brands types.Brands
-
-	pageRes, err := query.Paginate(ownerStore, req.Pagination, func(key, value []byte) error {
-		brand, exist := keeper.GetBrand(sdkCtx, string(value[:]))
-		if !exist {
-			panic(fmt.Errorf("unexpected brand is stored in brand_by_owner prefix"))
-		}
-		brands = append(brands, brand)
-		return nil
-	})
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
-	}
-
-	return &types.QueryBrandsByOwnerResponse{Brands: brands, Pagination: pageRes}, nil
 }

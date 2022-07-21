@@ -18,14 +18,12 @@ const (
 )
 
 var (
+	PlaceHolder = []byte{0x01}
+
 	KeyPrefixBrand = []byte{0x01}
 
 	KeyPrefixBrandByOwner = []byte{0x02}
 )
-
-func GetBrandKey(brandID string) []byte {
-	return []byte(brandID)
-}
 
 func GetPrefixBrandByOwnerKey(owner sdk.AccAddress) []byte {
 	return append(KeyPrefixBrandByOwner, address.MustLengthPrefix(owner)...)

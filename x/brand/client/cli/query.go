@@ -8,6 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	FlagOwner = "owner"
+)
+
 // NewTxCmd returns a root CLI command handler for all x/staking transaction commands.
 func GetQueryCmd() *cobra.Command {
 	brandQueryCmd := &cobra.Command{
@@ -21,7 +25,6 @@ func GetQueryCmd() *cobra.Command {
 	brandQueryCmd.AddCommand(
 		GetCmdQueryBrands(),
 		GetCmdQueryBrand(),
-		GetCmdQueryBrandsByOwner(),
 	)
 
 	return brandQueryCmd
@@ -30,7 +33,7 @@ func GetQueryCmd() *cobra.Command {
 func GetCmdQueryBrands() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "brands",
-		Short: "Query for all brands",
+		Short: "Query brands with optional filters",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -44,8 +47,14 @@ func GetCmdQueryBrands() *cobra.Command {
 				return err
 			}
 
+			owner, err := cmd.Flags().GetString(FlagOwner)
+			if err != nil {
+				return err
+			}
+
 			result, err := queryClient.Brands(cmd.Context(), &types.QueryBrandsRequest{
 				Pagination: pageReq,
+				Owner:      owner,
 			})
 			if err != nil {
 				return err
@@ -58,13 +67,14 @@ func GetCmdQueryBrands() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "brands")
 
+	cmd.Flags().String(FlagOwner, "", "(optional) filter brands by owner address, bech32_address")
 	return cmd
 }
 
 func GetCmdQueryBrand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "brand [brand_id]",
-		Short: "Query a brand",
+		Use:   "brand [brand-id]",
+		Short: "Query details of a single brand",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -86,41 +96,6 @@ func GetCmdQueryBrand() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func GetCmdQueryBrandsByOwner() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "brands-by-owner [owner_addr_bech32]",
-		Short: "Query for all brands by owner",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-			pageReq, err := client.ReadPageRequest(cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			result, err := queryClient.BrandsByOwner(cmd.Context(), &types.QueryBrandsByOwnerRequest{
-				Owner:      args[0],
-				Pagination: pageReq,
-			})
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintProto(result)
-		},
-	}
-
-	flags.AddQueryFlagsToCmd(cmd)
-	flags.AddPaginationFlagsToCmd(cmd, "brands-by-owner")
 
 	return cmd
 }

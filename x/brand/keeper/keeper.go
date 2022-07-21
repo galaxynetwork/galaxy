@@ -6,7 +6,6 @@ import (
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/galaxies-labs/galaxy/x/brand/types"
@@ -66,10 +65,4 @@ func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 // SetParams set the params
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	k.paramstore.SetParamSet(ctx, &params)
-}
-
-// getBrandPrefixStore get prefix brands
-func (k Keeper) getBrandByOwnerStore(ctx sdk.Context, owner sdk.AccAddress) prefix.Store {
-	store := ctx.KVStore(k.storeKey)
-	return prefix.NewStore(store, types.GetPrefixBrandByOwnerKey(owner))
 }

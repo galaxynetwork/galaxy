@@ -381,7 +381,7 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Brands queries all Brands
 	Brands(ctx context.Context, in *QueryBrandsRequest, opts ...grpc.CallOption) (*QueryBrandsResponse, error)
-	// Brand queries and Brand based on it's id
+	// Brand queries based on it's id
 	Brand(ctx context.Context, in *QueryBrandRequest, opts ...grpc.CallOption) (*QueryBrandResponse, error)
 	// BrandsByOwner queries all Brands by owner address
 	BrandsByOwner(ctx context.Context, in *QueryBrandsByOwnerRequest, opts ...grpc.CallOption) (*QueryBrandsByOwnerResponse, error)
@@ -426,7 +426,7 @@ func (c *queryClient) BrandsByOwner(ctx context.Context, in *QueryBrandsByOwnerR
 type QueryServer interface {
 	// Brands queries all Brands
 	Brands(context.Context, *QueryBrandsRequest) (*QueryBrandsResponse, error)
-	// Brand queries and Brand based on it's id
+	// Brand queries based on it's id
 	Brand(context.Context, *QueryBrandRequest) (*QueryBrandResponse, error)
 	// BrandsByOwner queries all Brands by owner address
 	BrandsByOwner(context.Context, *QueryBrandsByOwnerRequest) (*QueryBrandsByOwnerResponse, error)

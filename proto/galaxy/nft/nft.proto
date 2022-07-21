@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package galaxy.nft;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
 message Class {
@@ -9,9 +11,10 @@ message Class {
     string brand_id = 1;
 
     // id is a unique identifier of the Classs within a brand
+    // [a-zA-Z0-9-]{2,50}
     string id = 2;
 
-    ClassDescription description = 3;
+    ClassDescription description = 3 [(gogoproto.nullable) = false];;
 
     // fee_basis_points defines fee basis point received an nft is traded.
     // ! value specified at creation time is immutable.

@@ -2,6 +2,7 @@ syntax="proto3";
 
 package galaxy.nft;
 
+import "gogoproto/gogo.proto";
 import "galaxy/nft/nft.proto";
 
 option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
@@ -9,12 +10,12 @@ option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
 message GenesisState {
     // classes defines the list class of the nft type.
-    repeated Class classes = 1;
-    repeated NFTEntry entries = 2;
+    repeated Class classes = 1 [(gogoproto.nullable) = false];
+    repeated Entry entries = 2 [(gogoproto.nullable) = false];
 }
 
 
-message NFTEntry {
+message Entry {
     // owner is the owner address of the following nft
     string owner = 1;
 

@@ -19,7 +19,7 @@ service Query {
 
     // Class queries based on it's id
     rpc Class(QueryClassRequest) returns (QueryClassResponse) {
-        option (google.api.http).get = "/galaxy/nft/classes/{class_id}";
+        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}";
     }
 }
 
@@ -36,9 +36,10 @@ message QueryClassesResponse {
 }
 
 message QueryClassRequest {
-    string class_id = 1;
+    string brand_id = 1;
+    string class_id = 2;
 }
 
 message QueryClassResponse {
-    Class classes = 1 [(gogoproto.nullable) = false];
+    Class class = 1 [(gogoproto.nullable) = false];
 }

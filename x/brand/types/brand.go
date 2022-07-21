@@ -17,6 +17,7 @@ const (
 	// Constants pertaining to a Description object
 	MaxNameLength    int = 100
 	MaxDetailsLength int = 10000
+	MaxUriLength     int = 2048
 
 	DoNotModify = "[do-not-modify]"
 )
@@ -77,21 +78,25 @@ func NewBrandDescription(name, details, brandImageUri string) BrandDescription {
 }
 
 // Validate defines a method trim all space and basic validation.
-func (bd *BrandDescription) Validate() error {
-	bd.Name = strings.TrimSpace(bd.Name)
-	bd.Details = strings.TrimSpace(bd.Details)
-	bd.BrandImageUri = strings.TrimSpace(bd.BrandImageUri)
+func (desc *BrandDescription) Validate() error {
+	desc.Name = strings.TrimSpace(desc.Name)
+	desc.Details = strings.TrimSpace(desc.Details)
+	desc.BrandImageUri = strings.TrimSpace(desc.BrandImageUri)
 
-	if len(bd.Name) == 0 {
+	if len(desc.Name) == 0 {
 		return sdkerrors.Wrap(ErrInvalidBrandName, "brand name cannot be blank")
 	}
 
-	if len(bd.Name) > MaxNameLength {
+	if len(desc.Name) > MaxNameLength {
 		return sdkerrors.Wrapf(ErrInvalidBrandName, "brand name is longer than max length of %d", MaxNameLength)
 	}
 
-	if len(bd.Details) > MaxDetailsLength {
+	if len(desc.Details) > MaxDetailsLength {
 		return sdkerrors.Wrapf(ErrInvalidBrandDetails, "brand details is longer than max length of %d", MaxDetailsLength)
+	}
+
+	if len(desc.BrandImageUri) > MaxUriLength {
+		return sdkerrors.Wrapf(ErrInvalidBrandImageUri, "image_uri is longer than max length of %d", MaxUriLength)
 	}
 
 	return nil
@@ -108,7 +113,7 @@ func (bd BrandDescription) UpdateDescription(desc BrandDescription) BrandDescrip
 		desc.BrandImageUri = bd.BrandImageUri
 	}
 
-	return NewBrandDescription(desc.Name, desc.Details, desc.BrandImageUri)
+	return desc
 }
 
 func ValidateBrandID(id string) error {

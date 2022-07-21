@@ -65,9 +65,36 @@ func (k Keeper) IterateBrands(ctx sdk.Context, cb func(brand types.Brand) (stop 
 	}
 }
 
+func (k Keeper) IterateBrandsByOwner(ctx sdk.Context, owner sdk.AccAddress, cb func(brand types.Brand) (stop bool)) {
+	ownerStore := k.getBrandByOwnerStore(ctx, owner)
+
+	iterator := ownerStore.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		brand, exist := k.GetBrand(ctx, string(iterator.Key()[:]))
+		if !exist {
+			panic("unexpected brand is stored in brand_by_owner store")
+		}
+
+		if cb(brand) {
+			break
+		}
+	}
+}
+
 // GetBrands defines a method for returning all brands
 func (k Keeper) GetBrands(ctx sdk.Context) (brands types.Brands) {
 	k.IterateBrands(ctx, func(brand types.Brand) (stop bool) {
+		brands = append(brands, brand)
+		return false
+	})
+	return
+}
+
+// GetBrands defines a method for returning all brands a given owner
+func (k Keeper) GetBrandsByOwner(ctx sdk.Context, owner sdk.AccAddress) (brands types.Brands) {
+	k.IterateBrandsByOwner(ctx, owner, func(brand types.Brand) (stop bool) {
 		brands = append(brands, brand)
 		return false
 	})

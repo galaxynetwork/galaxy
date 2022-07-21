@@ -8,7 +8,7 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestCreateBrand() {
-	app, ctx, msgServer, queryClient := suite.app, suite.ctx, suite.msgServer, suite.queryClient
+	app, ctx, msgServer := suite.app, suite.ctx, suite.msgServer
 	wrapCtx := sdk.WrapSDKContext(ctx)
 
 	bak1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().String())
@@ -56,11 +56,6 @@ func (suite *KeeperTestSuite) TestCreateBrand() {
 			acc, err := sdk.AccAddressFromBech32(res.BrandAddress)
 			suite.Require().NoError(err)
 			suite.Require().True(app.AccountKeeper.HasAccount(ctx, acc))
-
-			res, err := queryClient.BrandsByOwner(wrapCtx, &types.QueryBrandsByOwnerRequest{Owner: test.msg.Owner})
-			suite.Require().NoError(err)
-			suite.Require().Len(res.Brands, 1)
-			suite.Require().Equal(res.Brands[0].Id, test.msg.Id)
 
 			newBalance := app.BankKeeper.GetBalance(ctx, bak1, initialMintedCoins.GetDenomByIndex(0))
 			suite.Require().Equal(
@@ -167,17 +162,6 @@ func (suite *KeeperTestSuite) TestTransferOwnershipBrand() {
 
 			suite.Require().NotEqual(res.Brand.Owner, test.msg.Owner)
 			suite.Require().Equal(res.Brand.Owner, test.msg.DestOwner)
-
-			res2, err2 := queryClient.BrandsByOwner(wrapCtx, &types.QueryBrandsByOwnerRequest{Owner: test.msg.Owner})
-			suite.Require().NoError(err2)
-			suite.Require().NotNil(res2)
-			suite.Require().Len(res2.Brands, 0)
-
-			res2, err2 = queryClient.BrandsByOwner(wrapCtx, &types.QueryBrandsByOwnerRequest{Owner: test.msg.DestOwner})
-			suite.Require().NoError(err2)
-			suite.Require().NotNil(res2)
-			suite.Require().Len(res2.Brands, 1)
-
 		} else {
 			suite.Require().Error(err)
 		}

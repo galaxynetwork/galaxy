@@ -58,9 +58,9 @@ func (suite *KeeperTestSuite) TestStoreBrand() {
 
 	require.Len(brandKeeper.GetBrands(ctx), 3)
 
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerA.String()), 2)
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerB.String()), 1)
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerC.String()), 0)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerA), 2)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerB), 1)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerC), 0)
 
 	// after swap owner of brand
 	brand, exist = brandKeeper.GetBrand(ctx, brandA.Id)
@@ -76,7 +76,7 @@ func (suite *KeeperTestSuite) TestStoreBrand() {
 
 	require.Len(brandKeeper.GetBrands(ctx), 3)
 
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerA.String()), 1)
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerB.String()), 1)
-	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerC.String()), 1)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerA), 1)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerB), 1)
+	require.Len(brandKeeper.GetBrandsByOwner(ctx, ownerC), 1)
 }

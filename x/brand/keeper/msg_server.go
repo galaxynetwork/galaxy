@@ -21,8 +21,6 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 // CreateBrand defines a method for creating a new Brand.
 func (ms msgServer) CreateBrand(goCtx context.Context, msg *types.MsgCreateBrand) (*types.MsgCreateBrandResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	owner, err := sdk.AccAddressFromBech32(msg.Owner)
 	if err != nil {
 		return nil, err
@@ -32,6 +30,8 @@ func (ms msgServer) CreateBrand(goCtx context.Context, msg *types.MsgCreateBrand
 	if err := brand.Validate(); err != nil {
 		return nil, err
 	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if exist := ms.HasBrand(ctx, brand.Id); exist {
 		return nil, types.ErrExistBrandID
@@ -74,16 +74,15 @@ func (ms msgServer) CreateBrand(goCtx context.Context, msg *types.MsgCreateBrand
 
 // EditBrand defines a method for editing an existing brand.
 func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*types.MsgEditBrandResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	if err := types.ValidateBrandID(msg.Id); err != nil {
 		return nil, types.ErrExistBrandID
 	}
 
-	_, err := sdk.AccAddressFromBech32(msg.Owner)
-	if err != nil {
+	if _, err := sdk.AccAddressFromBech32(msg.Owner); err != nil {
 		return nil, err
 	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	brand, exist := ms.GetBrand(ctx, msg.Id)
 	if !exist {
@@ -95,11 +94,11 @@ func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*
 	}
 
 	description := brand.Description.UpdateDescription(msg.Description)
-	brand.Description = description
-
-	if err := brand.Description.Validate(); err != nil {
-		return nil, types.ErrExistBrandID
+	if err := description.Validate(); err != nil {
+		return nil, err
 	}
+
+	brand.Description = description
 
 	ms.SetBrand(ctx, brand)
 
@@ -107,7 +106,6 @@ func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*
 		sdk.NewEvent(
 			types.TypeMsgEditBrand,
 			sdk.NewAttribute(types.AttributeBrandID, brand.Id),
-			sdk.NewAttribute(types.AttributeBrandAddress, brand.BrandAddress),
 		),
 	)
 
@@ -116,8 +114,6 @@ func (ms msgServer) EditBrand(goCtx context.Context, msg *types.MsgEditBrand) (*
 
 // TransferOwnershipBrand defines a method for transfer ownership of existing brand
 func (ms msgServer) TransferOwnershipBrand(goCtx context.Context, msg *types.MsgTransferOwnershipBrand) (*types.MsgTransferOwnershipBrandResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	if err := types.ValidateBrandID(msg.Id); err != nil {
 		return nil, types.ErrExistBrandID
 	}
@@ -132,6 +128,8 @@ func (ms msgServer) TransferOwnershipBrand(goCtx context.Context, msg *types.Msg
 		return nil, err
 	}
 
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	brand, exist := ms.GetBrand(ctx, msg.Id)
 	if !exist {
 		return nil, types.ErrNotFoundBrand
@@ -141,11 +139,11 @@ func (ms msgServer) TransferOwnershipBrand(goCtx context.Context, msg *types.Msg
 		return nil, types.ErrUnauthorized
 	}
 
-	brand.Owner = msg.DestOwner
+	brand.Owner = destOwner.String()
 
-	ms.SetBrand(ctx, brand)
 	ms.DeleteBrandByOwner(ctx, brand.Id, owner)
 	ms.SetBrandByOwner(ctx, brand.Id, destOwner)
+	ms.SetBrand(ctx, brand)
 
 	// call the after-creation hook
 	if err := ms.AfterBrandOwnerChanged(ctx, brand.Id, destOwner, owner); err != nil {
@@ -156,7 +154,6 @@ func (ms msgServer) TransferOwnershipBrand(goCtx context.Context, msg *types.Msg
 		sdk.NewEvent(
 			types.TypeMsgTransferOwnershipBrand,
 			sdk.NewAttribute(types.AttributeBrandID, brand.Id),
-			sdk.NewAttribute(types.AttributeBrandAddress, brand.BrandAddress),
 			sdk.NewAttribute(types.AttributeNewOwner, brand.Owner),
 		),
 	)

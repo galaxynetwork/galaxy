@@ -32,8 +32,8 @@ func GetQueryCmd() *cobra.Command {
 
 func GetCmdQueryBrands() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "brands --owner [brand_owner_bech32,optional]",
-		Short: "query all brands or query all brands a given owner address.",
+		Use:   "brands",
+		Short: "Query brands with optional filters",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -67,14 +67,14 @@ func GetCmdQueryBrands() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "brands")
 
-	cmd.Flags().String(FlagOwner, "", "The owner of the brand")
+	cmd.Flags().String(FlagOwner, "", "(optional) filter brands by owner address, bech32_address")
 	return cmd
 }
 
 func GetCmdQueryBrand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "brand [brand_id]",
-		Short: "query a brand",
+		Use:   "brand [brand-id]",
+		Short: "Query details of a single brand",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

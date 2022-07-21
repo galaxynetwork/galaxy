@@ -38,8 +38,8 @@ func NewTxCmd() *cobra.Command {
 
 func NewCreateBrandTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-brand [brand_id] --name [text] --details [text,optional] --brand-image-uri [text,optional]",
-		Short: "create a new brand",
+		Use:   "create-brand [brand-id] --name [text] --details [text,optional] --brand-image-uri [text,optional]",
+		Short: "Create a new brand",
 		Long: `"Create brand with brandID which is a trademark
 Note, the '--from' flag is owner of brand.
 `,
@@ -78,8 +78,8 @@ Note, the '--from' flag is owner of brand.
 
 func NewEditBrandTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "edit-brand [brand_id] --name [text] --details [text,optional] --brand-image-uri [text,optional]",
-		Short: "edit an existing brand",
+		Use:   "edit-brand [brand-id] --name [text] --details [text,optional] --brand-image-uri [text,optional]",
+		Short: "Edit an existing brand",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -115,8 +115,8 @@ func NewEditBrandTxCmd() *cobra.Command {
 
 func NewTransferOwnershipBrandTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "transfer [brand_id] [destowner_addr_bech32]",
-		Short: "transfer ownership an existing brand",
+		Use:   "transfer [brand-id] [destowner-addr-bech32]",
+		Short: "Transfer ownership of an existing brand",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

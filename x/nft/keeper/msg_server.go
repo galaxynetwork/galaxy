@@ -22,19 +22,27 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 // CreateClass defines a method for creating a new class within brand.
 func (k msgServer) CreateClass(goCtx context.Context, msg *types.MsgCreateClass) (*types.MsgCreateClassResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	brand, exist := k.brandKeeper.GetBrand(ctx, msg.BrandId)
-	if !exist {
-		return nil, brandtypes.ErrNotFoundBrand
-	}
-
-	if brand.Owner != msg.Creator {
-		return nil, brandtypes.ErrUnauthorized
+	if err := brandtypes.ValidateBrandID(msg.BrandId); err != nil {
+		return nil, err
 	}
 
 	class := types.NewClass(msg.BrandId, msg.Id, msg.FeeBasisPoints, msg.Description)
 	if err := class.Validate(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	brand, brandExist := k.brandKeeper.GetBrand(ctx, msg.BrandId)
+	if !brandExist {
+		return nil, brandtypes.ErrNotFoundBrand
+	}
+
+	if brand.Owner != msg.Creator {
+		return nil, types.ErrUnauthorized
+	}
+
+	if err := k.SaveClass(ctx, class); err != nil {
 		return nil, err
 	}
 
@@ -92,5 +100,4 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 	)
 
 	return &types.MsgEditClassResponse{}, nil
-
 }

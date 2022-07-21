@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,7 +27,7 @@ func (state *GenesisState) Validate() error {
 	for _, class := range state.Classes {
 		url := strings.Join([]string{class.BrandId, class.Id}, "/")
 		if seenClassWithinBrand[url] {
-			return fmt.Errorf("duplicate class for id %s within brand_id %s", class.Id, class.BrandId)
+			return fmt.Errorf("duplicate class for id %s within the brandID %s", class.Id, class.BrandId)
 		}
 
 		if err := class.Validate(); err != nil {
@@ -36,16 +37,23 @@ func (state *GenesisState) Validate() error {
 		seenClassWithinBrand[url] = true
 	}
 
-	// brand_id|class_id|nft_id duplicate check in InitGenesis
+	seenNFT := map[string]bool{}
 	for _, entry := range state.Entries {
 		if _, err := sdk.AccAddressFromBech32(entry.Owner); err != nil {
 			return err
 		}
 
 		for _, nft := range entry.Nfts {
+			url := strings.Join([]string{nft.BrandId, nft.ClassId, strconv.FormatUint(nft.Id, 10)}, "/")
+			if seenNFT[url] {
+				return fmt.Errorf("duplicate nft for url(brandID/classID/id) %s", url)
+			}
+
 			if err := nft.Validate(); err != nil {
 				return err
 			}
+
+			seenNFT[url] = true
 		}
 	}
 	return nil

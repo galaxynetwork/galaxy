@@ -13,7 +13,7 @@ import (
 const (
 	DoNotModifyDesc = "[do-not-modify]"
 
-	reClassIDString = `[a-zA-Z][a-zA-Z0-9-]{2,50}`
+	reClassIDString = `[a-zA-Z0-9-]{2,50}`
 
 	MaxFeeBasisPoints     uint32 = 10_000
 	MaxClassNameLength    int    = 100
@@ -80,26 +80,30 @@ func (desc *ClassDescription) UpdateDescription(desc2 ClassDescription) ClassDes
 	return desc2
 }
 
-func (desc *ClassDescription) Validate() error {
+func (desc *ClassDescription) TrimSpace() ClassDescription {
 	desc.Name = strings.TrimSpace(desc.Name)
 	desc.Details = strings.TrimSpace(desc.Details)
 	desc.ImageUri = strings.TrimSpace(desc.ImageUri)
 	desc.ExternalUrl = strings.TrimSpace(desc.ExternalUrl)
 
+	return NewClassDescription(desc.Name, desc.Details, desc.ExternalUrl, desc.ImageUri)
+}
+
+func (desc *ClassDescription) Validate() error {
 	if len(desc.Name) > MaxClassNameLength {
-		return sdkerrors.Wrapf(ErrInvalidClassName, "invalid name length; got: %d, max: %d", len(desc.Name), MaxClassNameLength)
+		return sdkerrors.Wrapf(ErrInvalidClassDescription, "invalid name length; got: %d, max: %d", len(desc.Name), MaxClassNameLength)
 	}
 
 	if len(desc.Details) > MaxClassDetailsLength {
-		return sdkerrors.Wrapf(ErrInvalidClassName, "invalid details length; got: %d, max: %d", len(desc.Details), MaxClassDetailsLength)
+		return sdkerrors.Wrapf(ErrInvalidClassDescription, "invalid details length; got: %d, max: %d", len(desc.Details), MaxClassDetailsLength)
 	}
 
 	if len(desc.ExternalUrl) > MaxUriLength {
-		return sdkerrors.Wrapf(ErrInvalidClassName, "invalid external_url length; got: %d, max: %d", len(desc.ExternalUrl), MaxUriLength)
+		return sdkerrors.Wrapf(ErrInvalidClassDescription, "invalid external_url length; got: %d, max: %d", len(desc.ExternalUrl), MaxUriLength)
 	}
 
 	if len(desc.ImageUri) > MaxUriLength {
-		return sdkerrors.Wrapf(ErrInvalidClassName, "invalid image_uri length; got: %d, max: %d", len(desc.ImageUri), MaxUriLength)
+		return sdkerrors.Wrapf(ErrInvalidClassDescription, "invalid image_uri length; got: %d, max: %d", len(desc.ImageUri), MaxUriLength)
 	}
 
 	return nil
@@ -107,11 +111,19 @@ func (desc *ClassDescription) Validate() error {
 
 func NewNFT(id uint64, classID, uri, varUri string) NFT {
 	return NFT{
-		ClassId: classID,
 		Id:      id,
+		ClassId: classID,
 		Uri:     uri,
 		VarUri:  varUri,
 	}
+}
+
+func (desc *NFT) TrimSpace() NFT {
+	desc.ClassId = strings.TrimSpace(desc.ClassId)
+	desc.Uri = strings.TrimSpace(desc.Uri)
+	desc.VarUri = strings.TrimSpace(desc.VarUri)
+
+	return NewNFT(desc.Id, desc.ClassId, desc.Uri, desc.VarUri)
 }
 
 func (nft *NFT) Validate() error {

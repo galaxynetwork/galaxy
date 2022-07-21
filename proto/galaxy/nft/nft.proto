@@ -38,16 +38,19 @@ message ClassDescription {
 }
 
 message NFT {
+    // brand_id associated with the NFT
+    string brand_id = 1;
+
     // class_id associated with the NFT
-    string class_id = 1;
+    string class_id = 2;
     
     // id is a unique identifier of the NFT within a class
     // auto increment within a class
-    uint64 id = 2;
+    uint64 id = 3;
 
     // uri for the NFT metadata stored off chain
-    string uri = 3;
+    string uri = 4;
 
     // var_uri for the NFT data wanted by the owner stored off chain
-    string var_uri = 4;
+    string var_uri = 5;
 }

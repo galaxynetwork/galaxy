@@ -36,6 +36,7 @@ func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 func (AppModuleBasic) Name() string {
 	return types.ModuleName
 }
+
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	types.RegisterCodec(cdc)
 }
@@ -47,6 +48,7 @@ func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) 
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.DefaultGenesisState())
 }
+
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
 	var genState types.GenesisState
 
@@ -78,6 +80,7 @@ type AppModule struct {
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
 	return AppModule{AppModuleBasic: NewAppModuleBasic(cdc), keeper: keeper}
 }
+
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, raw json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(raw, &genState)
@@ -85,6 +88,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, raw json.R
 	am.keeper.InitGenesis(ctx, genState)
 	return []abci.ValidatorUpdate{}
 }
+
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	genState := am.keeper.ExportGenesis(ctx)
 	return cdc.MustMarshalJSON(&genState)

@@ -13,7 +13,7 @@ import (
 const (
 	DoNotModifyDesc = "[do-not-modify]"
 
-	reClassIDString = `[a-zA-Z0-9-]{2,50}`
+	reClassIDString = `[a-zA-Z0-9][a-zA-Z0-9-]{2,50}`
 
 	MaxFeeBasisPoints     uint32 = 10_000
 	MaxClassNameLength    int    = 100

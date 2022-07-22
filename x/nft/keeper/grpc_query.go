@@ -12,10 +12,18 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var _ types.QueryServer = Keeper{}
+var _ types.QueryServer = Querier{}
+
+type Querier struct {
+	Keeper
+}
+
+func NewQuerier(k Keeper) Querier {
+	return Querier{Keeper: k}
+}
 
 // Classes queries all Classes
-func (k Keeper) Classes(goCtx context.Context, req *types.QueryClassesRequest) (*types.QueryClassesResponse, error) {
+func (k Querier) Classes(goCtx context.Context, req *types.QueryClassesRequest) (*types.QueryClassesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -63,7 +71,7 @@ func (k Keeper) Classes(goCtx context.Context, req *types.QueryClassesRequest) (
 }
 
 // Class queries based on it's id
-func (k Keeper) Class(goCtx context.Context, req *types.QueryClassRequest) (*types.QueryClassResponse, error) {
+func (k Querier) Class(goCtx context.Context, req *types.QueryClassRequest) (*types.QueryClassResponse, error) {
 	if err := brandtypes.ValidateBrandID(req.BrandId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

@@ -92,6 +92,10 @@ import (
 	brandkeeper "github.com/galaxies-labs/galaxy/x/brand/keeper"
 	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
 
+	nft "github.com/galaxies-labs/galaxy/x/nft"
+	nftkeeper "github.com/galaxies-labs/galaxy/x/nft/keeper"
+	nfttypes "github.com/galaxies-labs/galaxy/x/nft/types"
+
 	"github.com/spf13/cast"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
@@ -154,6 +158,7 @@ var (
 		mint.AppModuleBasic{},
 		clairdrop.AppModuleBasic{},
 		brand.AppModuleBasic{},
+		nft.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -221,6 +226,7 @@ type App struct {
 	MintKeeper      mintkeeper.Keeper
 	ClairdropKeeper clairdropkeeper.Keeper
 	BrandKeeper     brandkeeper.Keeper
+	NFTKeeper       nftkeeper.Keeper
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
@@ -273,6 +279,7 @@ func New(
 		minttypes.StoreKey,
 		clairdroptypes.StoreKey,
 		brandtypes.StoreKey,
+		nfttypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -352,6 +359,12 @@ func New(
 		app.DistrKeeper,
 		app.BankKeeper,
 		app.GetSubspace(brandtypes.ModuleName),
+	)
+
+	app.NFTKeeper = *nftkeeper.NewKeeper(
+		keys[nfttypes.StoreKey],
+		appCodec,
+		app.BrandKeeper,
 	)
 
 	// register the staking hooks
@@ -446,6 +459,7 @@ func New(
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		clairdrop.NewAppModule(appCodec, app.ClairdropKeeper),
 		brand.NewAppModule(appCodec, app.BrandKeeper),
+		nft.NewAppModule(appCodec, app.NFTKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -461,6 +475,7 @@ func New(
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
 		clairdroptypes.ModuleName,
+		nfttypes.ModuleName,
 		brandtypes.ModuleName,
 		stakingtypes.ModuleName,
 		ibchost.ModuleName,
@@ -486,6 +501,7 @@ func New(
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		minttypes.ModuleName,
+		nfttypes.ModuleName,
 		brandtypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -512,6 +528,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
+		nfttypes.ModuleName,
 		brandtypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,

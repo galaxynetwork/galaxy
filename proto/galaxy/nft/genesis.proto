@@ -21,6 +21,6 @@ message Entry {
     string owner = 1;
 
     // nfts is a group of nfts of the same owner
-    repeated NFT nfts = 2;
+    repeated NFT nfts = 2 [(gogoproto.nullable) = false];
 }
 

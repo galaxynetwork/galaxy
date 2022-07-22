@@ -109,8 +109,9 @@ func (desc *ClassDescription) Validate() error {
 	return nil
 }
 
-func NewNFT(id uint64, classID, uri, varUri string) NFT {
+func NewNFT(id uint64, brandID, classID, uri, varUri string) NFT {
 	return NFT{
+		BrandId: brandID,
 		Id:      id,
 		ClassId: classID,
 		Uri:     uri,
@@ -119,14 +120,23 @@ func NewNFT(id uint64, classID, uri, varUri string) NFT {
 }
 
 func (desc *NFT) TrimSpace() NFT {
+	desc.BrandId = strings.TrimSpace(desc.BrandId)
 	desc.ClassId = strings.TrimSpace(desc.ClassId)
 	desc.Uri = strings.TrimSpace(desc.Uri)
 	desc.VarUri = strings.TrimSpace(desc.VarUri)
 
-	return NewNFT(desc.Id, desc.ClassId, desc.Uri, desc.VarUri)
+	return NewNFT(desc.Id, desc.BrandId, desc.ClassId, desc.Uri, desc.VarUri)
 }
 
 func (nft *NFT) Validate() error {
+	if nft.Id == 0 {
+		return sdkerrors.Wrap(ErrInvalidNFTID, "nft id must be greater 0")
+	}
+
+	if err := brandtypes.ValidateBrandID(nft.BrandId); err != nil {
+		return err
+	}
+
 	if err := ValidateClassId(nft.ClassId); err != nil {
 		return err
 	}

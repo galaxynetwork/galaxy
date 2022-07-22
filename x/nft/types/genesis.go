@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+type NFTs = []NFT
 type Classes = []Class
 type Entries = []Entry
 
@@ -44,9 +45,13 @@ func (state *GenesisState) Validate() error {
 		}
 
 		for _, nft := range entry.Nfts {
-			url := strings.Join([]string{nft.BrandId, nft.ClassId, strconv.FormatUint(nft.Id, 10)}, "/")
+			baseUrl := strings.Join([]string{nft.BrandId, nft.ClassId}, "/")
+			url := strings.Join([]string{baseUrl, strconv.FormatUint(nft.Id, 10)}, "/")
 			if seenNFT[url] {
-				return fmt.Errorf("duplicate nft for url(brandID/classID/id) %s", url)
+				return fmt.Errorf("duplicate nft for nftID(brandID/classID/id) %s", url)
+			}
+			if !seenClassWithinBrand[baseUrl] {
+				return fmt.Errorf("nft not belonging to valid class for nftID(brandID/classID/id) %s", url)
 			}
 
 			if err := nft.Validate(); err != nil {

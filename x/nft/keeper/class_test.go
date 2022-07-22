@@ -6,7 +6,7 @@ func (suite *KeeperTestSuite) TestStoreClass() {
 	keeper, ctx := suite.app.NFTKeeper, suite.ctx
 
 	brandId := "brandid"
-	brandId2 := "brandId2"
+	brandId2 := "brandid2"
 
 	classA := types.NewClass(brandId, "classsid", 10_000, types.NewClassDescription("", "", "", ""))
 	classA2 := types.NewClass(brandId, "classsid", 10_000, types.NewClassDescription("", "", "", ""))

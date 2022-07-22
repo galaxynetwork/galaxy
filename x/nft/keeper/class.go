@@ -17,9 +17,7 @@ func (k Keeper) SaveClass(ctx sdk.Context, class types.Class) error {
 		return err
 	}
 
-	ctx.KVStore(k.storeKey).
-		Set(types.GetClassStoreKey(class.BrandId, class.Id), bz)
-
+	k.getClassOfBrandStore(ctx, class.BrandId).Set([]byte(class.Id), bz)
 	return nil
 }
 
@@ -29,17 +27,14 @@ func (k Keeper) SetClass(ctx sdk.Context, class types.Class) error {
 		return err
 	}
 
-	ctx.KVStore(k.storeKey).
-		Set(types.GetClassStoreKey(class.BrandId, class.Id), bz)
-
+	k.getClassOfBrandStore(ctx, class.BrandId).Set([]byte(class.Id), bz)
 	return nil
 }
 
 func (k Keeper) GetClass(ctx sdk.Context, brandID, id string) (types.Class, bool) {
 	var class types.Class
 
-	bz := ctx.KVStore(k.storeKey).
-		Get(types.GetClassStoreKey(brandID, id))
+	bz := k.getClassOfBrandStore(ctx, brandID).Get([]byte(id))
 
 	if bz == nil {
 		return class, false
@@ -54,15 +49,11 @@ func (k Keeper) GetClass(ctx sdk.Context, brandID, id string) (types.Class, bool
 }
 
 func (k Keeper) HasClass(ctx sdk.Context, brandID, id string) bool {
-	return ctx.KVStore(k.storeKey).
-		Has(types.GetClassStoreKey(brandID, id))
+	return k.getClassOfBrandStore(ctx, brandID).Has([]byte(id))
 }
 
 func (k Keeper) GetClasses(ctx sdk.Context) (classes types.Classes) {
-	iterator := prefix.NewStore(
-		ctx.KVStore(k.storeKey),
-		types.KeyPrefixClass,
-	).Iterator(nil, nil)
+	iterator := k.getClassPrefixStore(ctx).Iterator(nil, nil)
 
 	defer iterator.Close()
 
@@ -78,10 +69,7 @@ func (k Keeper) GetClasses(ctx sdk.Context) (classes types.Classes) {
 }
 
 func (k Keeper) GetClassesOfBrand(ctx sdk.Context, brandID string) (classes types.Classes) {
-	iterator := prefix.NewStore(
-		ctx.KVStore(k.storeKey),
-		types.GetClassOfBrandPrefix(brandID),
-	).Iterator(nil, nil)
+	iterator := k.getClassOfBrandStore(ctx, brandID).Iterator(nil, nil)
 
 	defer iterator.Close()
 
@@ -96,10 +84,11 @@ func (k Keeper) GetClassesOfBrand(ctx sdk.Context, brandID string) (classes type
 	return
 }
 
-func (k Keeper) getClassPrefixStore(ctx sdk.Context) prefix.Store {
-	return prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixClass)
+func (k Keeper) getClassOfBrandStore(ctx sdk.Context, brandID string) prefix.Store {
+	return prefix.NewStore(ctx.KVStore(k.storeKey), types.GetClassOfBrandStoreKey(brandID))
 }
 
-func (k Keeper) getClassOfBrandPrefixStore(ctx sdk.Context, brandID string) prefix.Store {
-	return prefix.NewStore(ctx.KVStore(k.storeKey), types.GetClassOfBrandPrefix(brandID))
+func (k Keeper) getClassPrefixStore(ctx sdk.Context) prefix.Store {
+	store := ctx.KVStore(k.storeKey)
+	return prefix.NewStore(store, types.GetPrefixClassKey())
 }

@@ -42,7 +42,7 @@ func (k Querier) Classes(goCtx context.Context, req *types.QueryClassesRequest) 
 
 	switch {
 	case len(req.BrandId) > 0:
-		if pageRes, err = query.Paginate(k.getClassOfBrandPrefixStore(ctx, req.BrandId), req.Pagination, func(_ []byte, bz []byte) error {
+		if pageRes, err = query.Paginate(k.getClassOfBrandStore(ctx, req.BrandId), req.Pagination, func(_ []byte, bz []byte) error {
 			var class types.Class
 			if err := k.cdc.Unmarshal(bz, &class); err != nil {
 				return err

@@ -1,6 +1,10 @@
 package types
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/galaxies-labs/galaxy/internal/conv"
+)
 
 const (
 	ModuleName = "nft"
@@ -18,28 +22,27 @@ const (
 //	- (0x01|[]byte(brandID)|0x00) prefix -> All classes given brandID
 
 var (
-	KeyPrefixClass = []byte{0x01}
-
-	Delimiter = []byte{0x00}
+	BrandClassKey = []byte{0x01}
+	Delimiter     = []byte{0x00}
 )
 
 func GetClassUniqueID(brandID, id string) string {
 	return strings.Join([]string{brandID, id}, "/")
 }
 
-func GetClassStoreKey(brandID, id string) []byte {
-	key := make([]byte, len(KeyPrefixClass)+len(brandID)+len(Delimiter)+len(id))
-	copy(key, KeyPrefixClass)
-	copy(key[len(KeyPrefixClass):], brandID)
-	copy(key[len(KeyPrefixClass)+len(brandID):], Delimiter)
-	copy(key[len(KeyPrefixClass)+len(brandID)+len(Delimiter):], id)
+func GetClassOfBrandStoreKey(brandID string) []byte {
+	brandIDBz := conv.UnsafeStrToBytes(brandID)
+
+	key := make([]byte, len(BrandClassKey)+len(brandIDBz)+len(Delimiter))
+
+	copy(key, BrandClassKey)
+	copy(key[len(BrandClassKey):], brandIDBz)
+	copy(key[len(BrandClassKey)+len(brandIDBz):], Delimiter)
 	return key
 }
 
-func GetClassOfBrandPrefix(brandID string) []byte {
-	key := make([]byte, len(KeyPrefixClass)+len(brandID)+len(Delimiter))
-	copy(key, KeyPrefixClass)
-	copy(key[len(KeyPrefixClass):], brandID)
-	copy(key[len(KeyPrefixClass)+len(brandID):], Delimiter)
+func GetPrefixClassKey() []byte {
+	key := make([]byte, len(BrandClassKey))
+	copy(key, BrandClassKey)
 	return key
 }

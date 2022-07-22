@@ -52,3 +52,30 @@ func TestClass(t *testing.T) {
 		}
 	}
 }
+
+func TestNFT(t *testing.T) {
+	tests := []struct {
+		expectPass bool
+		nft        NFT
+	}{
+		{true, NewNFT(1, "id", "classId", "", "")},
+		{true, NewNFT(1, "id", "classId", genStringWithLength(MaxUriLength), genStringWithLength(MaxUriLength))},
+		//zero nft id
+		{false, NewNFT(0, "id", "classId", "", "")},
+		//invalid brand id
+		{false, NewNFT(1, "", "classId", "", "")},
+		//invalid class id
+		{false, NewNFT(1, "id", "", "", "")},
+		//invalid uri length
+		{false, NewNFT(1, "id", "classid", genStringWithLength(MaxUriLength+1), genStringWithLength(MaxUriLength+1))},
+	}
+
+	for index, test := range tests {
+		err := test.nft.Validate()
+		if test.expectPass {
+			require.NoErrorf(t, err, "index: %d", index)
+		} else {
+			require.Errorf(t, err, "index: %d", index)
+		}
+	}
+}

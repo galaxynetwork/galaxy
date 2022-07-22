@@ -2,7 +2,7 @@ package keeper_test
 
 import "github.com/galaxies-labs/galaxy/x/nft/types"
 
-func (suite *KeeperTestSuite) TestClass() {
+func (suite *KeeperTestSuite) TestStoreClass() {
 	keeper, ctx := suite.app.NFTKeeper, suite.ctx
 
 	brandId := "brandid"

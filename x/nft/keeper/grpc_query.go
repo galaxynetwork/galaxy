@@ -72,6 +72,10 @@ func (k Querier) Classes(goCtx context.Context, req *types.QueryClassesRequest) 
 
 // Class queries based on it's id
 func (k Querier) Class(goCtx context.Context, req *types.QueryClassRequest) (*types.QueryClassResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
 	if err := brandtypes.ValidateBrandID(req.BrandId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -82,7 +86,7 @@ func (k Querier) Class(goCtx context.Context, req *types.QueryClassRequest) (*ty
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	class, exist := k.GetClass(ctx, req.ClassId, req.BrandId)
+	class, exist := k.GetClass(ctx, req.BrandId, req.ClassId)
 	if !exist {
 		return nil, status.Errorf(codes.NotFound,
 			sdkerrors.Wrapf(types.ErrNotFoundClass, "not found class for brandID: %s, id: %s", req.BrandId, req.ClassId).Error(),

@@ -2,6 +2,8 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
 )
 
 var (
@@ -33,6 +35,25 @@ func (msg MsgCreateClass) GetSignBytes() []byte {
 }
 
 func (msg MsgCreateClass) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+
+	if err := brandtypes.ValidateBrandID(msg.BrandId); err != nil {
+		return err
+	}
+
+	if err := ValidateClassId(msg.Id); err != nil {
+		return err
+	}
+
+	if err := msg.Description.Validate(); err != nil {
+		return err
+	}
+
+	if msg.FeeBasisPoints == 0 || msg.FeeBasisPoints > MaxFeeBasisPoints {
+		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, " got: %d, min: %d, max: %d", msg.FeeBasisPoints, 1, MaxFeeBasisPoints)
+	}
 
 	return nil
 }
@@ -61,6 +82,25 @@ func (msg MsgEditClass) GetSignBytes() []byte {
 }
 
 func (msg MsgEditClass) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Editor); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid editor address: %s", err)
+	}
+
+	if err := brandtypes.ValidateBrandID(msg.BrandId); err != nil {
+		return err
+	}
+
+	if err := ValidateClassId(msg.Id); err != nil {
+		return err
+	}
+
+	if err := msg.Description.Validate(); err != nil {
+		return err
+	}
+
+	if msg.FeeBasisPoints == 0 || msg.FeeBasisPoints > MaxFeeBasisPoints {
+		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, " got: %d, min: %d, max: %d", msg.FeeBasisPoints, 1, MaxFeeBasisPoints)
+	}
 
 	return nil
 }

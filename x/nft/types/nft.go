@@ -128,6 +128,7 @@ func (desc *NFT) TrimSpace() NFT {
 	return NewNFT(desc.Id, desc.BrandId, desc.ClassId, desc.Uri, desc.VarUri)
 }
 
+// need to validate url
 func (nft *NFT) Validate() error {
 	if nft.Id == 0 {
 		return sdkerrors.Wrap(ErrInvalidNFTID, "nft id must be greater 0")

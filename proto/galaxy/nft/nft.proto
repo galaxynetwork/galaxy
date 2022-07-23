@@ -37,6 +37,14 @@ message ClassDescription {
     string external_url = 4;
 }
 
+message Supply {
+    // sequence defines sequence that generates the id of an nft of a specific class
+    int64 sequence = 1;
+
+    // total_supply for tracks total number of nft tokens for a specific class.
+    int64 total_suply = 2;
+}
+
 message NFT {
     // brand_id associated with the NFT
     string brand_id = 1;

@@ -9,14 +9,27 @@ import "cosmos/msg/v1/msg.proto";
 
 option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
-// Msg defines the brand Msg service.
+// Msg defines the nft Msg service.
 service Msg {
     // CreateClass defines a method for creating a new class within brand.
     rpc CreateClass(MsgCreateClass) returns (MsgCreateClassResponse);
 
     // EditClass defines a method for editing an existing class.
     rpc EditClass(MsgEditClass) returns (MsgEditClassResponse);
+
+    // MintNFT defines a method for minting a new nft.
+    rpc MintNFT(MsgMintNFT) returns (MsgMintNFTResponse);
+
+    // UpdateNFT defines a method for updating variableURI an existing nft.
+    rpc UpdateNFT(MsgUpdateNFT) returns (MsgUpdateNFTResponse);
+
+    // BurnNFT defines a method for burnning an existing nft.
+    rpc BurnNFT(MsgBurnNFT) returns (MsgBurnNFTResponse);
+
+    // TransferNFT defines a method for transferring ownership an existing nft.
+    rpc TransferNFT(MsgTransferNFT) returns (MsgTransferNFTResponse);
 }
+
 
 message MsgCreateClass {
     option (cosmos.msg.v1.signer) = "creator";
@@ -50,3 +63,63 @@ message MsgEditClass {
 }
 
 message MsgEditClassResponse {}
+
+
+message MsgMintNFT {
+    option (cosmos.msg.v1.signer) = "minter";
+
+    string brand_id = 1;
+    string class_id = 2;
+
+    string uri = 3;
+    string var_uri = 4;
+    
+    string minter = 5;
+    string receipent = 6;
+}
+
+message MsgMintNFTResponse {
+    uint64 id = 1;
+}
+
+
+message MsgUpdateNFT {
+    option (cosmos.msg.v1.signer) = "sender";
+    
+    string brand_id = 1;
+    string class_id = 2;
+    uint64 id = 3;
+
+    string var_uri = 4;
+
+    string sender =5;
+}
+
+message MsgUpdateNFTResponse {}
+
+
+message MsgBurnNFT {
+    option (cosmos.msg.v1.signer) = "sender";
+    
+    string brand_id = 1;
+    string class_id = 2;
+    uint64 id = 3;
+
+    string sender = 4;
+}
+
+message MsgBurnNFTResponse {}
+
+
+message MsgTransferNFT {
+    option (cosmos.msg.v1.signer) = "sender";
+    
+    string brand_id = 1;
+    string class_id = 2;
+    uint64 id = 3;
+
+    string sender = 4;
+    string receipent = 5;
+}
+
+message MsgTransferNFTResponse {}

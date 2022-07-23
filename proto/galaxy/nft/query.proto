@@ -21,6 +21,26 @@ service Query {
     rpc Class(QueryClassRequest) returns (QueryClassResponse) {
         option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}";
     }
+
+    // NFTs queries all nfts belonging to a given brand and class
+    rpc NFTs(QueryNFTsRequest) returns (QueryNFTsResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/nfts";
+    }
+
+    // NFTs queries based on it's brand and class and id
+    rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/nfts/{id}";
+    }
+
+    // Owner queries the owner of the NFT based on its brand and class and id
+    rpc Owner(QueryOwnerRequest) returns (QueryOwnerResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/nfts/{id}/owner";
+    }
+
+    // Supply queries the number of NFTs from the given brand and class id
+    rpc Supply(QuerySupplyRequest) returns (QuerySupplyResponse) {
+        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/supply";
+    }
 }
 
 message QueryClassesRequest {
@@ -42,4 +62,48 @@ message QueryClassRequest {
 
 message QueryClassResponse {
     Class class = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryNFTsRequest {
+    string brand_id = 1;
+    string class_id = 2;
+
+    string owner = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+    cosmos.base.query.v1beta1.PageRequest pagination = 4;
+}
+
+message QueryNFTsResponse {
+    repeated NFT nfts = 1 [(gogoproto.nullable) = false];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryNFTRequest {
+    string brand_id = 1;
+    string class_id = 2;
+    string id = 3;
+}  
+
+message QueryNFTResponse {
+    NFT nft = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryOwnerRequest {
+    string brand_id = 1;
+    string class_id = 2;
+    string id = 3;
+}  
+
+message QueryOwnerResponse {
+    string owner = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message QuerySupplyRequest {
+    string brand_id = 1;
+    string class_id = 2;
+}  
+
+message QuerySupplyResponse {
+    uint64 amount = 1;
 }

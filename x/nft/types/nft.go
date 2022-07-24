@@ -182,5 +182,8 @@ func (supply *Supply) IncreaseSupply() {
 }
 
 func (supply *Supply) DecreaseSupply() {
+	if supply.TotalSupply == 0 {
+		return
+	}
 	supply.TotalSupply--
 }

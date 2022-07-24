@@ -3,16 +3,9 @@ package types
 import (
 	"testing"
 
+	"github.com/galaxies-labs/galaxy/internal/util"
 	"github.com/stretchr/testify/require"
 )
-
-func genStringWithLength(length int) string {
-	bz := []byte{}
-	for i := 0; i < length; i++ {
-		bz = append(bz, byte(i))
-	}
-	return string(bz[:])
-}
 
 func TestClass(t *testing.T) {
 	tests := []struct {
@@ -26,8 +19,8 @@ func TestClass(t *testing.T) {
 		{NewClass("brandid", "classid", 1, NewClassDescription("", "", "", "")), true},
 		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", "details", "externalurl", "imageuri")), true},
 		{NewClass("brandid", "classid", 10_000, NewClassDescription(
-			genStringWithLength(MaxClassNameLength), genStringWithLength(MaxClassDetailsLength),
-			genStringWithLength(MaxUriLength), genStringWithLength(MaxUriLength))), true},
+			util.GenStringWithLength(MaxClassNameLength), util.GenStringWithLength(MaxClassDetailsLength),
+			util.GenStringWithLength(MaxUriLength), util.GenStringWithLength(MaxUriLength))), true},
 		// empty brand id
 		{NewClass("", "classid", 10_000, NewClassDescription("", "", "", "")), false},
 		// invalid class id length
@@ -37,10 +30,10 @@ func TestClass(t *testing.T) {
 		// starts with hypen
 		{NewClass("brandid", "-classid", 10_000, NewClassDescription("", "", "", "")), false},
 		// invalid length description
-		{NewClass("brandid", "classid", 10_000, NewClassDescription(genStringWithLength(MaxClassNameLength+1), "details", "externalurl", "imageuri")), false},
-		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", genStringWithLength(MaxClassDetailsLength+1), "externalurl", "imageuri")), false},
-		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", "details", genStringWithLength(MaxUriLength+1), "imageuri")), false},
-		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", "details", "externalurl", genStringWithLength(MaxUriLength+1))), false},
+		{NewClass("brandid", "classid", 10_000, NewClassDescription(util.GenStringWithLength(MaxClassNameLength+1), "details", "externalurl", "imageuri")), false},
+		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", util.GenStringWithLength(MaxClassDetailsLength+1), "externalurl", "imageuri")), false},
+		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", "details", util.GenStringWithLength(MaxUriLength+1), "imageuri")), false},
+		{NewClass("brandid", "classid", 10_000, NewClassDescription("name", "details", "externalurl", util.GenStringWithLength(MaxUriLength+1))), false},
 	}
 
 	for index, test := range tests {
@@ -58,16 +51,18 @@ func TestNFT(t *testing.T) {
 		expectPass bool
 		nft        NFT
 	}{
-		{true, NewNFT(1, "id", "classId", "", "")},
-		{true, NewNFT(1, "id", "classId", genStringWithLength(MaxUriLength), genStringWithLength(MaxUriLength))},
+		{true, NewNFT(1, "id", "classId", "ipfs://hash", "")},
+		{true, NewNFT(2, "id", "classId", util.GenStringWithLength(MaxUriLength), util.GenStringWithLength(MaxUriLength))},
 		//zero nft id
-		{false, NewNFT(0, "id", "classId", "", "")},
+		{false, NewNFT(0, "id", "classId", "ipfs://hash", "")},
 		//invalid brand id
-		{false, NewNFT(1, "", "classId", "", "")},
+		{false, NewNFT(1, "", "classId", "ipfs://hash", "")},
 		//invalid class id
-		{false, NewNFT(1, "id", "", "", "")},
+		{false, NewNFT(1, "id", "", "ipfs://hash", "")},
+		//invalid uri
+		{false, NewNFT(1, "id", "classid", "", "")},
 		//invalid uri length
-		{false, NewNFT(1, "id", "classid", genStringWithLength(MaxUriLength+1), genStringWithLength(MaxUriLength+1))},
+		{false, NewNFT(1, "id", "classid", util.GenStringWithLength(MaxUriLength+1), util.GenStringWithLength(MaxUriLength+1))},
 	}
 
 	for index, test := range tests {
@@ -78,4 +73,44 @@ func TestNFT(t *testing.T) {
 			require.Errorf(t, err, "index: %d", index)
 		}
 	}
+}
+
+func TestSupply(t *testing.T) {
+	supply := DefaultSupply()
+
+	require.Equal(t, supply.Sequence, uint64(1))
+	require.Equal(t, supply.TotalSupply, uint64(0))
+
+	supply.DecreaseSupply()
+
+	require.Equal(t, supply.Sequence, uint64(1))
+	require.Equal(t, supply.TotalSupply, uint64(0))
+
+	var lastSequence uint64
+	var i uint64
+	for i = 1; i <= 100; i++ {
+		// save nft
+		require.Equal(t, supply.Sequence, i)
+		require.Equal(t, supply.TotalSupply, i-1)
+
+		supply.IncreaseSupply()
+
+		require.Equal(t, supply.TotalSupply, i)
+		lastSequence = supply.Sequence
+	}
+
+	for supply.TotalSupply != 0 {
+		currentSupply := supply.TotalSupply
+
+		// burn nft
+		supply.DecreaseSupply()
+
+		require.Equal(t, supply.Sequence, lastSequence)
+		require.Equal(t, supply.TotalSupply, currentSupply-1)
+
+	}
+
+	require.Equal(t, supply.Sequence, lastSequence)
+	require.Equal(t, supply.TotalSupply, uint64(0))
+
 }

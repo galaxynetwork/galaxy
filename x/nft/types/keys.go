@@ -25,6 +25,11 @@ const (
 //0x03|[]byte(brandID)|0x00|[]byte(classID)|0x00|[]byte(nftID) -> NFT{}
 //0x04|[]byte(brandID)|0x00|[]byte(classID)|0x00|[]byte(nftID) -> Owner{}
 
+//authz
+// brand
+// nft
+// marketplace
+
 var (
 	BrandClassKey       = []byte{0x01}
 	BrandClassSupplyKey = []byte{0x02}

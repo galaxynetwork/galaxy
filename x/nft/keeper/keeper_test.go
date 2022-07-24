@@ -31,7 +31,6 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.queryClient = types.NewQueryClient(queryHelper)
 
 	suite.msgServer = keeper.NewMsgServerImpl(suite.app.NFTKeeper)
-
 }
 
 func TestKeeperTestSuite(t *testing.T) {

@@ -39,10 +39,10 @@ message ClassDescription {
 
 message Supply {
     // sequence defines sequence that generates the id of an nft of a specific class
-    int64 sequence = 1;
+    uint64 sequence = 1;
 
     // total_supply for tracks total number of nft tokens for a specific class.
-    int64 total_suply = 2;
+    uint64 total_supply = 2;
 }
 
 message NFT {

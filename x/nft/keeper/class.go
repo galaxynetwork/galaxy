@@ -16,9 +16,9 @@ func (k Keeper) SaveClass(ctx sdk.Context, class types.Class) error {
 	if err != nil {
 		return err
 	}
-
 	k.getClassOfBrandStore(ctx, class.BrandId).Set([]byte(class.Id), bz)
-	return nil
+
+	return k.initializeClassSupply(ctx, class.BrandId, class.Id)
 }
 
 func (k Keeper) SetClass(ctx sdk.Context, class types.Class) error {

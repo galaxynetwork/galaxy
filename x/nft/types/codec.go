@@ -12,6 +12,12 @@ import (
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateClass{}, "galaxy/nft/create-class", nil)
 	cdc.RegisterConcrete(&MsgEditClass{}, "galaxy/nft/edit-class", nil)
+
+	cdc.RegisterConcrete(&MsgMintNFT{}, "galaxy/nft/mint-nft", nil)
+	cdc.RegisterConcrete(&MsgBurnNFT{}, "galaxy/nft/burn-nft", nil)
+	cdc.RegisterConcrete(&MsgTransferNFT{}, "galaxy/nft/transfer-nft", nil)
+	cdc.RegisterConcrete(&MsgUpdateNFT{}, "galaxy/nft/update-nft", nil)
+
 }
 
 // RegisterInterfaces registers the x/nft interfaces types with the interface registry
@@ -19,6 +25,11 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateClass{},
 		&MsgEditClass{},
+
+		&MsgMintNFT{},
+		&MsgBurnNFT{},
+		&MsgTransferNFT{},
+		&MsgUpdateNFT{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

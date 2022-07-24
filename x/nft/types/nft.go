@@ -142,6 +142,10 @@ func (nft *NFT) Validate() error {
 		return err
 	}
 
+	if len(nft.Uri) == 0 {
+		return sdkerrors.Wrap(ErrInvalidNFTUri, "uri can not be blank")
+	}
+
 	if len(nft.Uri) > MaxUriLength {
 		return sdkerrors.Wrapf(ErrInvalidNFTUri, "invalid uri length; got: %d, max: %d", len(nft.Uri), MaxUriLength)
 	}
@@ -159,4 +163,24 @@ func ValidateClassId(id string) error {
 	}
 
 	return nil
+}
+
+func NewSupply(sequence, totalSupply uint64) Supply {
+	return Supply{
+		Sequence:    sequence,
+		TotalSupply: totalSupply,
+	}
+}
+
+func DefaultSupply() Supply {
+	return NewSupply(1, 0)
+}
+
+func (supply *Supply) IncreaseSupply() {
+	supply.Sequence++
+	supply.TotalSupply++
+}
+
+func (supply *Supply) DecreaseSupply() {
+	supply.TotalSupply--
 }

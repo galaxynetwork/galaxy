@@ -101,3 +101,23 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 
 	return &types.MsgEditClassResponse{}, nil
 }
+
+// MintNFT defines a method for minting a new nft.
+func (k msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types.MsgMintNFTResponse, error) {
+	return nil, nil
+}
+
+// UpdateNFT defines a method for updating variableURI an existing nft.
+func (k msgServer) UpdateNFT(goCtx context.Context, msg *types.MsgUpdateNFT) (*types.MsgUpdateNFTResponse, error) {
+	return nil, nil
+}
+
+// BurnNFT defines a method for burnning an existing nft.
+func (k msgServer) BurnNFT(goCtx context.Context, msg *types.MsgBurnNFT) (*types.MsgBurnNFTResponse, error) {
+	return nil, nil
+}
+
+// TransferNFT defines a method for transferring ownership an existing nft.
+func (k msgServer) TransferNFT(goCtx context.Context, msg *types.MsgTransferNFT) (*types.MsgTransferNFTResponse, error) {
+	return nil, nil
+}

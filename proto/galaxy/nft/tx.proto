@@ -75,7 +75,7 @@ message MsgMintNFT {
     string var_uri = 4;
     
     string minter = 5;
-    string receipent = 6;
+    string recipient = 6;
 }
 
 message MsgMintNFTResponse {
@@ -119,7 +119,7 @@ message MsgTransferNFT {
     uint64 id = 3;
 
     string sender = 4;
-    string receipent = 5;
+    string recipient = 5;
 }
 
 message MsgTransferNFTResponse {}

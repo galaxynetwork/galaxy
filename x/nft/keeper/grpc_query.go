@@ -95,3 +95,23 @@ func (k Querier) Class(goCtx context.Context, req *types.QueryClassRequest) (*ty
 
 	return &types.QueryClassResponse{Class: class}, nil
 }
+
+// NFTs queries all nfts belonging to a given brand and class
+func (k Querier) NFTs(goCtx context.Context, req *types.QueryNFTsRequest) (*types.QueryNFTsResponse, error) {
+	return nil, nil
+}
+
+// NFTs queries based on it's brand and class and id
+func (k Querier) NFT(goCtx context.Context, req *types.QueryNFTRequest) (*types.QueryNFTResponse, error) {
+	return nil, nil
+}
+
+// Owner queries the owner of the NFT based on its brand and class and id
+func (k Querier) Owner(goCtx context.Context, req *types.QueryOwnerRequest) (*types.QueryOwnerResponse, error) {
+	return nil, nil
+}
+
+// Supply queries the number of NFTs from the given brand and class id
+func (k Querier) Supply(goCtx context.Context, req *types.QuerySupplyRequest) (*types.QuerySupplyResponse, error) {
+	return nil, nil
+}

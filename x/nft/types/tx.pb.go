@@ -260,7 +260,7 @@ type MsgMintNFT struct {
 	Uri       string `protobuf:"bytes,3,opt,name=uri,proto3" json:"uri,omitempty"`
 	VarUri    string `protobuf:"bytes,4,opt,name=var_uri,json=varUri,proto3" json:"var_uri,omitempty"`
 	Minter    string `protobuf:"bytes,5,opt,name=minter,proto3" json:"minter,omitempty"`
-	Receipent string `protobuf:"bytes,6,opt,name=receipent,proto3" json:"receipent,omitempty"`
+	Recipient string `protobuf:"bytes,6,opt,name=recipient,proto3" json:"recipient,omitempty"`
 }
 
 func (m *MsgMintNFT) Reset()         { *m = MsgMintNFT{} }
@@ -331,9 +331,9 @@ func (m *MsgMintNFT) GetMinter() string {
 	return ""
 }
 
-func (m *MsgMintNFT) GetReceipent() string {
+func (m *MsgMintNFT) GetRecipient() string {
 	if m != nil {
-		return m.Receipent
+		return m.Recipient
 	}
 	return ""
 }
@@ -603,7 +603,7 @@ type MsgTransferNFT struct {
 	ClassId   string `protobuf:"bytes,2,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
 	Id        uint64 `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
 	Sender    string `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`
-	Receipent string `protobuf:"bytes,5,opt,name=receipent,proto3" json:"receipent,omitempty"`
+	Recipient string `protobuf:"bytes,5,opt,name=recipient,proto3" json:"recipient,omitempty"`
 }
 
 func (m *MsgTransferNFT) Reset()         { *m = MsgTransferNFT{} }
@@ -667,9 +667,9 @@ func (m *MsgTransferNFT) GetSender() string {
 	return ""
 }
 
-func (m *MsgTransferNFT) GetReceipent() string {
+func (m *MsgTransferNFT) GetRecipient() string {
 	if m != nil {
-		return m.Receipent
+		return m.Recipient
 	}
 	return ""
 }
@@ -754,7 +754,7 @@ var fileDescriptor_1a4405b88179a65c = []byte{
 	0x84, 0x8a, 0xe7, 0x4f, 0xf7, 0x6f, 0x33, 0x60, 0x15, 0x2c, 0x0c, 0xe5, 0xd2, 0x7e, 0x6a, 0x43,
 	0x45, 0xc5, 0x7b, 0x08, 0x2e, 0x83, 0xe2, 0x11, 0x23, 0x4a, 0x7e, 0xd5, 0x97, 0x7f, 0xe1, 0x0a,
 	0xa8, 0x1c, 0x07, 0xac, 0x2f, 0xd1, 0x92, 0x42, 0xcb, 0xc7, 0x01, 0x3b, 0x60, 0x04, 0x36, 0x40,
-	0x79, 0x4c, 0xa8, 0xc0, 0x46, 0x86, 0x6f, 0x22, 0xb8, 0x06, 0xaa, 0x0c, 0x0f, 0x31, 0x89, 0x31,
+	0x79, 0x4c, 0xa8, 0xc0, 0x46, 0x86, 0x6f, 0x22, 0xb8, 0x06, 0xaa, 0x0c, 0x0f, 0x49, 0x4c, 0x30,
 	0x15, 0x76, 0x59, 0xa5, 0x32, 0xc0, 0x48, 0xd1, 0xa5, 0xee, 0x7d, 0x00, 0x33, 0xc6, 0x89, 0x10,
 	0xd3, 0x1f, 0xc9, 0xb9, 0x24, 0xfb, 0xe3, 0xbe, 0xd7, 0xbd, 0x3d, 0x88, 0x51, 0x20, 0xf0, 0x9f,
 	0x4b, 0xd3, 0xdb, 0x16, 0x93, 0x6d, 0x6f, 0x15, 0xc6, 0x31, 0x45, 0x99, 0x30, 0x1d, 0x19, 0xea,
@@ -771,7 +771,7 @@ var fileDescriptor_1a4405b88179a65c = []byte{
 	0xc2, 0xc5, 0x95, 0x53, 0xf8, 0x72, 0xe5, 0x14, 0x5e, 0x3d, 0x0c, 0x89, 0x78, 0x7d, 0x34, 0xe8,
 	0x0c, 0xa3, 0xb1, 0xa7, 0xf6, 0x21, 0x98, 0xaf, 0x1f, 0x06, 0x03, 0xee, 0x99, 0x27, 0xf1, 0x44,
 	0xbf, 0xa5, 0xa7, 0x31, 0xe6, 0x83, 0xb2, 0x7a, 0xe3, 0x9e, 0xfc, 0x0a, 0x00, 0x00, 0xff, 0xff,
-	0xc7, 0xbb, 0x28, 0xc7, 0x66, 0x07, 0x00, 0x00,
+	0x08, 0x4d, 0xc6, 0xa9, 0x66, 0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1230,10 +1230,10 @@ func (m *MsgMintNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receipent) > 0 {
-		i -= len(m.Receipent)
-		copy(dAtA[i:], m.Receipent)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Receipent)))
+	if len(m.Recipient) > 0 {
+		i -= len(m.Recipient)
+		copy(dAtA[i:], m.Recipient)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Recipient)))
 		i--
 		dAtA[i] = 0x32
 	}
@@ -1474,10 +1474,10 @@ func (m *MsgTransferNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receipent) > 0 {
-		i -= len(m.Receipent)
-		copy(dAtA[i:], m.Receipent)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Receipent)))
+	if len(m.Recipient) > 0 {
+		i -= len(m.Recipient)
+		copy(dAtA[i:], m.Recipient)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Recipient)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -1640,7 +1640,7 @@ func (m *MsgMintNFT) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Receipent)
+	l = len(m.Recipient)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1750,7 +1750,7 @@ func (m *MsgTransferNFT) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Receipent)
+	l = len(m.Recipient)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -2459,7 +2459,7 @@ func (m *MsgMintNFT) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Receipent", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2487,7 +2487,7 @@ func (m *MsgMintNFT) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receipent = string(dAtA[iNdEx:postIndex])
+			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3187,7 +3187,7 @@ func (m *MsgTransferNFT) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Receipent", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -3215,7 +3215,7 @@ func (m *MsgTransferNFT) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receipent = string(dAtA[iNdEx:postIndex])
+			m.Recipient = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

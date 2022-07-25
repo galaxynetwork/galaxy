@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package galaxy.marketplace;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/marketplace/types";
+
+service Msg {
+    rpc ListNFT(MsgListNFT) returns (MsgListNFTResponse);
+    rpc EditListNFT(MsgEditListNFT) returns (MsgEditListNFTResponse);
+    rpc DeleteListNFT(MsgDeleteListNFT) returns (MsgDeleteListNFTResponse);
+
+    rpc BuyNFT(MsgBuyNFT) returns (MsgBuyNFTResponse);
+}
+
+
+message MsgListNFT {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    string brand_id = 1;
+    string class_id = 2;
+    uint64 nft_id = 3;
+
+    string owner = 4;
+
+    repeated cosmos.base.v1beta1.Coin price = 5 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+}
+
+message MsgListNFTResponse {
+    uint64 id = 1;
+}
+
+message MsgEditListNFT {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    uint64 id = 1;
+    string owner = 2;
+
+    repeated cosmos.base.v1beta1.Coin price = 3 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+}
+
+message MsgEditListNFTResponse {}
+
+message MsgDeleteListNFT {
+    option (cosmos.msg.v1.signer) = "owner";
+
+    uint64 id = 1;
+    string owner = 2;
+}
+
+message MsgDeleteListNFTResponse {}
+
+
+message MsgBuyNFT {
+    option (cosmos.msg.v1.signer) = "buyer";
+
+    uint64 id = 1;
+    string buyer = 2;
+    string token_buy_denom = 3;
+}
+
+message MsgBuyNFTResponse {}

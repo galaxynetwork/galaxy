@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package galaxy.marketplace;
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/marketplace/types";
+
+
+message Params {
+    // module_sale_commission defines the commission taken by the module when nft is sold.
+    // Until the next upgrade, commission will be distributed to the only staking module.
+    string module_sale_commission = 1 [
+        (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+        (gogoproto.nullable)   = false
+    ];
+}

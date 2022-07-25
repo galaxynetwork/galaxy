@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package galaxy.marketplace;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/marketplace/types";
+
+
+message Listing {
+    // id defines the sequence number of the listing, auto incremented.
+    uint64 id = 1;
+    
+    // defines id of nft
+    string brand_id = 2;
+    string class_id = 3;
+    string nft_id = 4;
+
+    string owner = 5;
+
+    // price defines selling price of nft.
+    // can be several, purchase with one of the registered coins.
+    repeated cosmos.base.v1beta1.Coin price = 6 [
+        (gogoproto.nullable)     = false,
+        (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+}

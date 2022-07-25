@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package galaxy.marketplace;
+
+import "gogoproto/gogo.proto";
+import "galaxy/marketplace/listing.proto";
+import "galaxy/marketplace/params.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/galaxies-labs/galaxy/x/marketplace/types";
+
+
+service Query {
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+        option (google.api.http).get = "/galaxy/marketplace/params";
+    }
+
+    rpc Listings(QueryListingsRequest) returns (QueryListingsResponse) {
+        option (google.api.http).get = "/galaxy/marketplace/listings";
+    }
+
+    rpc Listing(QueryListingRequest) returns (QueryListingResponse) {
+        option (google.api.http).get = "/galaxy/marketplace/listings/{id}";
+    }
+
+    rpc ListingByNFT(QueryListingByNFTRequest) returns (QueryListingByNFTResponse) {
+        option (google.api.http).get = "/galaxy/marketplace/nft/{brand_id}/{class_id}/{nft_id}/listings";
+    }
+}
+
+
+message QueryParamsRequest {}
+
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryListingsRequest {
+    string owner = 1;
+
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryListingsResponse {
+    repeated Listing listings = 1 [(gogoproto.nullable) = false];
+
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+
+message QueryListingRequest {
+    uint64 id = 1;
+}
+
+message QueryListingResponse {
+    Listing listing = 1;
+}
+
+
+message QueryListingByNFTRequest {
+    string brand_id = 1;
+    string class_id = 2;
+    uint64 nft_id = 3;
+}
+
+message QueryListingByNFTResponse {
+    Listing listing = 1;
+}

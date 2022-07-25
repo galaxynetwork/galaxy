@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	"github.com/galaxies-labs/galaxy/internal/conv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -68,5 +70,35 @@ func GetClassSupplyStoreKey(brandID string) []byte {
 	copy(key, BrandClassSupplyKey)
 	copy(key[len(BrandClassSupplyKey):], brandIDBz)
 	copy(key[len(BrandClassSupplyKey)+len(brandIDBz):], Delimiter)
+	return key
+}
+
+func GetNFTStoreKey(brandID, classID string) []byte {
+	brandIDBz := conv.UnsafeStrToBytes(brandID)
+	classIDBz := conv.UnsafeStrToBytes(classID)
+
+	key := make([]byte, len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter))
+
+	copy(key, NFTKey)
+	copy(key[len(NFTKey):], brandIDBz)
+	copy(key[len(NFTKey)+len(brandIDBz):], Delimiter)
+	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter):], classIDBz)
+	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
+	return key
+}
+
+func GetOwnerStoreKey(brandID, classID string, id uint64) []byte {
+	brandIDBz := conv.UnsafeStrToBytes(brandID)
+	classIDBz := conv.UnsafeStrToBytes(classID)
+	idBz := sdk.Uint64ToBigEndian(id)
+
+	key := make([]byte, len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter)+len(idBz))
+
+	copy(key, NFTKey)
+	copy(key[len(NFTKey):], brandIDBz)
+	copy(key[len(NFTKey)+len(brandIDBz):], Delimiter)
+	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter):], classIDBz)
+	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
+	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter):], idBz)
 	return key
 }

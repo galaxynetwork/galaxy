@@ -33,6 +33,12 @@ func (suite *KeeperTestSuite) TestStoreClass() {
 		suite.Require().True(exist)
 		suite.Require().NotNil(class)
 		suite.Require().NotEmpty(class)
+		amount, err := keeper.GetTotalSupplyOfClass(ctx, class.BrandId, class.Id)
+		suite.Require().NoError(err)
+		suite.Require().Equal(
+			amount,
+			uint64(0),
+		)
 	}
 
 	class, exist := keeper.GetClass(ctx, unsavedClassA.BrandId, unsavedClassA.Id)

@@ -14,4 +14,8 @@ var (
 	ErrExistClass              = sdkerrors.Register(ModuleName, 8, "exist class within the brand")
 	ErrNotFoundClass           = sdkerrors.Register(ModuleName, 9, "not found class within the brand")
 	ErrUnauthorized            = sdkerrors.Register(ModuleName, 10, "unauthorized")
+	ErrExistNFT                = sdkerrors.Register(ModuleName, 11, "exist nft within the class of brand")
+	ErrAlreadyBurnedNFT        = sdkerrors.Register(ModuleName, 12, "already burned nft within the class of brand")
+	ErrNotFoundNFT             = sdkerrors.Register(ModuleName, 13, "not found nft within the class of brand")
+	ErrNotFoundOwner           = sdkerrors.Register(ModuleName, 14, "not found owner of nft")
 )

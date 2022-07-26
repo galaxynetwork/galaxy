@@ -11,21 +11,27 @@ import (
 type NFTs = []NFT
 type Classes = []Class
 type Entries = []Entry
+type ClassEntries = []ClassEntry
 
-func NewGenesisState(classes Classes, entries Entries) *GenesisState {
+func NewGenesisState(classEntries ClassEntries, entries Entries) *GenesisState {
 	return &GenesisState{
-		Classes: classes,
-		Entries: entries,
+		ClassEntries: classEntries,
+		Entries:      entries,
 	}
 }
 
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState(Classes{}, Entries{})
+	return NewGenesisState(ClassEntries{}, Entries{})
 }
 
 func (state *GenesisState) Validate() error {
 	seenClassWithinBrand := map[string]bool{}
-	for _, class := range state.Classes {
+	for _, classEntry := range state.ClassEntries {
+		nextSequence, class := classEntry.NextSequence, classEntry.Class
+		if nextSequence == 0 {
+			return fmt.Errorf("nextSequence must be greater 0")
+		}
+
 		url := strings.Join([]string{class.BrandId, class.Id}, "/")
 		if seenClassWithinBrand[url] {
 			return fmt.Errorf("duplicate class for id %s within the brandID %s", class.Id, class.BrandId)

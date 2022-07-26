@@ -10,11 +10,17 @@ option go_package = "github.com/galaxies-labs/galaxy/x/nft/types";
 
 message GenesisState {
     // classes defines the list class of the nft type.
-    repeated Class classes = 1 [(gogoproto.nullable) = false];
+    repeated ClassEntry class_entries = 1 [(gogoproto.nullable) = false];
     
     repeated Entry entries = 2 [(gogoproto.nullable) = false];
 }
 
+message ClassEntry {
+    Class class = 1 [(gogoproto.nullable) = false];
+    
+    // next nft sequence
+    uint64 next_sequence = 2;
+}
 
 message Entry {
     // owner is the owner address of the following nft
@@ -23,4 +29,5 @@ message Entry {
     // nfts is a group of nfts of the same owner
     repeated NFT nfts = 2 [(gogoproto.nullable) = false];
 }
+
 

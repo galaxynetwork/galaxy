@@ -16,12 +16,12 @@ func TestGenesis(t *testing.T) {
 	invalidClassA := NewClass("brandidc", "", 10_000, NewClassDescription("name", "", "", ""))
 	invalidClassB := NewClass("", "classida", 10_000, NewClassDescription("name", "", "", ""))
 
-	validNFTA := NewNFT(1, classA.BrandId, classA.Id, "", "")
+	validNFTA := NewNFT(1, classA.BrandId, classA.Id, "ipfs://nft", "")
 	validNFTA2 := validNFTA
-	validNFTB := NewNFT(1, classB.BrandId, classB.Id, "", "")
-	validNFTC := NewNFT(2, classA.BrandId, classA.Id, "", "")
-	invalidNFTA := NewNFT(1, invalidClassA.BrandId, classA.Id, "", "")
-	invalidNFTB := NewNFT(1, classA.BrandId, invalidClassB.Id, "", "")
+	validNFTB := NewNFT(1, classB.BrandId, classB.Id, "ipfs://nft", "")
+	validNFTC := NewNFT(2, classA.BrandId, classA.Id, "ipfs://nft", "")
+	invalidNFTA := NewNFT(1, invalidClassA.BrandId, classA.Id, "ipfs://nft", "")
+	invalidNFTB := NewNFT(1, classA.BrandId, invalidClassB.Id, "ipfs://nft", "")
 
 	ownerA := sdk.AccAddress("ownera...")
 	ownerB := sdk.AccAddress("ownerb...")
@@ -31,21 +31,23 @@ func TestGenesis(t *testing.T) {
 		genesisState *GenesisState
 	}{
 		{true, DefaultGenesisState()},
-		{true, NewGenesisState(Classes{classA, classB}, Entries{{ownerA.String(), NFTs{validNFTA, validNFTB}}, {ownerB.String(), NFTs{validNFTC}}})},
+		{true, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTA, validNFTB}}, {ownerB.String(), NFTs{validNFTC}}})},
 		// duplicate class
-		{false, NewGenesisState(Classes{classA, classA2, classB}, Entries{})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classA2, 1}, {classB, 1}}, Entries{})},
 		// invalid brandID format
-		{false, NewGenesisState(Classes{classA, classB, invalidClassB}, Entries{})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}, {invalidClassB, 1}}, Entries{})},
 		// invalid classID format
-		{false, NewGenesisState(Classes{classA, classB, invalidClassA}, Entries{})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}, {invalidClassA, 1}}, Entries{})},
 		// nft not within brandID
-		{false, NewGenesisState(Classes{classA, classB}, Entries{{ownerA.String(), NFTs{validNFTA, invalidNFTA}}})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTA, invalidNFTA}}})},
 		// nft not within brandID/classID
-		{false, NewGenesisState(Classes{classA, classB}, Entries{{ownerA.String(), NFTs{validNFTA, invalidNFTB}}})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTA, invalidNFTB}}})},
 		// duplicate nft within brandID/classID
-		{false, NewGenesisState(Classes{classA, classB}, Entries{{ownerA.String(), NFTs{validNFTB}}, {ownerB.String(), NFTs{validNFTA, validNFTA2}}})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTB}}, {ownerB.String(), NFTs{validNFTA, validNFTA2}}})},
 		// invalid owner address
-		{false, NewGenesisState(Classes{classA, classB}, Entries{{ownerA.String(), NFTs{validNFTA, validNFTB}}, {"", NFTs{validNFTC}}})},
+		{false, NewGenesisState(ClassEntries{{classA, 1}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTA, validNFTB}}, {"", NFTs{validNFTC}}})},
+		// zero sequence
+		{false, NewGenesisState(ClassEntries{{classA, 0}, {classB, 1}}, Entries{{ownerA.String(), NFTs{validNFTA, validNFTB}}, {ownerB.String(), NFTs{validNFTC}}})},
 	}
 
 	for index, test := range tests {

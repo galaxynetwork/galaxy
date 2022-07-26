@@ -199,8 +199,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftA4, ownerA))
 	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftB, ownerB))
 
-	state, err := suite.app.NFTKeeper.ExportGenesis(suite.ctx)
-	suite.Require().NoError(err)
+	state := suite.app.NFTKeeper.ExportGenesis(suite.ctx)
 
 	for _, ce := range state.ClassEntries {
 		uniqueID := types.GetClassUniqueID(ce.Class.BrandId, ce.Class.Id)
@@ -267,8 +266,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 		suite.app.NFTKeeper.BurnNFT(suite.ctx, nftA2.BrandId, nftA2.ClassId, nftA2.Id),
 	)
 
-	state, err = suite.app.NFTKeeper.ExportGenesis(suite.ctx)
-	suite.Require().NoError(err)
+	state = suite.app.NFTKeeper.ExportGenesis(suite.ctx)
 
 	nfts = types.NFTs{}
 	for _, e := range state.Entries {
@@ -316,8 +314,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 
 	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftC, ownerA))
 
-	state, err = suite.app.NFTKeeper.ExportGenesis(suite.ctx)
-	suite.Require().NoError(err)
+	state = suite.app.NFTKeeper.ExportGenesis(suite.ctx)
 
 	for _, ce := range state.ClassEntries {
 		totalSupply, err := suite.app.NFTKeeper.GetTotalSupplyOfClass(suite.ctx, ce.Class.BrandId, ce.Class.Id)

@@ -55,17 +55,14 @@ func (k Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	return nil
 }
 
-func (k Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
+func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	classes := k.GetClasses(ctx)
 
 	var classEntries types.ClassEntries
 	nftMap := make(map[string][]types.NFT)
 
 	for _, class := range classes {
-		seq, err := k.getSequenceOfClass(ctx, class.BrandId, class.Id)
-		if err != nil {
-			return nil, err
-		}
+		seq, _ := k.getSequenceOfClass(ctx, class.BrandId, class.Id)
 
 		classEntries = append(classEntries, types.ClassEntry{
 			Class:        class,
@@ -99,5 +96,5 @@ func (k Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 	return &types.GenesisState{
 		ClassEntries: classEntries,
 		Entries:      entries,
-	}, nil
+	}
 }

@@ -84,13 +84,13 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, raw json.R
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(raw, &genState)
 
-	//am.keeper.InitGenesis(ctx, genState)
+	am.keeper.InitGenesis(ctx, &genState)
 	return []abci.ValidatorUpdate{}
 }
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	//genState := am.keeper.ExportGenesis(ctx)
-	//	cdc.MustMarshalJSON(&genState)
+	genState := am.keeper.ExportGenesis(ctx)
+	cdc.MustMarshalJSON(genState)
 	return nil
 }
 

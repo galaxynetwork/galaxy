@@ -1,6 +1,7 @@
 package types
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/galaxies-labs/galaxy/internal/conv"
@@ -40,6 +41,21 @@ var (
 
 	Delimiter = []byte{0x00}
 )
+
+func GetNFTUniqueID(brandID, classID string, id uint64) string {
+	return strings.Join([]string{brandID, classID, strconv.FormatUint(id, 10)}, "/")
+}
+
+func ParseNFTUniqueID(uniqueID string) (string, string, uint64, error) {
+	ids := strings.Split(uniqueID, "/")
+
+	nftID, err := strconv.ParseUint(ids[2], 10, 64)
+	if err != nil {
+		return "", "", 0, err
+	}
+
+	return ids[0], ids[1], nftID, nil
+}
 
 func GetClassUniqueID(brandID, id string) string {
 	return strings.Join([]string{brandID, id}, "/")

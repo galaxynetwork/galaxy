@@ -12,7 +12,7 @@ import (
 func (k Keeper) GetTotalSupplyOfClass(ctx sdk.Context, brandID, id string) (uint64, error) {
 	bz := k.getClassSupplyStore(ctx, brandID).Get([]byte(id))
 	if bz == nil {
-		return 0, fmt.Errorf("invalid class dereference")
+		return 0, fmt.Errorf("invalid class supply dereference")
 	}
 
 	var supply types.Supply
@@ -23,11 +23,34 @@ func (k Keeper) GetTotalSupplyOfClass(ctx sdk.Context, brandID, id string) (uint
 	return supply.TotalSupply, nil
 }
 
+func (k Keeper) setSequenceOfClass(ctx sdk.Context, brandID, id string, sequence uint64) error {
+	store := k.getClassSupplyStore(ctx, brandID)
+	bz := store.Get([]byte(id))
+	if bz == nil {
+		return fmt.Errorf("invalid class supply dereference")
+	}
+
+	var supply types.Supply
+	if err := k.cdc.Unmarshal(bz, &supply); err != nil {
+		return err
+	}
+
+	supply.Sequence = sequence
+
+	if bz, err := k.cdc.Marshal(&supply); err != nil {
+		return err
+	} else {
+		store.Set([]byte(id), bz)
+	}
+
+	return nil
+}
+
 func (k Keeper) incrSupplyOfClass(ctx sdk.Context, brandID, id string) error {
 	store := k.getClassSupplyStore(ctx, brandID)
 	bz := store.Get([]byte(id))
 	if bz == nil {
-		return fmt.Errorf("invalid class dereference")
+		return fmt.Errorf("invalid class supply dereference")
 	}
 
 	var supply types.Supply
@@ -46,11 +69,34 @@ func (k Keeper) incrSupplyOfClass(ctx sdk.Context, brandID, id string) error {
 	return nil
 }
 
+func (k Keeper) incrOnlySupplyOfClass(ctx sdk.Context, brandID, id string) error {
+	store := k.getClassSupplyStore(ctx, brandID)
+	bz := store.Get([]byte(id))
+	if bz == nil {
+		return fmt.Errorf("invalid class supply dereference")
+	}
+
+	var supply types.Supply
+	if err := k.cdc.Unmarshal(bz, &supply); err != nil {
+		return err
+	}
+
+	supply.TotalSupply++
+
+	if bz, err := k.cdc.Marshal(&supply); err != nil {
+		return err
+	} else {
+		store.Set([]byte(id), bz)
+	}
+
+	return nil
+}
+
 func (k Keeper) decrSupplyOfClass(ctx sdk.Context, brandID, id string) error {
 	store := k.getClassSupplyStore(ctx, brandID)
 	bz := store.Get([]byte(id))
 	if bz == nil {
-		return fmt.Errorf("invalid class dereference")
+		return fmt.Errorf("invalid class supply dereference")
 	}
 
 	var supply types.Supply
@@ -73,7 +119,7 @@ func (k Keeper) getSequenceOfClass(ctx sdk.Context, brandID, id string) (uint64,
 	bz := k.getClassSupplyStore(ctx, brandID).Get([]byte(id))
 
 	if bz == nil {
-		return 0, fmt.Errorf("invalid class dereference")
+		return 0, fmt.Errorf("invalid class supply dereference")
 	}
 
 	var supply types.Supply

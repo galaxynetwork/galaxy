@@ -7,6 +7,23 @@ import (
 	"github.com/galaxies-labs/galaxy/x/nft/types"
 )
 
+// GetNFTsOfClass returns the nft of specified brandID and classID
+func (k Keeper) GetNFTsOfClass(ctx sdk.Context, brandID, classID string) (nfts types.NFTs) {
+	store := k.getNFTStore(ctx, brandID, classID)
+
+	iterator := store.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var nft types.NFT
+		if err := k.cdc.Unmarshal(iterator.Value(), &nft); err != nil {
+			panic(err)
+		}
+		nfts = append(nfts, nft)
+	}
+	return
+}
+
 // MintNFT defines a method for minting a new nft
 // Note: When the upper module uses this method, it needs to authenticate class
 func (k Keeper) MintNFT(ctx sdk.Context, nft types.NFT, recipient sdk.AccAddress) error {

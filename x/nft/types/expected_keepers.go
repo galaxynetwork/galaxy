@@ -7,4 +7,5 @@ import (
 
 type BrandKeeper interface {
 	GetBrand(ctx sdk.Context, brandID string) (types.Brand, bool)
+	HasBrand(ctx sdk.Context, brandID string) bool
 }

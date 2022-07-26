@@ -8,7 +8,7 @@ import (
 )
 
 // MintNFT defines a method for minting a new nft
-// Note: When the upper module uses this method, it needs to authenticate brand
+// Note: When the upper module uses this method, it needs to authenticate class
 func (k Keeper) MintNFT(ctx sdk.Context, nft types.NFT, recipient sdk.AccAddress) error {
 	if exist := k.HasNFT(ctx, nft.BrandId, nft.ClassId, nft.Id); exist {
 		return sdkerrors.Wrapf(types.ErrExistNFT, "for brandID: %s, classID: %s, id: %d", nft.BrandId, nft.ClassId, nft.Id)
@@ -99,20 +99,22 @@ func (k Keeper) HasNFT(ctx sdk.Context, brandID, classID string, id uint64) bool
 }
 
 // GetNFT returns the nft information of the specified brandID and classID and nftID
-func (k Keeper) GetNFT(ctx sdk.Context, brandID, classID string, id uint64) (nft types.NFT, exist bool) {
-	bz := k.getNFTStore(ctx, brandID, classID).
-		Get(sdk.Uint64ToBigEndian(id))
+func (k Keeper) GetNFT(ctx sdk.Context, brandID, classID string, id uint64) (types.NFT, bool) {
+	var nft types.NFT
+
+	bz := k.getNFTStore(ctx, brandID, classID).Get(sdk.Uint64ToBigEndian(id))
 
 	if bz == nil {
-		return
+		return nft, false
 	}
 
-	if err := k.cdc.Unmarshal(bz, &nft); err != nil {
+	err := k.cdc.Unmarshal(bz, &nft)
+
+	if err != nil {
 		panic(err)
 	}
 
-	exist = true
-	return
+	return nft, true
 }
 
 // HasNFT determines whether the specified brandID and classID and id burend
@@ -137,13 +139,15 @@ func (k Keeper) BurnedNFT(ctx sdk.Context, brandID, classID string, id uint64) b
 func (k Keeper) setNFT(ctx sdk.Context, nft types.NFT) error {
 	store := k.getNFTStore(ctx, nft.BrandId, nft.ClassId)
 
-	bz, err := k.cdc.Marshal(&nft)
-	if err != nil {
+	if bz, err := k.cdc.Marshal(&nft); err != nil {
 		return err
+	} else {
+		store.Set(
+			sdk.Uint64ToBigEndian(nft.Id),
+			bz,
+		)
+		return nil
 	}
-
-	store.Set(sdk.Uint64ToBigEndian(nft.Id), bz)
-	return nil
 }
 
 func (k Keeper) getNFTStore(ctx sdk.Context, brandID, classID string) prefix.Store {

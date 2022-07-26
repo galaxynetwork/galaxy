@@ -45,6 +45,11 @@ func GetClassUniqueID(brandID, id string) string {
 	return strings.Join([]string{brandID, id}, "/")
 }
 
+func ParseClassUniqueID(uniqueID string) (string, string) {
+	ids := strings.Split(uniqueID, "/")
+	return ids[0], ids[1]
+}
+
 func GetClassOfBrandStoreKey(brandID string) []byte {
 	brandIDBz := conv.UnsafeStrToBytes(brandID)
 
@@ -92,13 +97,13 @@ func GetOwnerStoreKey(brandID, classID string, id uint64) []byte {
 	classIDBz := conv.UnsafeStrToBytes(classID)
 	idBz := sdk.Uint64ToBigEndian(id)
 
-	key := make([]byte, len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter)+len(idBz))
+	key := make([]byte, len(OwnerKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter)+len(idBz))
 
-	copy(key, NFTKey)
-	copy(key[len(NFTKey):], brandIDBz)
-	copy(key[len(NFTKey)+len(brandIDBz):], Delimiter)
-	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter):], classIDBz)
-	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
-	copy(key[len(NFTKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter):], idBz)
+	copy(key, OwnerKey)
+	copy(key[len(OwnerKey):], brandIDBz)
+	copy(key[len(OwnerKey)+len(brandIDBz):], Delimiter)
+	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter):], classIDBz)
+	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
+	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter):], idBz)
 	return key
 }

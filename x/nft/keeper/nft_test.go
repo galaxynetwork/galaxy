@@ -24,8 +24,17 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 	}
 
 	var classes = map[string]uint64{}
+	var ownerMap = map[string]int{}
 	for i, test := range tests {
 		nft, owner := test.nft, test.owner
+
+		_, ok := ownerMap[owner.String()]
+		if !ok {
+			ownerMap[owner.String()] = 0
+		}
+		if test.stored {
+			ownerMap[owner.String()]++
+		}
 
 		suite.Require().Error(nft.Validate())
 
@@ -73,6 +82,13 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 		}
 	}
 
+	// check nfts len by owner
+	for k, v := range ownerMap {
+		acc, _ := sdk.AccAddressFromBech32(k)
+		nfts := keeper.GetNFTsByOwner(ctx, acc)
+		suite.Require().Len(nfts, v, "check nfts len by owner for: %s", k)
+	}
+
 	//update
 	newVarUri := "ifps://netnft"
 	for _, test := range tests {
@@ -97,7 +113,14 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 		nft := test.nft
 		owner := keeper.GetOwner(ctx, nft.BrandId, nft.ClassId, nft.Id)
 		newOwner := sdk.AccAddress(fmt.Sprintf("newaddr%d", i))
+
+		//for check owner store
+		if _, ok := ownerMap[newOwner.String()]; !ok {
+			ownerMap[newOwner.String()] = 0
+		}
+
 		if test.stored {
+			ownerMap[owner.String()]--
 			suite.Require().NotNil(owner)
 			suite.Require().NotEqual(owner, newOwner)
 			suite.Require().NoError(
@@ -105,12 +128,20 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 			)
 			owner = keeper.GetOwner(ctx, nft.BrandId, nft.ClassId, nft.Id)
 			suite.Require().Equal(owner, newOwner)
+			ownerMap[newOwner.String()]++
 		} else {
 			suite.Require().Nil(owner)
 			suite.Require().Error(
 				keeper.TransferNFT(ctx, nft.BrandId, nft.ClassId, nft.Id, newOwner),
 			)
 		}
+	}
+
+	// check nfts len by owner after transfer
+	for k, v := range ownerMap {
+		acc, _ := sdk.AccAddressFromBech32(k)
+		nfts := keeper.GetNFTsByOwner(ctx, acc)
+		suite.Require().Len(nfts, v, "check nfts len by owner after transferring for: %s", k)
 	}
 
 	for key, count := range classes {
@@ -143,6 +174,14 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 		}
 	}
 
+	// check nfts len by owner after burning
+	for k, _ := range ownerMap {
+		acc, _ := sdk.AccAddressFromBech32(k)
+		nfts := keeper.GetNFTsByOwner(ctx, acc)
+		suite.Require().Len(nfts, 0, "check nfts len by owner after burning for: %s", k)
+	}
+
+	// check totalSupply after burning
 	for key, _ := range classes {
 		brandID, classID := types.ParseClassUniqueID(key)
 		supply, err := keeper.GetTotalSupplyOfClass(ctx, brandID, classID)

@@ -55,9 +55,12 @@ func (k Keeper) BurnNFT(ctx sdk.Context, brandID, classID string, id uint64) err
 		return sdkerrors.Wrapf(types.ErrNotFoundNFT, "for brandID: %s, classID: %s, id: %d", brandID, classID, id)
 	}
 
+	owner := k.GetOwner(ctx, brandID, classID, id)
+
 	k.getNFTStore(ctx, brandID, classID).
 		Delete(sdk.Uint64ToBigEndian(id))
-	k.deleteOwner(ctx, brandID, classID, id)
+
+	k.deleteOwner(ctx, brandID, classID, id, owner)
 
 	if err := k.decrSupplyOfClass(ctx, brandID, classID); err != nil {
 		return err
@@ -90,7 +93,9 @@ func (k Keeper) TransferNFT(ctx sdk.Context, brandID, classID string, id uint64,
 		return sdkerrors.Wrapf(types.ErrNotFoundNFT, "for brandID: %s, classID: %s, id: %d", brandID, classID, id)
 	}
 
-	k.deleteOwner(ctx, brandID, classID, id)
+	owner := k.GetOwner(ctx, brandID, classID, id)
+	k.deleteOwner(ctx, brandID, classID, id, owner)
+
 	k.setOwner(ctx, brandID, classID, id, recipient)
 
 	return nil

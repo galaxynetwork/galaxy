@@ -7,6 +7,7 @@ import (
 	"github.com/galaxies-labs/galaxy/internal/conv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/address"
 )
 
 const (
@@ -27,17 +28,14 @@ const (
 //
 //0x03|[]byte(brandID)|0x00|[]byte(classID)|0x00|[]byte(nftID) -> NFT{}
 //0x04|[]byte(brandID)|0x00|[]byte(classID)|0x00|[]byte(nftID) -> Owner{}
-
-//authz
-// brand
-// nft
-// marketplace
+//0x05|[]byte(owner)|0x00|[]byte(classID)|0x00|[]byte(nftID) -> NFT{}
 
 var (
-	BrandClassKey       = []byte{0x01}
-	BrandClassSupplyKey = []byte{0x02}
-	NFTKey              = []byte{0x03}
-	OwnerKey            = []byte{0x04}
+	BrandClassKey        = []byte{0x01}
+	BrandClassSupplyKey  = []byte{0x02}
+	NFTKey               = []byte{0x03}
+	OwnerKey             = []byte{0x04}
+	NFTOfClassByOwnerKey = []byte{0x05}
 
 	Delimiter = []byte{0x00}
 )
@@ -121,5 +119,34 @@ func GetOwnerStoreKey(brandID, classID string, id uint64) []byte {
 	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter):], classIDBz)
 	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
 	copy(key[len(OwnerKey)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter):], idBz)
+	return key
+}
+
+func GetNFTOfClassByOwnerStoreKey(owner sdk.AccAddress, brandID, classID string) []byte {
+	owner = address.MustLengthPrefix(owner)
+	brandIDBz := conv.UnsafeStrToBytes(brandID)
+	classIDBz := conv.UnsafeStrToBytes(classID)
+
+	//0x05 | owner | 0x00 | brandID | 0x00 | classID | 0x00 -> nftId > 0x01
+	key := make([]byte, len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter)+len(brandIDBz)+len(Delimiter)+len(classIDBz)+len(Delimiter))
+
+	copy(key, NFTOfClassByOwnerKey)
+	copy(key[len(NFTOfClassByOwnerKey):], owner)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner):], Delimiter)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter):], brandIDBz)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter)+len(brandIDBz):], Delimiter)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter)+len(brandIDBz)+len(Delimiter):], classIDBz)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter)+len(brandIDBz)+len(Delimiter)+len(classIDBz):], Delimiter)
+	return key
+}
+
+func GetPrefixNFTOfClassByOwnerKey(owner sdk.AccAddress) []byte {
+	owner = address.MustLengthPrefix(owner)
+
+	key := make([]byte, len(NFTOfClassByOwnerKey)+len(owner)+len(Delimiter))
+
+	copy(key, NFTOfClassByOwnerKey)
+	copy(key[len(NFTOfClassByOwnerKey):], owner)
+	copy(key[len(NFTOfClassByOwnerKey)+len(owner):], Delimiter)
 	return key
 }

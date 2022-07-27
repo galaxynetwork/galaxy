@@ -70,7 +70,7 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 		return nil, brandtypes.ErrUnauthorized
 	}
 
-	class, exist := k.GetClass(ctx, msg.Id, msg.BrandId)
+	class, exist := k.GetClass(ctx, msg.BrandId, msg.Id)
 	if !exist {
 		return nil, types.ErrNotFoundClass
 	}

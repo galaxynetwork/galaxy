@@ -7,7 +7,7 @@ import (
 )
 
 // Classes queries all Classes
-func (suite *KeeperTestSuite) CreateClass() {
+func (suite *KeeperTestSuite) TestCreateClass() {
 	app, ctx, msgServer := suite.app, suite.ctx, suite.msgServer
 	wrapCtx := sdk.WrapSDKContext(ctx)
 
@@ -74,7 +74,7 @@ func (suite *KeeperTestSuite) CreateClass() {
 	suite.Require().Nil(res)
 }
 
-func (suite *KeeperTestSuite) EditClass() {
+func (suite *KeeperTestSuite) TestEditClass() {
 	app, ctx, msgServer := suite.app, suite.ctx, suite.msgServer
 	wrapCtx := sdk.WrapSDKContext(ctx)
 
@@ -98,8 +98,18 @@ func (suite *KeeperTestSuite) EditClass() {
 	suite.Require().Nil(res)
 
 	//without checking brand
-	app.NFTKeeper.SaveClass(ctx, types.NewClass(msgA.BrandId, msgA.Id, msgA.FeeBasisPoints, msgA.Description))
-	app.NFTKeeper.SaveClass(ctx, types.NewClass(msgB.BrandId, msgB.Id, msgB.FeeBasisPoints, msgB.Description))
+	suite.Require().NoError(
+		app.BrandKeeper.SetBrand(ctx, brandtypes.NewBrand(msgA.BrandId, addr, brandtypes.NewBrandDescription("brand", "", ""))),
+	)
+	suite.Require().NoError(
+		app.BrandKeeper.SetBrand(ctx, brandtypes.NewBrand(msgB.BrandId, addr2, brandtypes.NewBrandDescription("brand", "", ""))),
+	)
+	suite.Require().NoError(
+		app.NFTKeeper.SaveClass(ctx, types.NewClass(msgA.BrandId, msgA.Id, msgA.FeeBasisPoints, msgA.Description)),
+	)
+	suite.Require().NoError(
+		app.NFTKeeper.SaveClass(ctx, types.NewClass(msgB.BrandId, msgB.Id, msgB.FeeBasisPoints, msgB.Description)),
+	)
 
 	res, err = msgServer.EditClass(wrapCtx, msgA)
 	suite.Require().NoError(err)
@@ -109,15 +119,15 @@ func (suite *KeeperTestSuite) EditClass() {
 	suite.Require().NoError(err)
 	suite.Require().NotNil(res)
 
-	msgC := msgA
+	msgC := *msgA
 	msgC.Editor = sdk.AccAddress("randome...").String()
-	res, err = msgServer.EditClass(wrapCtx, msgA)
+	res, err = msgServer.EditClass(wrapCtx, &msgC)
 	suite.Require().Error(err)
 	suite.Require().Nil(res)
 
-	msgD := msgB
+	msgD := *msgB
 	msgD.Editor = msgA.Editor
-	res, err = msgServer.EditClass(wrapCtx, msgB)
+	res, err = msgServer.EditClass(wrapCtx, &msgD)
 	suite.Require().Error(err)
 	suite.Require().Nil(res)
 

@@ -118,7 +118,7 @@ func (bd BrandDescription) UpdateDescription(desc BrandDescription) BrandDescrip
 
 func ValidateBrandID(id string) error {
 	if !reBrandID.MatchString(strings.TrimSpace(id)) {
-		return sdkerrors.Wrapf(ErrInvalidBrandID, "invalid brand id: %s", id)
+		return ErrInvalidBrandID
 	}
 
 	return nil

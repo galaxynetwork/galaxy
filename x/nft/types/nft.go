@@ -35,11 +35,11 @@ func NewClass(brandID, id string, feeBasisPoints uint32, description ClassDescri
 }
 
 func (class *Class) Validate() error {
-	if err := ValidateClassId(class.Id); err != nil {
+	if err := brandtypes.ValidateBrandID(class.BrandId); err != nil {
 		return err
 	}
 
-	if err := brandtypes.ValidateBrandID(class.BrandId); err != nil {
+	if err := ValidateClassId(class.Id); err != nil {
 		return err
 	}
 

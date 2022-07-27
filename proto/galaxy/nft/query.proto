@@ -23,11 +23,15 @@ service Query {
     }
 
     // NFTs queries all nfts belonging to a given brand and class
+    // cases:
+    // - by owner
+    // - by brandID and classID
+    // - by brandID and classID and owner
     rpc NFTs(QueryNFTsRequest) returns (QueryNFTsResponse) {
-        option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/nfts";
+        option (google.api.http).get = "/galaxy/nft/nfts";
     }
 
-    // NFTs queries based on it's brand and class and id
+    // NFT queries based on it's brand and class and id
     rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
         option (google.api.http).get = "/galaxy/nft/classes/{brand_id}/{class_id}/nfts/{id}";
     }
@@ -82,7 +86,7 @@ message QueryNFTsResponse {
 message QueryNFTRequest {
     string brand_id = 1;
     string class_id = 2;
-    string id = 3;
+    uint64 id = 3;
 }  
 
 message QueryNFTResponse {
@@ -92,7 +96,7 @@ message QueryNFTResponse {
 message QueryOwnerRequest {
     string brand_id = 1;
     string class_id = 2;
-    string id = 3;
+    uint64 id = 3;
 }  
 
 message QueryOwnerResponse {
@@ -105,5 +109,8 @@ message QuerySupplyRequest {
 }  
 
 message QuerySupplyResponse {
+    // amount defines total supply of class
     uint64 amount = 1;
+    //next_sequence defines next sequecne number of nft within class
+    uint64 next_sequence = 2;
 }

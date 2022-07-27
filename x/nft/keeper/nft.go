@@ -175,3 +175,7 @@ func (k Keeper) setNFT(ctx sdk.Context, nft types.NFT) error {
 func (k Keeper) getNFTStore(ctx sdk.Context, brandID, classID string) prefix.Store {
 	return prefix.NewStore(ctx.KVStore(k.storeKey), types.GetNFTStoreKey(brandID, classID))
 }
+
+func (k Keeper) getNFTPrefix(ctx sdk.Context) prefix.Store {
+	return prefix.NewStore(ctx.KVStore(k.storeKey), types.NFTKey)
+}

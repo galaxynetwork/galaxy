@@ -8,6 +8,21 @@ import (
 	"github.com/galaxies-labs/galaxy/x/nft/types"
 )
 
+// GetSupply returns the supply information of the specified class
+func (k Keeper) GetSupply(ctx sdk.Context, brandID, id string) (supply types.Supply, err error) {
+	bz := k.getClassSupplyStore(ctx, brandID).Get([]byte(id))
+	if bz == nil {
+		err = fmt.Errorf("invalid class supply dereference")
+		return
+	}
+
+	if err = k.cdc.Unmarshal(bz, &supply); err != nil {
+		return
+	}
+
+	return
+}
+
 // GetTotalSupplyOfClass returns the totalSupply information of the specified class
 func (k Keeper) GetTotalSupplyOfClass(ctx sdk.Context, brandID, id string) (uint64, error) {
 	bz := k.getClassSupplyStore(ctx, brandID).Get([]byte(id))

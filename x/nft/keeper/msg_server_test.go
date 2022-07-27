@@ -1,8 +1,6 @@
 package keeper_test
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
 	"github.com/galaxies-labs/galaxy/x/nft/types"
@@ -21,25 +19,19 @@ func (suite *KeeperTestSuite) TestCreateClass() {
 	//invalid arguments
 	//details message in sdk.BasicValidate
 	tests := []struct {
-		msg         *types.MsgCreateClass
-		expectError error
+		msg *types.MsgCreateClass
 	}{
-		{types.NewMsgCreateClass("", classIDA, ownerA.String(), 10_000, desc), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgCreateClass(brandIDA, "", ownerA.String(), 10_000, desc), types.ErrInvalidClassID},
-		{types.NewMsgCreateClass(brandIDA, classIDA, ownerA.String(), 10_001, desc), types.ErrInvalidFeeBasisPoints},
-		{types.NewMsgCreateClass(brandIDA, classIDA, ownerA.String(), 0, types.NewClassDescription("", "", "", "")), types.ErrInvalidClassDescription},
-		{types.NewMsgCreateClass(brandIDA, classIDA, "", 10_000, desc), nil},
+		{types.NewMsgCreateClass("", classIDA, ownerA.String(), 10_000, desc)},
+		{types.NewMsgCreateClass(brandIDA, "", ownerA.String(), 10_000, desc)},
+		{types.NewMsgCreateClass(brandIDA, classIDA, ownerA.String(), 10_001, desc)},
+		{types.NewMsgCreateClass(brandIDA, classIDA, ownerA.String(), 0, types.NewClassDescription("", "", "", ""))},
+		{types.NewMsgCreateClass(brandIDA, classIDA, "", 10_000, desc)},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.CreateClass(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-
-		if test.expectError != nil {
-			fmt.Println(err, test.expectError)
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	//owner should be same for brand
@@ -70,8 +62,12 @@ func (suite *KeeperTestSuite) TestCreateClass() {
 		_, err := msgServer.CreateClass(wrapCtx, msg)
 		suite.Require().Equal(err, types.ErrUnauthorized)
 
+		msg.Creator = d.o.String()
 		_, err = msgServer.CreateClass(wrapCtx, msg)
 		suite.Require().NoError(err)
+
+		_, err = msgServer.CreateClass(wrapCtx, msg)
+		suite.Require().Error(err)
 	}
 }
 
@@ -87,23 +83,19 @@ func (suite *KeeperTestSuite) TestEditClass() {
 	//invalid arguments
 	//details message in sdk.BasicValidate
 	tests := []struct {
-		msg         *types.MsgEditClass
-		expectError error
+		msg *types.MsgEditClass
 	}{
-		{types.NewMsgEditClass("", classIDA, ownerA.String(), 10_000, desc), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgEditClass(brandIDA, "", ownerA.String(), 10_000, desc), types.ErrInvalidClassID},
-		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 10_001, desc), types.ErrInvalidFeeBasisPoints},
-		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 0, types.NewClassDescription("", "", "", "")), types.ErrInvalidClassDescription},
-		{types.NewMsgEditClass(brandIDA, classIDA, "", 10_000, desc), nil},
+		{types.NewMsgEditClass("", classIDA, ownerA.String(), 10_000, desc)},
+		{types.NewMsgEditClass(brandIDA, "", ownerA.String(), 10_000, desc)},
+		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 10_001, desc)},
+		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 0, types.NewClassDescription("", "", "", ""))},
+		{types.NewMsgEditClass(brandIDA, classIDA, "", 10_000, desc)},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.EditClass(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-		if test.expectError != nil {
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	//owner should be same for brand
@@ -167,23 +159,19 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 
 	//invalid arguments
 	tests := []struct {
-		msg         *types.MsgMintNFT
-		expectError error
+		msg *types.MsgMintNFT
 	}{
-		{types.NewMsgMintNFT("", classIDA, "ipfs://nft", "", ownerA.String(), recipient.String()), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgMintNFT(brandIDA, "", "ipfs://nft", "", ownerA.String(), recipient.String()), types.ErrInvalidClassID},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "", "", ownerA.String(), recipient.String()), types.ErrInvalidNFTUri},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", "", recipient.String()), nil},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", ownerA.String(), ""), nil},
+		{types.NewMsgMintNFT("", classIDA, "ipfs://nft", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintNFT(brandIDA, "", "ipfs://nft", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintNFT(brandIDA, classIDA, "", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", "", recipient.String())},
+		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", ownerA.String(), "")},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.MintNFT(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-		if test.expectError != nil {
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	nftData := []struct {
@@ -246,22 +234,18 @@ func (suite *KeeperTestSuite) TestUpdateNFT() {
 
 	//invalid arguments
 	tests := []struct {
-		msg         *types.MsgUpdateNFT
-		expectError error
+		msg *types.MsgUpdateNFT
 	}{
-		{types.NewMsgUpdateNFT("", classIDA, 1, "", ownerA.String()), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgUpdateNFT(brandIDA, "", 1, "", ownerA.String()), types.ErrInvalidClassID},
-		{types.NewMsgUpdateNFT(brandIDA, classIDA, 0, "", ownerA.String()), types.ErrInvalidNFTID},
-		{types.NewMsgUpdateNFT(brandIDA, classIDA, 1, "", ""), nil},
+		{types.NewMsgUpdateNFT("", classIDA, 1, "", ownerA.String())},
+		{types.NewMsgUpdateNFT(brandIDA, "", 1, "", ownerA.String())},
+		{types.NewMsgUpdateNFT(brandIDA, classIDA, 0, "", ownerA.String())},
+		{types.NewMsgUpdateNFT(brandIDA, classIDA, 1, "", "")},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.UpdateNFT(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-		if test.expectError != nil {
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	//ignore set brand first
@@ -315,22 +299,18 @@ func (suite *KeeperTestSuite) TestBurnNFT() {
 
 	//invalid arguments
 	tests := []struct {
-		msg         *types.MsgBurnNFT
-		expectError error
+		msg *types.MsgBurnNFT
 	}{
-		{types.NewMsgBurnNFT("", classIDA, 1, ownerA.String()), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgBurnNFT(brandIDA, "", 1, ownerA.String()), types.ErrInvalidClassID},
-		{types.NewMsgBurnNFT(brandIDA, classIDA, 0, ownerA.String()), types.ErrInvalidNFTID},
-		{types.NewMsgBurnNFT(brandIDA, classIDA, 1, ""), nil},
+		{types.NewMsgBurnNFT("", classIDA, 1, ownerA.String())},
+		{types.NewMsgBurnNFT(brandIDA, "", 1, ownerA.String())},
+		{types.NewMsgBurnNFT(brandIDA, classIDA, 0, ownerA.String())},
+		{types.NewMsgBurnNFT(brandIDA, classIDA, 1, "")},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.BurnNFT(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-		if test.expectError != nil {
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	//ignore set brand first
@@ -387,23 +367,19 @@ func (suite *KeeperTestSuite) TestTransferNFT() {
 
 	//invalid arguments
 	tests := []struct {
-		msg         *types.MsgTransferNFT
-		expectError error
+		msg *types.MsgTransferNFT
 	}{
-		{types.NewMsgTransferNFT("", classIDA, 1, ownerA.String(), recipient.String()), brandtypes.ErrInvalidBrandID},
-		{types.NewMsgTransferNFT(brandIDA, "", 1, ownerA.String(), recipient.String()), types.ErrInvalidClassID},
-		{types.NewMsgTransferNFT(brandIDA, classIDA, 0, ownerA.String(), recipient.String()), types.ErrInvalidNFTID},
-		{types.NewMsgTransferNFT(brandIDA, classIDA, 1, "", recipient.String()), nil},
-		{types.NewMsgTransferNFT(brandIDA, classIDA, 1, ownerA.String(), ""), nil},
+		{types.NewMsgTransferNFT("", classIDA, 1, ownerA.String(), recipient.String())},
+		{types.NewMsgTransferNFT(brandIDA, "", 1, ownerA.String(), recipient.String())},
+		{types.NewMsgTransferNFT(brandIDA, classIDA, 0, ownerA.String(), recipient.String())},
+		{types.NewMsgTransferNFT(brandIDA, classIDA, 1, "", recipient.String())},
+		{types.NewMsgTransferNFT(brandIDA, classIDA, 1, ownerA.String(), "")},
 	}
 
 	for _, test := range tests {
 		res, err := msgServer.TransferNFT(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
-		if test.expectError != nil {
-			suite.Require().Equal(err, test.expectError)
-		}
 	}
 
 	//ignore set brand first

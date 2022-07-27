@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
 	"github.com/galaxies-labs/galaxy/x/nft/types"
@@ -22,13 +23,13 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 // CreateClass defines a method for creating a new class within brand.
 func (k msgServer) CreateClass(goCtx context.Context, msg *types.MsgCreateClass) (*types.MsgCreateClassResponse, error) {
-	if err := brandtypes.ValidateBrandID(msg.BrandId); err != nil {
-		return nil, err
-	}
-
 	class := types.NewClass(msg.BrandId, msg.Id, msg.FeeBasisPoints, msg.Description)
 	if err := class.Validate(); err != nil {
 		return nil, err
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid creater address: %s", err)
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -59,6 +60,23 @@ func (k msgServer) CreateClass(goCtx context.Context, msg *types.MsgCreateClass)
 
 // EditClass defines a method for editing an existing class.
 func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*types.MsgEditClassResponse, error) {
+	//validation
+	if err := brandtypes.ValidateBrandID(msg.BrandId); err != nil {
+		return nil, err
+	}
+
+	if err := types.ValidateClassId(msg.Id); err != nil {
+		return nil, err
+	}
+
+	if err := types.ValidateFeeBasisPoints(msg.FeeBasisPoints); err != nil {
+		return nil, err
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Editor); err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid editor address: %s", err)
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	brand, exist := k.brandKeeper.GetBrand(ctx, msg.BrandId)
@@ -67,7 +85,7 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 	}
 
 	if brand.Owner != msg.Editor {
-		return nil, brandtypes.ErrUnauthorized
+		return nil, types.ErrUnauthorized
 	}
 
 	class, exist := k.GetClass(ctx, msg.BrandId, msg.Id)

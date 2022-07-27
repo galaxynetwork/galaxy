@@ -43,8 +43,8 @@ func (class *Class) Validate() error {
 		return err
 	}
 
-	if class.FeeBasisPoints > MaxFeeBasisPoints {
-		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, "invalid fee basis_points; got: %d, max: %d", class.FeeBasisPoints, MaxFeeBasisPoints)
+	if err := ValidateFeeBasisPoints(class.FeeBasisPoints); err != nil {
+		return err
 	}
 
 	if err := class.Description.Validate(); err != nil {
@@ -157,14 +157,6 @@ func (nft *NFT) Validate() error {
 	return nil
 }
 
-func ValidateClassId(id string) error {
-	if !reClassID.MatchString(id) {
-		return ErrInvalidClassID
-	}
-
-	return nil
-}
-
 func NewSupply(sequence, totalSupply uint64) Supply {
 	return Supply{
 		Sequence:    sequence,
@@ -186,4 +178,20 @@ func (supply *Supply) DecreaseSupply() {
 		return
 	}
 	supply.TotalSupply--
+}
+
+func ValidateClassId(id string) error {
+	if !reClassID.MatchString(id) {
+		return ErrInvalidClassID
+	}
+
+	return nil
+}
+
+func ValidateFeeBasisPoints(feeBasisPoints uint32) error {
+	if feeBasisPoints > MaxFeeBasisPoints {
+		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, "invalid fee basis_points; got: %d, max: %d", feeBasisPoints, MaxFeeBasisPoints)
+	}
+
+	return nil
 }

@@ -12,7 +12,7 @@ const (
 	FlagOwner = "owner"
 )
 
-// NewTxCmd returns a root CLI command handler for all x/staking transaction commands.
+// NewTxCmd returns a root CLI command handler for all x/brand transaction commands.
 func GetQueryCmd() *cobra.Command {
 	brandQueryCmd := &cobra.Command{
 		Use:                        types.ModuleName,

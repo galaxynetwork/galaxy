@@ -17,7 +17,7 @@ const (
 	FlagBrandImageUri = "brand-image-uri"
 )
 
-// NewTxCmd returns a root CLI command handler for all x/staking transaction commands.
+// NewTxCmd returns a root CLI command handler for all x/brand transaction commands.
 func NewTxCmd() *cobra.Command {
 	brandTxCmd := &cobra.Command{
 		Use:                        types.ModuleName,

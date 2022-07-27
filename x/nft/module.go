@@ -14,6 +14,7 @@ import (
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/galaxies-labs/galaxy/x/nft/client/cli"
 	"github.com/galaxies-labs/galaxy/x/nft/keeper"
 	"github.com/galaxies-labs/galaxy/x/nft/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -68,7 +69,7 @@ func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Rout
 
 func (AppModuleBasic) GetTxCmd() *cobra.Command { return &cobra.Command{} }
 
-func (AppModuleBasic) GetQueryCmd() *cobra.Command { return &cobra.Command{} }
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { return cli.GetQueryCmd() }
 
 type AppModule struct {
 	AppModuleBasic

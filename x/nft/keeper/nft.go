@@ -88,14 +88,12 @@ func (k Keeper) UpdateNFT(ctx sdk.Context, brandID, classID string, id uint64, v
 
 // TransferNFT defines a method for sending a nft to another account.
 // Note: When the upper module uses this method, it needs to authenticate nft
-func (k Keeper) TransferNFT(ctx sdk.Context, brandID, classID string, id uint64, recipient sdk.AccAddress) error {
+func (k Keeper) TransferNFT(ctx sdk.Context, brandID, classID string, id uint64, owner sdk.AccAddress, recipient sdk.AccAddress) error {
 	if !k.HasNFT(ctx, brandID, classID, id) {
 		return sdkerrors.Wrapf(types.ErrNotFoundNFT, "for brandID: %s, classID: %s, id: %d", brandID, classID, id)
 	}
 
-	owner := k.GetOwner(ctx, brandID, classID, id)
 	k.deleteOwner(ctx, brandID, classID, id, owner)
-
 	k.setOwner(ctx, brandID, classID, id, recipient)
 
 	return nil

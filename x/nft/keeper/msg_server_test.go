@@ -184,37 +184,42 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 		{5, brandIDB, classIDA, ownerB}, {3, brandIDB, classIDB, ownerB}, {10, brandIDB, classIDB, ownerC},
 	}
 
+	classMap := map[string]int{}
+
 	for _, d := range nftData {
+		cuID := types.GetClassUniqueID(d.b, d.c)
+		if _, ok := classMap[cuID]; !ok {
+			classMap[cuID] = 0
+		}
+
 		for i := 0; i < d.num; i++ {
+			classMap[cuID]++
 			hasBrand := app.BrandKeeper.HasBrand(ctx, d.b)
 
-			nft, err := app.NFTKeeper.GenNFT(ctx, d.b, d.c, "ipfs://nft", "")
-			suite.Require().NoError(err)
-
-			msg := types.NewMsgMintNFT(nft.BrandId, nft.ClassId, "ipfs://nft", "", recipient.String(), recipient.String())
+			msg := types.NewMsgMintNFT(d.b, d.c, "ipfs://nft", "", recipient.String(), recipient.String())
 
 			if !hasBrand {
-				_, err = msgServer.MintNFT(wrapCtx, msg)
+				_, err := msgServer.MintNFT(wrapCtx, msg)
 				suite.Require().Equal(err, brandtypes.ErrNotFoundBrand)
 
 				suite.Require().NoError(
-					app.BrandKeeper.SetBrand(ctx, brandtypes.NewBrand(nft.BrandId, recipient, brandtypes.NewBrandDescription("name", "", ""))),
+					app.BrandKeeper.SetBrand(ctx, brandtypes.NewBrand(msg.BrandId, recipient, brandtypes.NewBrandDescription("name", "", ""))),
 				)
 			}
 
-			hasClass := app.NFTKeeper.HasClass(ctx, nft.BrandId, nft.ClassId)
+			hasClass := app.NFTKeeper.HasClass(ctx, msg.BrandId, msg.ClassId)
 			if !hasClass {
-				_, err = msgServer.MintNFT(wrapCtx, msg)
+				_, err := msgServer.MintNFT(wrapCtx, msg)
 				suite.Require().Equal(err, types.ErrNotFoundClass)
 
 				suite.Require().NoError(
-					app.NFTKeeper.SaveClass(ctx, types.NewClass(nft.BrandId, nft.ClassId, 0, types.NewClassDescription("", "", "", ""))),
+					app.NFTKeeper.SaveClass(ctx, types.NewClass(msg.BrandId, msg.ClassId, 0, types.NewClassDescription("", "", "", ""))),
 				)
 			}
 
 			nmsg := *msg
 			nmsg.Minter = sdk.AccAddress("randomaddress").String()
-			_, err = msgServer.MintNFT(wrapCtx, &nmsg)
+			_, err := msgServer.MintNFT(wrapCtx, &nmsg)
 			suite.Require().Equal(err, types.ErrUnauthorized)
 
 			res, err := msgServer.MintNFT(wrapCtx, msg)
@@ -222,6 +227,13 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 			suite.Require().NotZero(res.Id)
 		}
 	}
+
+	for uid, len := range classMap {
+		brandID, classID := types.ParseClassUniqueID(uid)
+		nfts := app.NFTKeeper.GetNFTsOfClass(ctx, brandID, classID)
+		suite.Require().Len(nfts, len)
+	}
+
 }
 
 func (suite *KeeperTestSuite) TestUpdateNFT() {
@@ -279,8 +291,9 @@ func (suite *KeeperTestSuite) TestUpdateNFT() {
 			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
 
 			msg.VarUri = "ipfs://customer_uri"
-			_, err = msgServer.UpdateNFT(wrapCtx, msg)
+			res, err := msgServer.UpdateNFT(wrapCtx, msg)
 			suite.Require().NoError(err)
+			suite.Require().NotNil(res)
 
 			msg.Sender = sdk.AccAddress("randomowner").String()
 			_, err = msgServer.UpdateNFT(wrapCtx, msg)
@@ -347,8 +360,9 @@ func (suite *KeeperTestSuite) TestBurnNFT() {
 			suite.Require().Equal(err, types.ErrUnauthorized)
 
 			msg.Sender = d.o.String()
-			_, err = msgServer.BurnNFT(wrapCtx, msg)
+			res, err := msgServer.BurnNFT(wrapCtx, msg)
 			suite.Require().NoError(err)
+			suite.Require().NotNil(res)
 
 			suite.Require().True(
 				app.NFTKeeper.BurnedNFT(ctx, nft.BrandId, nft.ClassId, nft.Id),
@@ -419,8 +433,9 @@ func (suite *KeeperTestSuite) TestTransferNFT() {
 			suite.Require().Equal(d.o, app.NFTKeeper.GetOwner(ctx, nft.BrandId, nft.ClassId, nft.Id))
 
 			msg.Sender = d.o.String()
-			_, err = msgServer.TransferNFT(wrapCtx, msg)
+			res, err := msgServer.TransferNFT(wrapCtx, msg)
 			suite.Require().NoError(err)
+			suite.Require().NotNil(res)
 
 			suite.Require().Equal(recipient, app.NFTKeeper.GetOwner(ctx, nft.BrandId, nft.ClassId, nft.Id))
 

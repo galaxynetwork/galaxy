@@ -124,7 +124,7 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 			suite.Require().NotNil(owner)
 			suite.Require().NotEqual(owner, newOwner)
 			suite.Require().NoError(
-				keeper.TransferNFT(ctx, nft.BrandId, nft.ClassId, nft.Id, newOwner),
+				keeper.TransferNFT(ctx, nft.BrandId, nft.ClassId, nft.Id, owner, newOwner),
 			)
 			owner = keeper.GetOwner(ctx, nft.BrandId, nft.ClassId, nft.Id)
 			suite.Require().Equal(owner, newOwner)
@@ -132,7 +132,7 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 		} else {
 			suite.Require().Nil(owner)
 			suite.Require().Error(
-				keeper.TransferNFT(ctx, nft.BrandId, nft.ClassId, nft.Id, newOwner),
+				keeper.TransferNFT(ctx, nft.BrandId, nft.ClassId, nft.Id, owner, newOwner),
 			)
 		}
 	}

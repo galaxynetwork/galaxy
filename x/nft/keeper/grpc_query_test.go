@@ -26,9 +26,7 @@ func (suite *KeeperTestSuite) TestClasses() {
 	suite.Require().Nil(res.Pagination.NextKey)
 	suite.Require().Len(res.Classes, 0)
 
-	brandID := "brandid"
-	brandID2 := "brandid2"
-	brandID3 := "brandid3"
+	brandID, brandID2, brandID3 := "brandid", "brandid2", "brandid3"
 	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, "classid", 10_000, types.NewClassDescription("", "", "", ""))))
 	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, "classid2", 1000, types.NewClassDescription("", "", "", ""))))
 	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID2, "classid", 100, types.NewClassDescription("", "", "", ""))))
@@ -88,64 +86,59 @@ func (suite *KeeperTestSuite) TestClass() {
 	keeper, ctx, queryClient := suite.app.NFTKeeper, suite.ctx, suite.queryClient
 	wrapCtx := sdk.WrapSDKContext(ctx)
 
-	//invalid brandID
-	req := &types.QueryClassRequest{BrandId: "", ClassId: "classid"}
-	res, err := queryClient.Class(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
+	brandID, brandID2, brandID3 := "brandid", "brandid2", "brandid3"
+	classID, classID2, classID3, classID4 := "classid", "classid2", "classid3", "classid4"
 
-	//invalid classID
-	req = &types.QueryClassRequest{BrandId: "brandid", ClassId: ""}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
+	//invalid arguments
+	tests := []struct {
+		req *types.QueryClassRequest
+	}{
+		{&types.QueryClassRequest{BrandId: "", ClassId: classID}},
+		{&types.QueryClassRequest{BrandId: brandID, ClassId: ""}},
+		{&types.QueryClassRequest{BrandId: brandID, ClassId: ".classid"}},
+		{&types.QueryClassRequest{BrandId: ".brandID", ClassId: classID}},
+		//not found
+		{&types.QueryClassRequest{BrandId: brandID, ClassId: classID}},
+	}
 
-	brandID := "brandid"
-	brandID2 := "brandid2"
-	brandID3 := "brandid3"
+	for _, test := range tests {
+		res, err := queryClient.Class(wrapCtx, test.req)
+		suite.Require().Error(err)
+		suite.Require().Nil(res)
+	}
 
-	classID := "classid"
-	classID2 := "classid2"
-	classID3 := "classid3"
-	classID4 := "classid4"
+	classes := []struct {
+		class types.Class
+	}{
+		{types.NewClass(brandID, classID, 10_000, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID, classID2, 1000, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID2, classID, 100, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID2, classID2, 100, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID, classID3, 10, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID, classID4, 1, types.NewClassDescription("", "", "", ""))},
+		{types.NewClass(brandID3, classID, 9999, types.NewClassDescription("", "", "", ""))},
+	}
 
-	// not exist class
-	req = &types.QueryClassRequest{BrandId: brandID, ClassId: classID}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
+	for _, class := range classes {
+		suite.Require().NoError(keeper.SaveClass(ctx, class.class))
 
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, classID, 10_000, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, classID2, 1000, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID2, classID, 100, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID2, classID2, 100, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, classID3, 10, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID, classID4, 1, types.NewClassDescription("", "", "", ""))))
-	suite.Require().NoError(keeper.SaveClass(ctx, types.NewClass(brandID3, classID, 9999, types.NewClassDescription("", "", "", ""))))
+		req := &types.QueryClassRequest{BrandId: class.class.BrandId, ClassId: class.class.Id}
+		res, err := queryClient.Class(wrapCtx, req)
+		suite.Require().NoError(err)
+		suite.Require().NotNil(res)
+		suite.Require().Equal(res.Class, class.class)
 
-	req = &types.QueryClassRequest{BrandId: brandID, ClassId: classID}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().NoError(err)
-	suite.Require().NotNil(res)
-	suite.Require().Equal(types.GetClassUniqueID(brandID, classID), types.GetClassUniqueID(res.Class.BrandId, res.Class.Id))
+		//check for not found after data stored
+		req = &types.QueryClassRequest{BrandId: class.class.BrandId, ClassId: "randomclassID"}
+		res, err = queryClient.Class(wrapCtx, req)
+		suite.Require().Error(err)
+		suite.Require().Nil(res)
 
-	req = &types.QueryClassRequest{BrandId: brandID3, ClassId: classID}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().NoError(err)
-	suite.Require().NotNil(res)
-	suite.Require().Equal(types.GetClassUniqueID(brandID3, classID), types.GetClassUniqueID(res.Class.BrandId, res.Class.Id))
-
-	//empty classID
-	req = &types.QueryClassRequest{BrandId: brandID3, ClassId: classID2}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
-
-	//empty brandID
-	req = &types.QueryClassRequest{BrandId: "random", ClassId: classID}
-	res, err = queryClient.Class(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
+		req = &types.QueryClassRequest{BrandId: "randombrandID", ClassId: class.class.Id}
+		res, err = queryClient.Class(wrapCtx, req)
+		suite.Require().Error(err)
+		suite.Require().Nil(res)
+	}
 }
 
 func (suite *KeeperTestSuite) TestNFTs() {
@@ -158,32 +151,35 @@ func (suite *KeeperTestSuite) TestNFTs() {
 
 	pageReq := &query.PageRequest{}
 
-	req := &types.QueryNFTsRequest{BrandId: "", ClassId: "", Owner: "", Pagination: pageReq}
-	res, err := queryClient.NFTs(wrapCtx, req)
-	suite.Require().NoError(err)
-	suite.Require().Nil(res.Pagination.NextKey)
-	suite.Require().Empty(res.Nfts)
+	//invalid arguments
+	tests := []struct {
+		expectPass bool
+		req        *types.QueryNFTsRequest
+	}{
+		{true, &types.QueryNFTsRequest{BrandId: "", ClassId: "", Owner: "", Pagination: pageReq}},
+		{true, &types.QueryNFTsRequest{BrandId: "", ClassId: "", Owner: ""}},
 
-	//invalid brandID
-	req = &types.QueryNFTsRequest{BrandId: "invalid.brandId", ClassId: classIDA, Owner: ownerA.String(), Pagination: pageReq}
-	res, err = queryClient.NFTs(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
-	//invalid classID
-	req = &types.QueryNFTsRequest{BrandId: brandIDA, ClassId: "random.classID", Owner: ownerA.String(), Pagination: pageReq}
-	res, err = queryClient.NFTs(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
-	//invalid owner
-	req = &types.QueryNFTsRequest{BrandId: brandIDA, ClassId: classIDA, Owner: "ownera", Pagination: pageReq}
-	res, err = queryClient.NFTs(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
-	// classID requires brandId
-	req = &types.QueryNFTsRequest{BrandId: "", ClassId: classIDA, Owner: ownerA.String(), Pagination: pageReq}
-	res, err = queryClient.NFTs(wrapCtx, req)
-	suite.Require().Error(err)
-	suite.Require().Nil(res)
+		{false, &types.QueryNFTsRequest{BrandId: "invalid.brandID", ClassId: classIDA, Owner: ownerA.String(), Pagination: pageReq}},
+		{false, &types.QueryNFTsRequest{BrandId: "invalid.brandID", ClassId: classIDA, Owner: ownerA.String(), Pagination: pageReq}},
+		{false, &types.QueryNFTsRequest{BrandId: brandIDA, ClassId: "invalud.classID", Owner: ownerA.String(), Pagination: pageReq}},
+		{false, &types.QueryNFTsRequest{BrandId: brandIDA, ClassId: classIDA, Owner: "invalidowner", Pagination: pageReq}},
+		// brandID and classID requires each other
+		{false, &types.QueryNFTsRequest{BrandId: brandIDA, ClassId: "", Owner: ownerA.String(), Pagination: pageReq}},
+		{false, &types.QueryNFTsRequest{BrandId: "", ClassId: classIDA, Owner: ownerA.String(), Pagination: pageReq}},
+	}
+
+	for _, test := range tests {
+		res, err := queryClient.NFTs(wrapCtx, test.req)
+		if test.expectPass {
+			suite.Require().NoError(err)
+			suite.Require().NotNil(res)
+			suite.Require().Nil(res.Pagination.NextKey)
+			suite.Require().Len(res.Nfts, 0)
+		} else {
+			suite.Require().Error(err)
+			suite.Require().Nil(res)
+		}
+	}
 
 	//ignore set brand first
 	app.NFTKeeper.SaveClass(ctx, types.NewClass(brandIDA, classIDA, 0, types.NewClassDescription("", "", "", "")))
@@ -230,8 +226,8 @@ func (suite *KeeperTestSuite) TestNFTs() {
 		}
 	}
 
-	req = &types.QueryNFTsRequest{}
-	res, err = queryClient.NFTs(wrapCtx, req)
+	req := &types.QueryNFTsRequest{}
+	res, err := queryClient.NFTs(wrapCtx, req)
 	suite.Require().NoError(err)
 	suite.Require().Nil(res.Pagination.NextKey)
 	suite.Require().Len(res.Nfts, totalNftLen)
@@ -374,7 +370,6 @@ func (suite *KeeperTestSuite) TestNFT() {
 	req = &types.QueryNFTRequest{"random", "random", 1}
 	res, err = queryClient.NFT(wrapCtx, req)
 	suite.Require().Error(err)
-
 }
 
 func (suite *KeeperTestSuite) TestOwner() {

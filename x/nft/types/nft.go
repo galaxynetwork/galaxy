@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	DoNotModifyDesc = "[do-not-modify]"
+	DoNotModifyDesc                  = "[do-not-modify]"
+	DoNotModifyFeeBasisPoints uint32 = 10_001
 
 	reClassIDString = `[a-zA-Z0-9][a-zA-Z0-9-]{2,50}`
 
@@ -43,7 +44,7 @@ func (class *Class) Validate() error {
 		return err
 	}
 
-	if err := ValidateFeeBasisPoints(class.FeeBasisPoints); err != nil {
+	if err := ValidateFeeBasisPoints(class.FeeBasisPoints, false); err != nil {
 		return err
 	}
 
@@ -52,6 +53,14 @@ func (class *Class) Validate() error {
 	}
 
 	return nil
+}
+
+func (class *Class) UpdateFeeBasisPoints(feeBasisPoints2 uint32) Class {
+	if feeBasisPoints2 == DoNotModifyFeeBasisPoints {
+		feeBasisPoints2 = class.FeeBasisPoints
+	}
+
+	return NewClass(class.BrandId, class.Id, feeBasisPoints2, class.Description)
 }
 
 func NewClassDescription(name, details, externalUrl, imageUri string) ClassDescription {
@@ -188,9 +197,15 @@ func ValidateClassId(id string) error {
 	return nil
 }
 
-func ValidateFeeBasisPoints(feeBasisPoints uint32) error {
-	if feeBasisPoints > MaxFeeBasisPoints {
-		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, "invalid fee basis_points; got: %d, max: %d", feeBasisPoints, MaxFeeBasisPoints)
+func ValidateFeeBasisPoints(feeBasisPoints uint32, editing bool) error {
+	if editing {
+		if feeBasisPoints != DoNotModifyFeeBasisPoints && feeBasisPoints > MaxFeeBasisPoints {
+			return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, "invalid fee basis_points; got: %d, max: %d", feeBasisPoints, MaxFeeBasisPoints)
+		}
+	} else {
+		if feeBasisPoints > MaxFeeBasisPoints {
+			return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, "invalid fee basis_points; got: %d, max: %d", feeBasisPoints, MaxFeeBasisPoints)
+		}
 	}
 
 	return nil

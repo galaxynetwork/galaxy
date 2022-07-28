@@ -108,7 +108,7 @@ func (msg MsgEditClass) ValidateBasic() error {
 		return err
 	}
 
-	if msg.FeeBasisPoints == 0 || msg.FeeBasisPoints > MaxFeeBasisPoints {
+	if msg.FeeBasisPoints == 0 || (msg.FeeBasisPoints != DoNotModifyFeeBasisPoints && msg.FeeBasisPoints > MaxFeeBasisPoints) {
 		return sdkerrors.Wrapf(ErrInvalidFeeBasisPoints, " got: %d, min: %d, max: %d", msg.FeeBasisPoints, 1, MaxFeeBasisPoints)
 	}
 

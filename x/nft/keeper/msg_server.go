@@ -69,7 +69,7 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 		return nil, err
 	}
 
-	if err := types.ValidateFeeBasisPoints(msg.FeeBasisPoints); err != nil {
+	if err := types.ValidateFeeBasisPoints(msg.FeeBasisPoints, true); err != nil {
 		return nil, err
 	}
 
@@ -98,8 +98,8 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 		return nil, err
 	}
 
+	class = class.UpdateFeeBasisPoints(msg.FeeBasisPoints)
 	class.Description = desc
-	class.FeeBasisPoints = msg.FeeBasisPoints
 
 	if err := k.SetClass(ctx, class); err != nil {
 		return nil, err

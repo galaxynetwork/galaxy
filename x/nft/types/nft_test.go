@@ -26,7 +26,7 @@ func TestClass(t *testing.T) {
 		// invalid class id length
 		{NewClass("brandid", "cl", 10_000, NewClassDescription("", "", "", "")), false},
 		// fee basis points over max value
-		{NewClass("brandid", "classid", 10_001, NewClassDescription("", "", "", "")), false},
+		{NewClass("brandid", "classid", 10_002, NewClassDescription("", "", "", "")), false},
 		// starts with hypen
 		{NewClass("brandid", "-classid", 10_000, NewClassDescription("", "", "", "")), false},
 		// invalid length description

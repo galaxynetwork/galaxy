@@ -87,7 +87,7 @@ func (suite *KeeperTestSuite) TestEditClass() {
 	}{
 		{types.NewMsgEditClass("", classIDA, ownerA.String(), 10_000, desc)},
 		{types.NewMsgEditClass(brandIDA, "", ownerA.String(), 10_000, desc)},
-		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 10_001, desc)},
+		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 10_002, desc)},
 		{types.NewMsgEditClass(brandIDA, classIDA, ownerA.String(), 0, types.NewClassDescription("", "", "", ""))},
 		{types.NewMsgEditClass(brandIDA, classIDA, "", 10_000, desc)},
 	}
@@ -108,10 +108,15 @@ func (suite *KeeperTestSuite) TestEditClass() {
 		{brandIDB, classIDA, ownerB}, {brandIDB, classIDB, ownerB},
 	}
 
-	for _, d := range classes {
+	for i, d := range classes {
 		hasBrand := app.BrandKeeper.HasBrand(ctx, d.b)
 
-		msg := types.NewMsgEditClass(d.b, d.c, d.o.String(), 10_000, desc)
+		var msg *types.MsgEditClass
+		if i == 0 {
+			msg = types.NewMsgEditClass(d.b, d.c, d.o.String(), 10_001, desc)
+		} else {
+			msg = types.NewMsgEditClass(d.b, d.c, d.o.String(), 10_000, desc)
+		}
 
 		if !hasBrand {
 			_, err := msgServer.EditClass(wrapCtx, msg)

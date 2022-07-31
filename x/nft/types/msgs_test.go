@@ -16,6 +16,7 @@ func TestMsgCreateClass(t *testing.T) {
 		{true, NewMsgCreateClass("brandid", "classid", sdk.AccAddress("owner1...").String(), 10_000, NewClassDescription("name", "", "", ""))},
 		{true, NewMsgCreateClass("brandid", "class-id123", sdk.AccAddress("owner1...").String(), 1, NewClassDescription("name", "", "", ""))},
 		{true, NewMsgCreateClass("brandid", "cla", sdk.AccAddress("owner1...").String(), 1, NewClassDescription("name", "", "", ""))},
+		{true, NewMsgCreateClass("brandid", "cla", sdk.AccAddress("owner1...").String(), 0, NewClassDescription("name", "", "", ""))},
 
 		//invliad brandID
 		{false, NewMsgCreateClass("-", "class-id123", sdk.AccAddress("owner1...").String(), 1, NewClassDescription("name", "", "", ""))},
@@ -26,7 +27,6 @@ func TestMsgCreateClass(t *testing.T) {
 		//invliad ownerAddress
 		{false, NewMsgCreateClass("brandid", "classid", "owner1...", 1, NewClassDescription("name", "", "", ""))},
 		//invliad feeBasisPoints
-		{false, NewMsgCreateClass("brandid", "classid", sdk.AccAddress("owner1...").String(), 0, NewClassDescription("name", "", "", ""))},
 		{false, NewMsgCreateClass("brandid", "classid", sdk.AccAddress("owner1...").String(), MaxFeeBasisPoints+1, NewClassDescription("name", "", "", ""))},
 	}
 
@@ -50,6 +50,7 @@ func TestMsgEditClass(t *testing.T) {
 		{true, NewMsgEditClass("brandid", "classid", sdk.AccAddress("owner1...").String(), 10_000, NewClassDescription("name", "", "", ""))},
 		{true, NewMsgEditClass("brandid", "classid", sdk.AccAddress("owner1...").String(), 10_001, NewClassDescription("name", "", "", ""))},
 		{true, NewMsgEditClass("brandid", "class-id123", sdk.AccAddress("owner1...").String(), 1, NewClassDescription("name", "", "", ""))},
+		{true, NewMsgEditClass("brandid", "class-id123", sdk.AccAddress("owner1...").String(), 0, NewClassDescription("name", "", "", ""))},
 		{true, NewMsgEditClass("brandid", "cla", sdk.AccAddress("owner1...").String(), 1, NewClassDescription("name", "", "", ""))},
 
 		//invliad brandID
@@ -61,7 +62,6 @@ func TestMsgEditClass(t *testing.T) {
 		//invliad ownerAddress
 		{false, NewMsgEditClass("brandid", "classid", "owner1...", 1, NewClassDescription("name", "", "", ""))},
 		//invliad feeBasisPoints
-		{false, NewMsgEditClass("brandid", "classid", sdk.AccAddress("owner1...").String(), 0, NewClassDescription("name", "", "", ""))},
 		{false, NewMsgEditClass("brandid", "classid", sdk.AccAddress("owner1...").String(), MaxFeeBasisPoints+2, NewClassDescription("name", "", "", ""))},
 	}
 

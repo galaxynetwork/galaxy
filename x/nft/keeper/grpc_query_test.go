@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"fmt"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -131,11 +132,13 @@ func (suite *KeeperTestSuite) TestClass() {
 		//check for not found after data stored
 		req = &types.QueryClassRequest{BrandId: class.class.BrandId, ClassId: "randomclassID"}
 		res, err = queryClient.Class(wrapCtx, req)
+		fmt.Println((err))
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
 
 		req = &types.QueryClassRequest{BrandId: "randombrandID", ClassId: class.class.Id}
 		res, err = queryClient.Class(wrapCtx, req)
+		fmt.Println((err))
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
 	}

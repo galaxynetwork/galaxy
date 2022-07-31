@@ -90,5 +90,4 @@ func (keeper Querier) Brand(ctx context.Context, req *types.QueryBrandRequest) (
 	brand, _ := keeper.GetBrand(sdkCtx, req.BrandId)
 
 	return &types.QueryBrandResponse{Brand: brand}, nil
-
 }

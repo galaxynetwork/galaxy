@@ -129,7 +129,7 @@ func NewEditClassTxCmd() *cobra.Command {
 
 func NewMintNFTTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "mint [brand-id] [class-id] [recipient,bech32_address]",
+		Use:   "mint [brand-id] [class-id] [recipient,bech32_address] --uri [text] --var-uri [text,optional]",
 		Short: "Mint a new nft within class",
 		Long: `"Mint a new nft within class"
 Note, the '--from' flag is owner of brand (minter).
@@ -168,7 +168,7 @@ the '--var-uri' flag is url of data wanted by the owner stored off chain.
 
 func NewUpdateNFTTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update [brand-id] [class-id] [nft-id] --from [sender]",
+		Use:   "update [brand-id] [class-id] [nft-id] --var-uri [text] --from [sender]",
 		Short: "Update var-uri of an existing nft",
 		Long: `"Update var-uri of an existing nft"
 		Note, the '--from' flag is owner of nft.

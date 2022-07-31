@@ -5,7 +5,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/galaxies-labs/galaxy/internal/conv"
 	brandtypes "github.com/galaxies-labs/galaxy/x/brand/types"
@@ -90,9 +89,7 @@ func (k Querier) Class(goCtx context.Context, req *types.QueryClassRequest) (*ty
 
 	class, exist := k.GetClass(ctx, req.BrandId, req.ClassId)
 	if !exist {
-		return nil, status.Errorf(codes.NotFound,
-			sdkerrors.Wrapf(types.ErrNotFoundClass, "not found class for brandID: %s, id: %s", req.BrandId, req.ClassId).Error(),
-		)
+		return nil, status.Errorf(codes.NotFound, "not found class for brandID: %s, id: %s", req.BrandId, req.ClassId)
 	}
 
 	return &types.QueryClassResponse{Class: class}, nil
@@ -110,7 +107,7 @@ func (k Querier) NFTs(goCtx context.Context, req *types.QueryNFTsRequest) (*type
 	if len(req.Owner) > 0 {
 		owner, err = sdk.AccAddressFromBech32(req.Owner)
 		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, sdkerrors.ErrInvalidAddress.Wrapf("invalid owner address: %s", req.Owner).Error())
+			return nil, status.Errorf(codes.InvalidArgument, "invalid owner address: %s", req.Owner)
 		}
 	}
 
@@ -197,9 +194,11 @@ func (k Querier) NFT(goCtx context.Context, req *types.QueryNFTRequest) (*types.
 	if err := brandtypes.ValidateBrandID(req.BrandId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, brandtypes.ErrInvalidBrandID.Error())
 	}
+
 	if err := types.ValidateClassId(req.ClassId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, types.ErrInvalidClassID.Error())
 	}
+
 	if req.Id <= 0 {
 		return nil, status.Error(codes.InvalidArgument, types.ErrInvalidNFTID.Error())
 	}
@@ -208,9 +207,7 @@ func (k Querier) NFT(goCtx context.Context, req *types.QueryNFTRequest) (*types.
 
 	nft, exist := k.GetNFT(ctx, req.BrandId, req.ClassId, req.Id)
 	if !exist {
-		return nil, status.Errorf(codes.NotFound,
-			sdkerrors.Wrapf(types.ErrNotFoundNFT, "not found nft for brandID: %s, classID: %s, id: %d", req.BrandId, req.ClassId, req.Id).Error(),
-		)
+		return nil, status.Errorf(codes.NotFound, "not found nft for brandID: %s, classID: %s, id: %d", req.BrandId, req.ClassId, req.Id)
 	}
 	return &types.QueryNFTResponse{Nft: nft}, nil
 }
@@ -224,15 +221,21 @@ func (k Querier) Owner(goCtx context.Context, req *types.QueryOwnerRequest) (*ty
 	if err := brandtypes.ValidateBrandID(req.BrandId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, brandtypes.ErrInvalidBrandID.Error())
 	}
+
 	if err := types.ValidateClassId(req.ClassId); err != nil {
 		return nil, status.Error(codes.InvalidArgument, types.ErrInvalidClassID.Error())
 	}
+
 	if req.Id <= 0 {
 		return nil, status.Error(codes.InvalidArgument, types.ErrInvalidNFTID.Error())
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	owner := k.GetOwner(ctx, req.BrandId, req.ClassId, req.Id)
+
+	if owner == nil {
+		return nil, status.Error(codes.NotFound, types.ErrNotFoundClass.Error())
+	}
 
 	return &types.QueryOwnerResponse{Owner: owner.String()}, nil
 }

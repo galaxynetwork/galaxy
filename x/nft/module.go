@@ -91,8 +91,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, raw json.R
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	genState := am.keeper.ExportGenesis(ctx)
-	cdc.MustMarshalJSON(genState)
-	return nil
+	return cdc.MustMarshalJSON(genState)
 }
 
 func (am AppModule) RegisterInvariants(sdk.InvariantRegistry) {}

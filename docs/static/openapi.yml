@@ -5,7 +5,10 @@ info:
   description: A REST interface for state queries, legacy transactions
   version: 1.0.0
 paths:
-  /galaxy/clairdrop/module_account_balance:
+  #brand
+  #nft
+  #clairdrop
+  "/galaxy/clairdrop/module_account_balance":
     get:
       summary: Module account balance queries the module account balance of clairdorp module
       operationId: GalaxyClairdropModuleAccountBalance
@@ -164,7 +167,8 @@ paths:
           type: string
       tags:
         - Query
-  /galaxy/mint/params:
+  #mint
+  "/galaxy/mint/params":
     get:
       summary: Params queries the params of mint module
       operationId: GalaxyMintParams
@@ -230,7 +234,7 @@ paths:
                       Blocks per year
       tags:
         - Query
-  /galaxy/mint/minter:
+  "/galaxy/mint/minter":
     get:
       summary: Minter queries the minter of mint module
       operationId: GalaxyMintMinter
@@ -257,6 +261,7 @@ paths:
                       Current year
       tags:
         - Query
+
   /cosmos/authz/v1beta1/grants:
     get:
       summary: "Returns list of `Authorization`, granted to the grantee by the granter."

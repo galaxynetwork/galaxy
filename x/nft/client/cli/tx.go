@@ -35,7 +35,7 @@ func NewTxCmd() *cobra.Command {
 	nftTxCmd.AddCommand(
 		NewCreateClassTxCmd(),
 		NewEditClassTxCmd(),
-		NewMintNFTTxCmd(),
+		NewMintToNFTTxCmd(),
 		NewUpdateNFTTxCmd(),
 		NewTransferNFTTxCmd(),
 		NewBurnNFTTxCmd(),
@@ -127,7 +127,7 @@ func NewEditClassTxCmd() *cobra.Command {
 	return cmd
 }
 
-func NewMintNFTTxCmd() *cobra.Command {
+func NewMintToNFTTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "mint [brand-id] [class-id] [recipient,bech32_address]",
 		Short: "Mint a new nft within class",
@@ -144,7 +144,7 @@ the '--var-uri' flag is url of data wanted by the owner stored off chain.
 
 			txf := tx.NewFactoryCLI(clientCtx, cmd.Flags()).WithTxConfig(clientCtx.TxConfig).WithAccountRetriever(clientCtx.AccountRetriever)
 
-			txf, msg, err := NewBuildMintNFTMsg(args[0], args[1], args[2], clientCtx, txf, cmd.Flags())
+			txf, msg, err := NewBuildMintToNFTMsg(args[0], args[1], args[2], clientCtx, txf, cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -294,12 +294,12 @@ func NewBuildEditClassMsg(brandID string, classID string, clientCtx client.Conte
 			feeBasisPoints, types.NewClassDescription(name, details, externalUrl, imageUri)), nil
 }
 
-func NewBuildMintNFTMsg(brandID string, classID string, recipient string, clientCtx client.Context, txf tx.Factory, fs *flag.FlagSet) (tx.Factory, sdk.Msg, error) {
+func NewBuildMintToNFTMsg(brandID string, classID string, recipient string, clientCtx client.Context, txf tx.Factory, fs *flag.FlagSet) (tx.Factory, sdk.Msg, error) {
 	uri, _ := fs.GetString(FlagUri)
 	varUri, _ := fs.GetString(FlagVarUri)
 
 	return txf,
-		types.NewMsgMintNFT(brandID, classID, uri, varUri, clientCtx.GetFromAddress().String(), recipient), nil
+		types.NewMsgMintToNFT(brandID, classID, uri, varUri, clientCtx.GetFromAddress().String(), recipient), nil
 }
 
 func NewBuildUpdateNFTMsg(brandID string, classID string, id string, clientCtx client.Context, txf tx.Factory, fs *flag.FlagSet) (tx.Factory, sdk.Msg, error) {

@@ -24,9 +24,9 @@ func (k Keeper) GetNFTsOfClass(ctx sdk.Context, brandID, classID string) (nfts t
 	return
 }
 
-// MintNFT defines a method for minting a new nft
+// MintToNFT defines a method for minting a new nft
 // Note: When the upper module uses this method, it needs to authenticate class
-func (k Keeper) MintNFT(ctx sdk.Context, nft types.NFT, recipient sdk.AccAddress) error {
+func (k Keeper) MintToNFT(ctx sdk.Context, nft types.NFT, recipient sdk.AccAddress) error {
 	if exist := k.HasNFT(ctx, nft.BrandId, nft.ClassId, nft.Id); exist {
 		return sdkerrors.Wrapf(types.ErrExistNFT, "for brandID: %s, classID: %s, id: %d", nft.BrandId, nft.ClassId, nft.Id)
 	}

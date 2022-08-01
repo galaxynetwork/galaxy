@@ -218,7 +218,7 @@ func (suite *KeeperTestSuite) TestNFTs() {
 		for i := 0; i < d.num; i++ {
 			nft, err := app.NFTKeeper.GenNFT(ctx, d.b, d.c, "ipfs://nft", "")
 			suite.Require().NoError(err)
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			ownerMap[d.o.String()] = append(ownerMap[d.o.String()], nft)
 			classMap[types.GetClassUniqueID(d.b, d.c)] = append(classMap[types.GetClassUniqueID(d.b, d.c)], nft)
@@ -343,7 +343,7 @@ func (suite *KeeperTestSuite) TestNFT() {
 		for i := 0; i < d.num; i++ {
 			nft, err := app.NFTKeeper.GenNFT(ctx, d.b, d.c, "ipfs://nft", "")
 			suite.Require().NoError(err)
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			nftMap[types.GetNFTUniqueID(nft.BrandId, nft.ClassId, nft.Id)] = d.o.String()
 		}
@@ -421,7 +421,7 @@ func (suite *KeeperTestSuite) TestOwner() {
 		for i := 0; i < d.num; i++ {
 			nft, err := app.NFTKeeper.GenNFT(ctx, d.b, d.c, "ipfs://nft", "")
 			suite.Require().NoError(err)
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			nftMap[types.GetNFTUniqueID(nft.BrandId, nft.ClassId, nft.Id)] = d.o.String()
 		}
@@ -508,7 +508,7 @@ func (suite *KeeperTestSuite) TestSupply() {
 		for i := 0; i < d.num; i++ {
 			nft, err := app.NFTKeeper.GenNFT(ctx, d.b, d.c, "ipfs://nft", "")
 			suite.Require().NoError(err)
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			supply.IncreaseSupply()
 			suite.Require().NotEqual(prevSupply.TotalSupply, supply.TotalSupply)

@@ -77,32 +77,32 @@ func TestMsgEditClass(t *testing.T) {
 	}
 }
 
-func TestMsgMintNFT(t *testing.T) {
+func TestMsgMintToNFT(t *testing.T) {
 	tests := []struct {
 		expectPass bool
-		msg        *MsgMintNFT
+		msg        *MsgMintToNFT
 	}{
-		{true, NewMsgMintNFT("brandid", "classid", "ipfs://hash", "https://nft.json",
+		{true, NewMsgMintToNFT("brandid", "classid", "ipfs://hash", "https://nft.json",
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
-		{true, NewMsgMintNFT("brandid", "classid", "ipfs://hash", "",
+		{true, NewMsgMintToNFT("brandid", "classid", "ipfs://hash", "",
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
-		{true, NewMsgMintNFT("brandid", "classid", util.GenStringWithLength(MaxUriLength), util.GenStringWithLength(MaxUriLength),
+		{true, NewMsgMintToNFT("brandid", "classid", util.GenStringWithLength(MaxUriLength), util.GenStringWithLength(MaxUriLength),
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
 
-		{false, NewMsgMintNFT("", "classid", "ipfs://hash", "",
+		{false, NewMsgMintToNFT("", "classid", "ipfs://hash", "",
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
-		{false, NewMsgMintNFT("brandid", "", "ipfs://hash", "",
+		{false, NewMsgMintToNFT("brandid", "", "ipfs://hash", "",
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
-		{false, NewMsgMintNFT("brandid", "classid", "", "",
+		{false, NewMsgMintToNFT("brandid", "classid", "", "",
 			sdk.AccAddress("minter").String(), sdk.AccAddress("recipient").String())},
-		{false, NewMsgMintNFT("brandid", "classid", "ipfs://hash", "",
+		{false, NewMsgMintToNFT("brandid", "classid", "ipfs://hash", "",
 			"minter", sdk.AccAddress("recipient").String())},
-		{false, NewMsgMintNFT("brandid", "classid", "ipfs://hash", "",
+		{false, NewMsgMintToNFT("brandid", "classid", "ipfs://hash", "",
 			sdk.AccAddress("minter").String(), "recipient")},
 	}
 
 	for index, test := range tests {
-		require.Equal(t, test.msg.Type(), TypeMsgMintNFT)
+		require.Equal(t, test.msg.Type(), TypeMsgMintToNFT)
 		err := test.msg.ValidateBasic()
 		if test.expectPass {
 			require.NoError(t, err, "test for index: %d", index)

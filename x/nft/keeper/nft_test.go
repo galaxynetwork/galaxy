@@ -59,7 +59,7 @@ func (suite *KeeperTestSuite) TestStoreNFT() {
 		//mint
 		if test.stored {
 			suite.Require().NoError(
-				keeper.MintNFT(ctx, nft, owner),
+				keeper.MintToNFT(ctx, nft, owner),
 			)
 			classes[types.GetClassUniqueID(nft.BrandId, nft.ClassId)]++
 		}

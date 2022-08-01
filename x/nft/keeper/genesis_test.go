@@ -193,11 +193,11 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 	suite.Require().NoError(suite.app.NFTKeeper.SaveClass(suite.ctx, classB))
 
 	//save nft
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftA, ownerA))
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftA2, ownerA))
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftA3, ownerA))
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftA4, ownerA))
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftB, ownerB))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftA, ownerA))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftA2, ownerA))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftA3, ownerA))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftA4, ownerA))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftB, ownerB))
 
 	state := suite.app.NFTKeeper.ExportGenesis(suite.ctx)
 
@@ -312,7 +312,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 	suite.Require().NoError(err)
 	suite.Require().Equal(nftC.Id, uint64(5))
 
-	suite.Require().NoError(suite.app.NFTKeeper.MintNFT(suite.ctx, nftC, ownerA))
+	suite.Require().NoError(suite.app.NFTKeeper.MintToNFT(suite.ctx, nftC, ownerA))
 
 	state = suite.app.NFTKeeper.ExportGenesis(suite.ctx)
 

@@ -13,7 +13,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateClass{}, "galaxy/nft/create-class", nil)
 	cdc.RegisterConcrete(&MsgEditClass{}, "galaxy/nft/edit-class", nil)
 
-	cdc.RegisterConcrete(&MsgMintNFT{}, "galaxy/nft/mint-nft", nil)
+	cdc.RegisterConcrete(&MsgMintToNFT{}, "galaxy/nft/mint-to-nft", nil)
 	cdc.RegisterConcrete(&MsgBurnNFT{}, "galaxy/nft/burn-nft", nil)
 	cdc.RegisterConcrete(&MsgTransferNFT{}, "galaxy/nft/transfer-nft", nil)
 	cdc.RegisterConcrete(&MsgUpdateNFT{}, "galaxy/nft/update-nft", nil)
@@ -26,7 +26,7 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgCreateClass{},
 		&MsgEditClass{},
 
-		&MsgMintNFT{},
+		&MsgMintToNFT{},
 		&MsgBurnNFT{},
 		&MsgTransferNFT{},
 		&MsgUpdateNFT{},

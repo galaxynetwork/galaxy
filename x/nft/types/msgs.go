@@ -10,7 +10,7 @@ var (
 	_ sdk.Msg = &MsgCreateClass{}
 	_ sdk.Msg = &MsgEditClass{}
 
-	_ sdk.Msg = &MsgMintNFT{}
+	_ sdk.Msg = &MsgMintToNFT{}
 	_ sdk.Msg = &MsgBurnNFT{}
 	_ sdk.Msg = &MsgUpdateNFT{}
 	_ sdk.Msg = &MsgTransferNFT{}
@@ -20,7 +20,7 @@ const (
 	TypeMsgCreateClass = "crete-class"
 	TypeMsgEditClass   = "edit-class"
 
-	TypeMsgMintNFT     = "mint-nft"
+	TypeMsgMintToNFT   = "mint-to-nft"
 	TypeMsgBurnNFT     = "burn-nft"
 	TypeMsgUpdateNFT   = "update-nft"
 	TypeMsgTransferNFT = "transfer-nft"
@@ -120,8 +120,8 @@ func (msg MsgEditClass) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{editor}
 }
 
-func NewMsgMintNFT(brandID, classId, uri, varUri, minter, recipient string) *MsgMintNFT {
-	return &MsgMintNFT{
+func NewMsgMintToNFT(brandID, classId, uri, varUri, minter, recipient string) *MsgMintToNFT {
+	return &MsgMintToNFT{
 		BrandId:   brandID,
 		ClassId:   classId,
 		Uri:       uri,
@@ -131,13 +131,13 @@ func NewMsgMintNFT(brandID, classId, uri, varUri, minter, recipient string) *Msg
 	}
 }
 
-func (msg MsgMintNFT) Route() string { return RouterKey }
-func (msg MsgMintNFT) Type() string  { return TypeMsgMintNFT }
-func (msg MsgMintNFT) GetSignBytes() []byte {
+func (msg MsgMintToNFT) Route() string { return RouterKey }
+func (msg MsgMintToNFT) Type() string  { return TypeMsgMintToNFT }
+func (msg MsgMintToNFT) GetSignBytes() []byte {
 	return ModuleCdc.MustMarshalJSON(&msg)
 }
 
-func (msg MsgMintNFT) ValidateBasic() error {
+func (msg MsgMintToNFT) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Minter); err != nil {
 		return sdkerrors.ErrInvalidAddress.Wrapf("invalid minter address: %s", err)
 	}
@@ -169,7 +169,7 @@ func (msg MsgMintNFT) ValidateBasic() error {
 	return nil
 }
 
-func (msg MsgMintNFT) GetSigners() []sdk.AccAddress {
+func (msg MsgMintToNFT) GetSigners() []sdk.AccAddress {
 	minter, _ := sdk.AccAddressFromBech32(msg.Minter)
 	return []sdk.AccAddress{minter}
 }

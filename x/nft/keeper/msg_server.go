@@ -120,8 +120,8 @@ func (k msgServer) EditClass(goCtx context.Context, msg *types.MsgEditClass) (*t
 	return &types.MsgEditClassResponse{}, nil
 }
 
-// MintNFT defines a method for minting a new nft.
-func (k msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types.MsgMintNFTResponse, error) {
+// MintToNFT defines a method for minting a new nft.
+func (k msgServer) MintToNFT(goCtx context.Context, msg *types.MsgMintToNFT) (*types.MsgMintToNFTResponse, error) {
 	nft := types.NewNFT(1, msg.BrandId, msg.ClassId, msg.Uri, msg.VarUri)
 
 	//for basic validation
@@ -158,13 +158,13 @@ func (k msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 		nft.Id = sequence
 	}
 
-	if err := k.Keeper.MintNFT(ctx, nft, recipient); err != nil {
+	if err := k.Keeper.MintToNFT(ctx, nft, recipient); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.TypeMsgMintNFT,
+			types.TypeMsgMintToNFT,
 			sdk.NewAttribute(brandtypes.AttributeBrandID, nft.BrandId),
 			sdk.NewAttribute(types.AttributeClassID, nft.ClassId),
 			sdk.NewAttribute(types.AttributeNFTID, strconv.FormatUint(nft.Id, 10)),
@@ -172,7 +172,7 @@ func (k msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types
 		),
 	)
 
-	return &types.MsgMintNFTResponse{Id: nft.Id}, nil
+	return &types.MsgMintToNFTResponse{Id: nft.Id}, nil
 }
 
 // UpdateNFT defines a method for updating variableURI an existing nft.

@@ -17,8 +17,8 @@ service Msg {
     // EditClass defines a method for editing an existing class.
     rpc EditClass(MsgEditClass) returns (MsgEditClassResponse);
 
-    // MintNFT defines a method for minting a new nft.
-    rpc MintNFT(MsgMintNFT) returns (MsgMintNFTResponse);
+    // MintToNFT defines a method for minting a new nft.
+    rpc MintToNFT(MsgMintToNFT) returns (MsgMintToNFTResponse);
 
     // UpdateNFT defines a method for updating variableURI an existing nft.
     rpc UpdateNFT(MsgUpdateNFT) returns (MsgUpdateNFTResponse);
@@ -65,7 +65,7 @@ message MsgEditClass {
 message MsgEditClassResponse {}
 
 
-message MsgMintNFT {
+message MsgMintToNFT {
     option (cosmos.msg.v1.signer) = "minter";
 
     string brand_id = 1;
@@ -78,7 +78,7 @@ message MsgMintNFT {
     string recipient = 6;
 }
 
-message MsgMintNFTResponse {
+message MsgMintToNFTResponse {
     uint64 id = 1;
 }
 

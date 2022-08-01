@@ -154,7 +154,7 @@ func (suite *KeeperTestSuite) TestEditClass() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestMintNFT() {
+func (suite *KeeperTestSuite) TestMintToNFT() {
 	app, ctx, msgServer := suite.app, suite.ctx, suite.msgServer
 	wrapCtx := sdk.WrapSDKContext(ctx)
 
@@ -164,17 +164,17 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 
 	//invalid arguments
 	tests := []struct {
-		msg *types.MsgMintNFT
+		msg *types.MsgMintToNFT
 	}{
-		{types.NewMsgMintNFT("", classIDA, "ipfs://nft", "", ownerA.String(), recipient.String())},
-		{types.NewMsgMintNFT(brandIDA, "", "ipfs://nft", "", ownerA.String(), recipient.String())},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "", "", ownerA.String(), recipient.String())},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", "", recipient.String())},
-		{types.NewMsgMintNFT(brandIDA, classIDA, "ipfs://nft", "", ownerA.String(), "")},
+		{types.NewMsgMintToNFT("", classIDA, "ipfs://nft", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintToNFT(brandIDA, "", "ipfs://nft", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintToNFT(brandIDA, classIDA, "", "", ownerA.String(), recipient.String())},
+		{types.NewMsgMintToNFT(brandIDA, classIDA, "ipfs://nft", "", "", recipient.String())},
+		{types.NewMsgMintToNFT(brandIDA, classIDA, "ipfs://nft", "", ownerA.String(), "")},
 	}
 
 	for _, test := range tests {
-		res, err := msgServer.MintNFT(wrapCtx, test.msg)
+		res, err := msgServer.MintToNFT(wrapCtx, test.msg)
 		suite.Require().Error(err)
 		suite.Require().Nil(res)
 	}
@@ -201,10 +201,10 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 			classMap[cuID]++
 			hasBrand := app.BrandKeeper.HasBrand(ctx, d.b)
 
-			msg := types.NewMsgMintNFT(d.b, d.c, "ipfs://nft", "", recipient.String(), recipient.String())
+			msg := types.NewMsgMintToNFT(d.b, d.c, "ipfs://nft", "", recipient.String(), recipient.String())
 
 			if !hasBrand {
-				_, err := msgServer.MintNFT(wrapCtx, msg)
+				_, err := msgServer.MintToNFT(wrapCtx, msg)
 				suite.Require().Equal(err, brandtypes.ErrNotFoundBrand)
 
 				suite.Require().NoError(
@@ -214,7 +214,7 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 
 			hasClass := app.NFTKeeper.HasClass(ctx, msg.BrandId, msg.ClassId)
 			if !hasClass {
-				_, err := msgServer.MintNFT(wrapCtx, msg)
+				_, err := msgServer.MintToNFT(wrapCtx, msg)
 				suite.Require().Equal(err, types.ErrNotFoundClass)
 
 				suite.Require().NoError(
@@ -224,10 +224,10 @@ func (suite *KeeperTestSuite) TestMintNFT() {
 
 			nmsg := *msg
 			nmsg.Minter = sdk.AccAddress("randomaddress").String()
-			_, err := msgServer.MintNFT(wrapCtx, &nmsg)
+			_, err := msgServer.MintToNFT(wrapCtx, &nmsg)
 			suite.Require().Equal(err, types.ErrUnauthorized)
 
-			res, err := msgServer.MintNFT(wrapCtx, msg)
+			res, err := msgServer.MintToNFT(wrapCtx, msg)
 			suite.Require().NoError(err)
 			suite.Require().NotZero(res.Id)
 		}
@@ -293,7 +293,7 @@ func (suite *KeeperTestSuite) TestUpdateNFT() {
 			_, err = msgServer.UpdateNFT(wrapCtx, msg)
 			suite.Require().Equal(err, types.ErrNotFoundNFT)
 
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			msg.VarUri = "ipfs://customer_uri"
 			res, err := msgServer.UpdateNFT(wrapCtx, msg)
@@ -358,7 +358,7 @@ func (suite *KeeperTestSuite) TestBurnNFT() {
 			_, err = msgServer.BurnNFT(wrapCtx, msg)
 			suite.Require().Equal(err, types.ErrNotFoundNFT)
 
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			msg.Sender = sdk.AccAddress("randomowner").String()
 			_, err = msgServer.BurnNFT(wrapCtx, msg)
@@ -428,7 +428,7 @@ func (suite *KeeperTestSuite) TestTransferNFT() {
 			_, err = msgServer.TransferNFT(wrapCtx, msg)
 			suite.Require().Equal(err, types.ErrNotFoundNFT)
 
-			suite.Require().NoError(app.NFTKeeper.MintNFT(ctx, nft, d.o))
+			suite.Require().NoError(app.NFTKeeper.MintToNFT(ctx, nft, d.o))
 
 			msg.Sender = sdk.AccAddress("randomowner").String()
 			_, err = msgServer.TransferNFT(wrapCtx, msg)

@@ -5,7 +5,7 @@ package galaxy.clairdrop;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
-option go_package = "github.com/galaxies-labs/galaxy/x/clairdrop/types";
+option go_package = "github.com/galaxynetwork/galaxy/x/clairdrop/types";
 
 
 enum ClaimAction {

@@ -2,7 +2,7 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 )
 
 // SetParams set the params

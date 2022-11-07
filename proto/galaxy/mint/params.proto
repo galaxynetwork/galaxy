@@ -5,7 +5,7 @@ package galaxy.mint;
 import "gogoproto/gogo.proto";
 import "galaxy/mint/mint.proto";
 
-option go_package = "github.com/galaxies-labs/galaxy/x/mint/types";
+option go_package = "github.com/galaxynetwork/galaxy/x/mint/types";
 
 message Params {
   option (gogoproto.goproto_stringer) = false;

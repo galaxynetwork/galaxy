@@ -13,9 +13,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/galaxies-labs/galaxy/x/mint/client/cli"
-	"github.com/galaxies-labs/galaxy/x/mint/keeper"
-	"github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/x/mint/client/cli"
+	"github.com/galaxynetwork/galaxy/x/mint/keeper"
+	"github.com/galaxynetwork/galaxy/x/mint/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	abci "github.com/tendermint/tendermint/abci/types"
 )

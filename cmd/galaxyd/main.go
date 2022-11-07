@@ -4,8 +4,8 @@ import (
 	"os"
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
-	"github.com/galaxies-labs/galaxy/app"
-	"github.com/galaxies-labs/galaxy/cmd/galaxyd/cmd"
+	"github.com/galaxynetwork/galaxy/app"
+	"github.com/galaxynetwork/galaxy/cmd/galaxyd/cmd"
 )
 
 func main() {

@@ -1,11 +1,10 @@
-module github.com/orbisworlds/galaxy
+module github.com/galaxynetwork/galaxy
 
 go 1.18
 
 require (
 	github.com/cosmos/cosmos-sdk v0.45.9
 	github.com/cosmos/ibc-go/v3 v3.3.0
-	github.com/galaxies-labs/galaxy v1.1.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0

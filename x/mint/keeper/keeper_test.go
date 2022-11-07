@@ -10,8 +10,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/galaxies-labs/galaxy/app"
-	"github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/app"
+	"github.com/galaxynetwork/galaxy/x/mint/types"
 	"github.com/stretchr/testify/suite"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )

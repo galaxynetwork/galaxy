@@ -10,7 +10,7 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 )
 
 type Keeper struct {

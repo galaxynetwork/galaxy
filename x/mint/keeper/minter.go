@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/x/mint/types"
 )
 
 func (k Keeper) GetMinter(ctx sdk.Context) (minter types.Minter) {

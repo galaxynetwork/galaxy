@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 )
 
 func (suite *KeeperTestSuite) TestHookOfUnclaimableAccount() {

@@ -4,8 +4,8 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/keeper"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/keeper"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 )
 
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {

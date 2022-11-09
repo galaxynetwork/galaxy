@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/x/mint/types"
 )
 
 func (k Keeper) Minter(c context.Context, _ *types.QueryMinterRequest) (*types.QueryMinterResponse, error) {

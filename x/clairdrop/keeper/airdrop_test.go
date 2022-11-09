@@ -9,8 +9,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
-	minttypes "github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
+	minttypes "github.com/galaxynetwork/galaxy/x/mint/types"
 )
 
 func (suite *KeeperTestSuite) TestEndAirdropCall() {

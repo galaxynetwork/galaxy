@@ -5,9 +5,9 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/galaxies-labs/galaxy/app"
-	"github.com/galaxies-labs/galaxy/x/clairdrop"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/app"
+	"github.com/galaxynetwork/galaxy/x/clairdrop"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 	"github.com/stretchr/testify/require"
 
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"

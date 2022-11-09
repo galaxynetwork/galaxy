@@ -16,7 +16,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
-	"github.com/galaxies-labs/galaxy/app"
+	"github.com/galaxynetwork/galaxy/app"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"

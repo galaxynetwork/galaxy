@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/galaxies-labs/galaxy/x/mint/keeper"
-	"github.com/galaxies-labs/galaxy/x/mint/types"
+	"github.com/galaxynetwork/galaxy/x/mint/keeper"
+	"github.com/galaxynetwork/galaxy/x/mint/types"
 )
 
 func BeginBlocker(ctx sdk.Context, k keeper.Keeper) {

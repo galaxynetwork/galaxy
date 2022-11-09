@@ -16,9 +16,9 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/client/cli"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/keeper"
-	"github.com/galaxies-labs/galaxy/x/clairdrop/types"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/client/cli"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/keeper"
+	"github.com/galaxynetwork/galaxy/x/clairdrop/types"
 )
 
 var (
